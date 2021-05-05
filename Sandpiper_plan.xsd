@@ -103,7 +103,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <!-- If a server is available, it is listed here -->
-                        <xs:element minOccurs="0" name="Response">
+                        <xs:element minOccurs="0" name="Response" maxOccurs="unbounded">
                             <xs:complexType>
                                 <xs:attribute name="uri" type="xs:string" use="required"/>
                                 <xs:attribute name="role">
@@ -261,6 +261,7 @@
                             </xs:element>
                         </xs:sequence>
                         <xs:attributeGroup ref="Model"/>
+                        <xs:attributeGroup ref="Description_Main"/>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

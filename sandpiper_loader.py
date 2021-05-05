@@ -1,3 +1,12 @@
+"""
+	Copyright (C) 2021 The Sandpiper Authors. All rights reserved.
+
+   	This document, part of the Sandpiper Framework software specification and package, is made available to you
+   	under the terms of the Artistic License 2.0, which can be found at https://www.perlfoundation.org/artistic-license-20.html . For more information,
+   	please feel free to visit us at https://www.sandpiperframework.org .
+
+"""
+
 import sqlite3
 import openpyxl as opxl
 import argparse

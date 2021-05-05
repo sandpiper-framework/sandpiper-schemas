@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.0"
-    elementFormDefault="qualified">
-
+<xs:schema elementFormDefault="qualified" vc:minVersion="1.0"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <!-- Copyright (C) 2021 The Sandpiper Authors. All rights reserved.
 
    	This document, part of the Sandpiper Framework software specification and package, is made available to you
@@ -10,11 +9,10 @@
    	please feel free to visit us at https://www.sandpiperframework.org .
 
     -->
-
     <!-- Basic types -->
     <xs:simpleType name="uuid">
         <xs:restriction base="xs:string">
-            <xs:length value="36" fixed="true"/>
+            <xs:length fixed="true" value="36"/>
             <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
             />
         </xs:restriction>
@@ -56,7 +54,6 @@
             <xs:enumeration value="3"/>
         </xs:restriction>
     </xs:simpleType>
-
     <!-- Attribute templates used in multiple places -->
     <xs:attributeGroup name="Model">
         <xs:attribute name="uuid" type="uuid" use="required"/>
@@ -67,11 +64,10 @@
     <xs:attributeGroup name="Description_Optional">
         <xs:attribute name="description" type="String_Medium" use="optional"/>
     </xs:attributeGroup>
-
     <!-- Element templates used in multiple places -->
     <xs:complexType name="LinkGroup">
         <xs:sequence>
-            <xs:element name="UniqueLink" minOccurs="0" maxOccurs="unbounded">
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="UniqueLink">
                 <xs:complexType>
                     <xs:attributeGroup ref="Model"/>
                     <xs:attribute name="keyfield" type="FieldName" use="required"/>
@@ -79,10 +75,10 @@
                     <xs:attributeGroup ref="Description_Optional"/>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="MultiLink" minOccurs="0" maxOccurs="unbounded">
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="MultiLink">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="MultLinkEntry" minOccurs="1" maxOccurs="unbounded">
+                        <xs:element maxOccurs="unbounded" minOccurs="1" name="MultLinkEntry">
                             <xs:complexType>
                                 <xs:attributeGroup ref="Model"/>
                                 <xs:attribute name="keyvalue" type="FieldValue" use="required"/>
@@ -95,20 +91,19 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-
     <xs:complexType name="Instance">
         <xs:sequence>
-            <xs:element name="Software" minOccurs="1" maxOccurs="1">
+            <xs:element maxOccurs="1" minOccurs="1" name="Software">
                 <xs:complexType>
                     <xs:attributeGroup ref="Description_Main"/>
                     <xs:attribute name="version" type="String_Short" use="required"/>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="Capability" minOccurs="1" maxOccurs="1">
+            <xs:element maxOccurs="1" minOccurs="1" name="Capability">
                 <xs:complexType>
                     <xs:sequence>
                         <!-- If a server is available, it is listed here -->
-                        <xs:element name="Response" minOccurs="0">
+                        <xs:element minOccurs="0" name="Response">
                             <xs:complexType>
                                 <xs:attribute name="uri" type="xs:string" use="required"/>
                                 <xs:attribute name="role">
@@ -130,10 +125,9 @@
         </xs:sequence>
         <xs:attributeGroup ref="Model"/>
     </xs:complexType>
-
     <xs:complexType name="Controller">
         <xs:sequence>
-            <xs:element name="Controller" minOccurs="1" maxOccurs="1">
+            <xs:element maxOccurs="1" minOccurs="1" name="Controller">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="Admin">
@@ -149,46 +143,45 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-
     <!-- Main schema -->
     <xs:element name="Plan">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Primary" minOccurs="1" maxOccurs="1">
+                <xs:element maxOccurs="1" minOccurs="1" name="Primary">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Instance" type="Instance" minOccurs="1" maxOccurs="1"/>
-                            <xs:element name="Controller" type="Controller" minOccurs="1"
-                                maxOccurs="1"/>
-                            <xs:element name="Links" type="LinkGroup" minOccurs="0" maxOccurs="1">
+                            <xs:element maxOccurs="1" minOccurs="1" name="Instance" type="Instance"/>
+                            <xs:element maxOccurs="1" minOccurs="1" name="Controller"
+                                type="Controller"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="Links" type="LinkGroup">
                                 <xs:unique name="PrimaryNodeLinkUniqueKeyField">
                                     <xs:selector xpath="MultiLink | UniqueLink"/>
                                     <xs:field xpath="@keyfield"/>
                                 </xs:unique>
                             </xs:element>
-                            <xs:element name="Pools" maxOccurs="1" minOccurs="0">
+                            <xs:element maxOccurs="1" minOccurs="0" name="Pools">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Pool" minOccurs="1" maxOccurs="unbounded">
+                                        <xs:element maxOccurs="unbounded" minOccurs="1" name="Pool">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                  <xs:element name="Links" type="LinkGroup"
-                                                  minOccurs="0" maxOccurs="1">
+                                                  <xs:element maxOccurs="1" minOccurs="0"
+                                                  name="Links" type="LinkGroup">
                                                   <xs:unique name="PrimaryPoolLinkUniqueKeyField">
                                                   <xs:selector xpath="MultiLink | UniqueLink"/>
                                                   <xs:field xpath="@keyfield"/>
                                                   </xs:unique>
                                                   </xs:element>
-                                                  <xs:element name="Slices" minOccurs="0"
-                                                  maxOccurs="1">
+                                                  <xs:element maxOccurs="1" minOccurs="0"
+                                                  name="Slices">
                                                   <xs:complexType>
                                                   <xs:sequence>
-                                                  <xs:element name="Slice" minOccurs="1"
-                                                  maxOccurs="unbounded">
+                                                  <xs:element maxOccurs="unbounded" minOccurs="1"
+                                                  name="Slice">
                                                   <xs:complexType>
                                                   <xs:sequence>
-                                                  <xs:element name="Links" type="LinkGroup"
-                                                  minOccurs="0" maxOccurs="1">
+                                                  <xs:element maxOccurs="1" minOccurs="0"
+                                                  name="Links" type="LinkGroup">
                                                   <xs:unique name="SliceLinkUniqueKeyField">
                                                   <xs:selector xpath="MultiLink | UniqueLink"/>
                                                   <xs:field xpath="@keyfield"/>
@@ -216,25 +209,26 @@
                             </xs:element>
                         </xs:sequence>
                         <xs:attributeGroup ref="Model"/>
+                        <xs:attributeGroup ref="Description_Main"/>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Communal" minOccurs="1" maxOccurs="1">
+                <xs:element maxOccurs="1" minOccurs="1" name="Communal">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Subscriptions" minOccurs="0" maxOccurs="1">
+                            <xs:element maxOccurs="1" minOccurs="0" name="Subscriptions">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Subscription" minOccurs="1"
-                                            maxOccurs="unbounded">
+                                        <xs:element maxOccurs="unbounded" minOccurs="1"
+                                            name="Subscription">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                   <!-- Not part of Sandpiper 1.0 - future use -->
-                                                  <xs:element name="DeliveryProfiles" minOccurs="0"
-                                                  maxOccurs="1">
+                                                  <xs:element maxOccurs="1" minOccurs="0"
+                                                  name="DeliveryProfiles">
                                                   <xs:complexType>
                                                   <xs:sequence>
-                                                  <xs:element name="DeliveryProfile" minOccurs="1"
-                                                  maxOccurs="unbounded">
+                                                  <xs:element maxOccurs="unbounded" minOccurs="1"
+                                                  name="DeliveryProfile">
                                                   <xs:complexType>
                                                   <xs:attributeGroup ref="Model"/>
                                                   </xs:complexType>
@@ -253,13 +247,13 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Secondary" minOccurs="1" maxOccurs="1">
+                <xs:element maxOccurs="1" minOccurs="1" name="Secondary">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Instance" type="Instance" minOccurs="1" maxOccurs="1"/>
-                            <xs:element name="Controller" type="Controller" minOccurs="1"
-                                maxOccurs="1"/>
-                            <xs:element name="Links" type="LinkGroup" minOccurs="0" maxOccurs="1">
+                            <xs:element maxOccurs="1" minOccurs="1" name="Instance" type="Instance"/>
+                            <xs:element maxOccurs="1" minOccurs="1" name="Controller"
+                                type="Controller"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="Links" type="LinkGroup">
                                 <xs:unique name="SecondaryNodeLinkUniqueKeyField">
                                     <xs:selector xpath="MultiLink | UniqueLink"/>
                                     <xs:field xpath="@keyfield"/>
@@ -271,7 +265,7 @@
                 </xs:element>
             </xs:sequence>
             <xs:attribute name="uuid" type="uuid"/>
+            <xs:attributeGroup ref="Description_Main"/>
         </xs:complexType>
     </xs:element>
-
 </xs:schema>

@@ -51,24 +51,24 @@ slice_unique_links = LightData("slice_unique_links")
 slice_multi_links = LightData("slice_multi_links")
 slice_multi_link_entries = LightData("slice_multi_link_entries")
 
-nodes.fields = ["nodeUUID", "nodeDescription", "selfNode", "createdOn", "controllerUUID", "instanceUUID"]
-controllers.fields = ["controllerUUID", "controllerDescription", "adminContact", "adminEmail", "createdOn"]
-instances.fields = ["instanceUUID", "softwareDescription", "softwareVersion", "capabilityLevel", "createdOn"]
-instance_responders.fields = ["instanceUUID", "capabilityURI", "capabilityRole", "instanceResponderOrder"]
-pools.fields = ["nodeUUID", "poolUUID", "poolDescription", "poolOrder", "createdOn"]
-slices.fields = ["poolUUID", "sliceUUID", "sliceDescription", "sliceType", "fileName", "sliceOrder", "createdOn"]
+nodes.fields = ["node_uuid", "node_description", "self_node", "created_on", "controller_uuid", "instance_uuid"]
+controllers.fields = ["controller_uuid", "controller_description", "admin_contact", "admin_email", "created_on"]
+instances.fields = ["instance_uuid", "software_description", "software_version", "capability_Level", "created_on"]
+instance_responders.fields = ["instance_uuid", "capability_uri", "capability_role", "instance_responder_order"]
+pools.fields = ["node_uuid", "pool_uuid", "pool_description", "pool_order", "created_on"]
+slices.fields = ["pool_uuid", "slice_uuid", "slice_description", "slice_type", "fileName", "slice_order", "created_on"]
 
-node_unique_links.fields = ["nodeUUID", "nodeUniqueLinkUUID", "keyField", "keyValue", "keyDescription", "linkOrder"]
-node_multi_links.fields = ["nodeUUID", "nodeMultiLinkUUID", "keyField", "linkOrder"]
-node_multi_link_entries.fields = ["nodeMultiLinkUUID", "nodeMultiLinkEntryUUID", "keyValue", "keyDescription", "linkEntryOrder"]
+node_unique_links.fields = ["node_uuid", "node_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
+node_multi_links.fields = ["node_uuid", "node_multi_link_uuid", "key_field", "link_order"]
+node_multi_link_entries.fields = ["node_multi_link_uuid", "node_multi_linkEntry_uuid", "key_value", "key_description", "link_entry_order"]
 
-pool_unique_links.fields = ["poolUUID", "poolUniqueLinkUUID", "keyField", "keyValue", "keyDescription", "linkOrder"]
-pool_multi_links.fields = ["poolUUID", "poolMultiLinkUUID", "keyField", "linkOrder"]
-pool_multi_link_entries.fields = ["poolMultiLinkUUID", "poolMultiLinkEntryUUID", "keyValue", "keyDescription", "linkEntryOrder"]
+pool_unique_links.fields = ["pool_uuid", "pool_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
+pool_multi_links.fields = ["pool_uuid", "pool_multi_link_uuid", "key_field", "link_order"]
+pool_multi_link_entries.fields = ["pool_multi_link_uuid", "pool_multi_linkEntry_uuid", "key_value", "key_description", "link_entry_order"]
 
-slice_unique_links.fields = ["sliceUUID", "sliceUniqueLinkUUID", "keyField", "keyValue", "keyDescription", "linkOrder"]
-slice_multi_links.fields = ["sliceUUID", "sliceMultiLinkUUID", "keyField", "linkOrder"]
-slice_multi_link_entries.fields = ["sliceMultiLinkUUID", "sliceMultiLinkEntryUUID", "keyValue", "keyDescription", "linkEntryOrder"]
+slice_unique_links.fields = ["slice_uuid", "slice_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
+slice_multi_links.fields = ["slice_uuid", "slice_multi_link_uuid", "key_field", "link_order"]
+slice_multi_link_entries.fields = ["slice_multi_link_uuid", "slice_multi_link_entry_uuid", "key_value", "key_description", "link_entry_order"]
 
 dbname = ""
 if pargs.db == "":

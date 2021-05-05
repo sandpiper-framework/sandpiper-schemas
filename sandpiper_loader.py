@@ -56,7 +56,7 @@ controllers.fields = ["controller_uuid", "controller_description", "admin_contac
 instances.fields = ["instance_uuid", "software_description", "software_version", "capability_Level", "created_on"]
 instance_responders.fields = ["instance_uuid", "capability_uri", "capability_role", "instance_responder_order"]
 pools.fields = ["node_uuid", "pool_uuid", "pool_description", "pool_order", "created_on"]
-slices.fields = ["pool_uuid", "slice_uuid", "slice_description", "slice_type", "fileName", "slice_order", "created_on"]
+slices.fields = ["pool_uuid", "slice_uuid", "slice_description", "slice_type", "file_name", "slice_order", "created_on"]
 
 node_unique_links.fields = ["node_uuid", "node_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
 node_multi_links.fields = ["node_uuid", "node_multi_link_uuid", "key_field", "link_order"]

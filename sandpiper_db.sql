@@ -8,6 +8,9 @@
 */
 
 -- Convenience for development
+--- History logs
+DROP TABLE IF EXISTS activity;
+
 --- Local config entries
 DROP TABLE IF EXISTS local_environment_variables;
 

@@ -32,12 +32,14 @@ class LightData:
 		self.destination = destination
 
 # Set up our data objects
+plan = LightData("plans")
 nodes = LightData("nodes")
 controllers = LightData("controllers")
 instances = LightData("instances")
 instance_responders = LightData("instance_responders")
 pools = LightData("pools")
 slices = LightData("slices")
+plan_slices = LightData("plan_slices")
 
 node_unique_links = LightData("node_unique_links")
 node_multi_links = LightData("node_multi_links")
@@ -51,12 +53,15 @@ slice_unique_links = LightData("slice_unique_links")
 slice_multi_links = LightData("slice_multi_links")
 slice_multi_link_entries = LightData("slice_multi_link_entries")
 
+plan.fields = ["plan_uuid", "primary_node_uuid", "secondary_node_uuid"];
+
 nodes.fields = ["node_uuid", "node_description", "self_node", "created_on", "controller_uuid", "instance_uuid"]
 controllers.fields = ["controller_uuid", "controller_description", "admin_contact", "admin_email", "created_on"]
 instances.fields = ["instance_uuid", "software_description", "software_version", "capability_Level", "created_on"]
 instance_responders.fields = ["instance_uuid", "capability_uri", "capability_role", "instance_responder_order"]
 pools.fields = ["node_uuid", "pool_uuid", "pool_description", "pool_order", "created_on"]
 slices.fields = ["pool_uuid", "slice_uuid", "slice_description", "slice_type", "file_name", "slice_order", "created_on"]
+plan_slices.fields = ["plan_uuid", "slice_uuid", "plan_slice_order"]
 
 node_unique_links.fields = ["node_uuid", "node_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
 node_multi_links.fields = ["node_uuid", "node_multi_link_uuid", "key_field", "link_order"]
@@ -91,15 +96,21 @@ if pargs.excel != "":
 	print(f"Loading Excel file {pargs.excel}...")
 	wb = opxl.load_workbook(pargs.excel) 
 
-	nodeWs = wb.worksheets[0]
-	dataWs = wb.worksheets[1]
-	linkWs = wb.worksheets[2]
+	planWs = wb.worksheets[0]
+	nodeWs = wb.worksheets[1]
+	dataWs = wb.worksheets[2]
+	linkWs = wb.worksheets[3]
 
 	# for each of the above worksheets, iterate through them and pull out the relevant data
 	# (note that this needs to be in the same order as the fields listing of the data objects above)
-	for ws in [nodeWs, dataWs, linkWs]:
+	for ws in [planWs, nodeWs, dataWs, linkWs]:
 		head = list(ws.values)[0]
 		body = list(ws.values)[1:]
+
+		if ws.title == "Plan":
+			# Plan is simple enough
+			for e in list(body):
+				plan.data.append(list(e[0:3]))
 
 		if ws.title == "Nodes":
 			# Nodes is one-row-per so no need to do fancy stuff here
@@ -109,9 +120,9 @@ if pargs.excel != "":
 				instances.data.append(list(e[9:14]))
 				# optional responders
 				if e[14] is not None and e[14] != "":
-					instance_responders.data.append(list(e[14:16]))
+					instance_responders.data.append(list(e[9:10]) + list(e[15:16]) + list(e[14:15]) + [1])
 				if e[16] is not None and e[16] != "":
-					instance_responders.data.append(list(e[16:18]))
+					instance_responders.data.append(list(e[9:10]) + list(e[17:18]) + list(e[16:17]) + [2])
 
 		if ws.title == "Data":
 			# Data can contain multiple pool entries; only use the first
@@ -127,6 +138,8 @@ if pargs.excel != "":
 				
 				slice_i += 1
 				slices.data.append(list(e[1:2]) + list(e[4:8]) + [slice_i] + list(e[8:9])) 
+
+				plan_slices.data.append([plan.data[0][0]] + list(e[4:5]) + [slice_i])
 
 		if ws.title == "Links":
 			# Links can be either unique or multi. First column is the object type.
@@ -170,7 +183,8 @@ if pargs.excel != "":
 					mlinkes.data.append(list(e[7:8]) + list(e[9:12]) + [linkentryorder])
 
 	for d in [
-			controllers, instances, instance_responders, nodes, pools, slices
+			  controllers, instances, instance_responders, nodes, pools, slices
+			, plan, plan_slices
 			, node_unique_links, node_multi_links, node_multi_link_entries
 			, pool_unique_links, pool_multi_links, pool_multi_link_entries
 			, slice_unique_links, slice_multi_links, slice_multi_link_entries

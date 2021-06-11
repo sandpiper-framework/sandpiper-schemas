@@ -160,10 +160,17 @@ CREATE TABLE slice_grains (
 CREATE TABLE plans (
 		  plan_uuid CHAR(36) PRIMARY KEY
 		, primary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
-		, secondary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
+		, secondary_node_uuid CHAR(36) NULL REFERENCES nodes (node_uuid)
+-- NULL secondary node means the plan was invoked but not assigned to a known node secondary
+		, status TEXT NOT NULL
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, UNIQUE (primary_node_uuid, secondary_node_uuid)
 		, CHECK (primary_node_uuid <> secondary_node_uuid)
+		, CHECK (status IN ('Invoked', 'Proposed', 'Approved', 'On Hold', 'Rejected'))
+		, CHECK (
+				(status IN ('Proposed', 'Approved', 'On Hold', 'Rejected') AND secondary_node_uuid IS NOT NULL) OR
+				(status = 'Invoked' AND secondary_node_uuid IS NULL)
+			)
 	);
 
 CREATE TABLE plan_slices (

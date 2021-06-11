@@ -163,6 +163,7 @@ CREATE TABLE plans (
 		, secondary_node_uuid CHAR(36) NULL REFERENCES nodes (node_uuid)
 -- NULL secondary node means the plan was invoked but not assigned to a known node secondary
 		, status TEXT NOT NULL
+		, status_message TEXT NULL
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, UNIQUE (primary_node_uuid, secondary_node_uuid)
 		, CHECK (primary_node_uuid <> secondary_node_uuid)

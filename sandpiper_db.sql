@@ -164,12 +164,13 @@ CREATE TABLE plans (
 -- NULL secondary node means the plan was invoked but not assigned to a known node secondary
 		, status TEXT NOT NULL
 		, status_message TEXT NULL
+		, local_description TEXT NULL
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, UNIQUE (primary_node_uuid, secondary_node_uuid)
 		, CHECK (primary_node_uuid <> secondary_node_uuid)
-		, CHECK (status IN ('Invoked', 'Proposed', 'Approved', 'On Hold', 'Rejected'))
+		, CHECK (status IN ('Invoked', 'Proposed', 'Approved', 'On Hold', 'Rejected', 'Obsolete'))
 		, CHECK (
-				(status IN ('Proposed', 'Approved', 'On Hold', 'Rejected') AND secondary_node_uuid IS NOT NULL) OR
+				(status IN ('Proposed', 'Approved', 'On Hold', 'Rejected', 'Obsolete') AND secondary_node_uuid IS NOT NULL) OR
 				(status = 'Invoked' AND secondary_node_uuid IS NULL)
 			)
 	);

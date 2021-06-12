@@ -221,7 +221,7 @@ CREATE TABLE node_multi_link_entries (
 CREATE TABLE pool_unique_links (
 		  pool_unique_link_uuid CHAR(36) PRIMARY KEY
 		, pool_uuid CHAR(36) NOT NULL REFERENCES pools (pool_uuid)
-		, key_field TEXT NOT NULL REFERENCES unique_key_fields (key_field)
+		, key_field TEXT NOT NULL REFERENCES unique_key_fields (unique_key_field)
 		, key_value TEXT NOT NULL
 		, key_description TEXT NULL
 		, link_order INTEGER NOT NULL DEFAULT 0
@@ -231,7 +231,7 @@ CREATE TABLE pool_unique_links (
 CREATE TABLE pool_multi_links (
 		  pool_multi_link_uuid CHAR(36) PRIMARY KEY
 		, pool_uuid CHAR(36) NOT NULL REFERENCES pools (pool_uuid)
-		, key_field TEXT NOT NULL
+		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
 		, link_order INTEGER NOT NULL DEFAULT 0
 	);
 		
@@ -247,7 +247,7 @@ CREATE TABLE pool_multi_link_entries (
 CREATE TABLE slice_unique_links (
 		  slice_unique_link_uuid CHAR(36) PRIMARY KEY
 		, slice_uuid CHAR(36) NOT NULL REFERENCES slices (slice_uuid)
-		, key_field TEXT NOT NULL REFERENCES unique_key_fields (key_field)
+		, key_field TEXT NOT NULL REFERENCES unique_key_fields (unique_key_field)
 		, key_value TEXT NOT NULL
 		, key_description TEXT NULL
 		, link_order INTEGER NOT NULL DEFAULT 0
@@ -257,7 +257,7 @@ CREATE TABLE slice_unique_links (
 CREATE TABLE slice_multi_links (
 		  slice_multi_link_uuid CHAR(36) PRIMARY KEY
 		, slice_uuid CHAR(36) NOT NULL REFERENCES slices (slice_uuid)
-		, key_field TEXT NOT NULL
+		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
 		, link_order INTEGER NOT NULL DEFAULT 0
 	);
 		

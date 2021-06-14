@@ -53,7 +53,7 @@ slice_unique_links = LightData("slice_unique_links")
 slice_multi_links = LightData("slice_multi_links")
 slice_multi_link_entries = LightData("slice_multi_link_entries")
 
-plan.fields = ["plan_uuid", "primary_node_uuid", "secondary_node_uuid"];
+plan.fields = ["plan_uuid", "primary_node_uuid", "secondary_node_uuid", "status", "status_message", "local_description"];
 
 nodes.fields = ["node_uuid", "node_description", "self_node", "created_on", "controller_uuid", "instance_uuid"]
 controllers.fields = ["controller_uuid", "controller_description", "admin_contact", "admin_email", "created_on"]
@@ -110,7 +110,7 @@ if pargs.excel != "":
 		if ws.title == "Plan":
 			# Plan is simple enough
 			for e in list(body):
-				plan.data.append(list(e[0:3]))
+				plan.data.append(list(e[0:3] + ("Approved", "", "Sample Plan")))
 
 		if ws.title == "Nodes":
 			# Nodes is one-row-per so no need to do fancy stuff here
@@ -181,6 +181,8 @@ if pargs.excel != "":
 						lastmulti = e[7]
 						mlinks.data.append(list(e[1:2]) + list(e[7:9]) + [multilinkorder])
 					mlinkes.data.append(list(e[7:8]) + list(e[9:12]) + [linkentryorder])
+
+	sqlFile = pathlib.Path("test.sql")
 
 	for d in [
 			  controllers, instances, instance_responders, nodes, pools, slices

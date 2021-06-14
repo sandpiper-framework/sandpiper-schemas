@@ -27,6 +27,10 @@ DROP TABLE IF EXISTS slice_multi_link_entries;
 DROP TABLE IF EXISTS slice_multi_links;
 DROP TABLE IF EXISTS slice_unique_links;
 
+DROP TABLE IF EXISTS plan_slice_multi_links;
+DROP TABLE IF EXISTS plan_slice_multi_link_entries;
+DROP TABLE IF EXISTS plan_slice_unique_links;
+
 -- Core tables
 DROP TABLE IF EXISTS grain_payloads;
 DROP TABLE IF EXISTS slice_grains;
@@ -209,7 +213,7 @@ CREATE TABLE node_multi_links (
 		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
 		, link_order INTEGER NOT NULL DEFAULT 0
 	);
-		
+
 CREATE TABLE node_multi_link_entries (
 		  node_multi_link_entry_uuid CHAR(36) PRIMARY KEY
 		, node_multi_link_uuid CHAR(36) NOT NULL REFERENCES node_multi_links (node_multi_link_uuid)
@@ -235,7 +239,7 @@ CREATE TABLE pool_multi_links (
 		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
 		, link_order INTEGER NOT NULL DEFAULT 0
 	);
-		
+
 CREATE TABLE pool_multi_link_entries (
 		  pool_multi_link_entry_uuid CHAR(36) PRIMARY KEY
 		, pool_multi_link_uuid CHAR(36) NOT NULL REFERENCES pool_multi_links (pool_multi_link_uuid)
@@ -261,7 +265,7 @@ CREATE TABLE slice_multi_links (
 		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
 		, link_order INTEGER NOT NULL DEFAULT 0
 	);
-		
+
 CREATE TABLE slice_multi_link_entries (
 		  slice_multi_link_entry_uuid CHAR(36) PRIMARY KEY
 		, slice_multi_link_uuid CHAR(36) NOT NULL REFERENCES slice_multi_links (slice_multi_link_uuid)
@@ -269,6 +273,32 @@ CREATE TABLE slice_multi_link_entries (
 		, key_description TEXT NULL
 		, link_entry_order INTEGER NOT NULL DEFAULT 0
 		, UNIQUE (slice_multi_link_uuid, key_value)
+	);
+
+CREATE TABLE plan_slice_unique_links (
+		  plan_slice_unique_link_uuid CHAR(36) PRIMARY KEY
+		, plan_slice_id INTEGER NOT NULL REFERENCES plan_slices (plan_slice_id)
+		, key_field TEXT NOT NULL REFERENCES unique_key_fields (unique_key_field)
+		, key_value TEXT NOT NULL
+		, key_description TEXT NULL
+		, link_order INTEGER NOT NULL DEFAULT 0
+		, UNIQUE (plan_slice_id, key_field)
+	);
+
+CREATE TABLE plan_slice_multi_links (
+		  plan_slice_multi_link_uuid CHAR(36) PRIMARY KEY
+		, plan_slice_id INTEGER NOT NULL REFERENCES plan_slices (plan_slice_id)
+		, key_field TEXT NOT NULL REFERENCES multi_key_fields (multi_key_field)
+		, link_order INTEGER NOT NULL DEFAULT 0
+	);
+
+CREATE TABLE plan_slice_multi_link_entries (
+		  plan_slice_multi_link_entry_uuid CHAR(36) PRIMARY KEY
+		, plan_slice_multi_link_uuid CHAR(36) NOT NULL REFERENCES plan_slice_multi_links (plan_slice_multi_link_uuid)
+		, key_value TEXT NOT NULL
+		, key_description TEXT NULL
+		, link_entry_order INTEGER NOT NULL DEFAULT 0
+		, UNIQUE (plan_slice_multi_link_uuid, key_value)
 	);
 
 -- Key value table data

@@ -53,12 +53,12 @@ slice_unique_links = LightData("slice_unique_links")
 slice_multi_links = LightData("slice_multi_links")
 slice_multi_link_entries = LightData("slice_multi_link_entries")
 
-plan.fields = ["plan_uuid", "primary_node_uuid", "secondary_node_uuid", "status", "status_message", "local_description"];
+plan.fields = ["plan_uuid", "primary_node_uuid", "secondary_node_uuid", "status", "status_message", "plan_description", "local_description"];
 
 nodes.fields = ["node_uuid", "node_description", "self_node", "created_on", "controller_uuid", "instance_uuid"]
 controllers.fields = ["controller_uuid", "controller_description", "admin_contact", "admin_email", "created_on"]
 instances.fields = ["instance_uuid", "software_description", "software_version", "capability_Level", "created_on"]
-instance_responders.fields = ["instance_uuid", "capability_uri", "capability_role", "instance_responder_order"]
+instance_responders.fields = ["instance_uuid", "capability_uri", "capability_role", "instance_responder_order", "capability_description"]
 pools.fields = ["node_uuid", "pool_uuid", "pool_description", "pool_order", "created_on"]
 slices.fields = ["pool_uuid", "slice_uuid", "slice_description", "slice_type", "file_name", "slice_order", "created_on"]
 plan_slices.fields = ["plan_uuid", "slice_uuid", "plan_slice_order"]
@@ -72,8 +72,8 @@ pool_multi_links.fields = ["pool_uuid", "pool_multi_link_uuid", "key_field", "li
 pool_multi_link_entries.fields = ["pool_multi_link_uuid", "pool_multi_linkEntry_uuid", "key_value", "key_description", "link_entry_order"]
 
 slice_unique_links.fields = ["slice_uuid", "slice_unique_link_uuid", "key_field", "key_value", "key_description", "link_order"]
-slice_multi_links.fields = ["slice_uuid", "slice_multi_link_uuid", "key_field", "link_order"]
-slice_multi_link_entries.fields = ["slice_multi_link_uuid", "slice_multi_link_entry_uuid", "key_value", "key_description", "link_entry_order"]
+slice_multi_links.fields = ["slice_uuid", "slice_multi_link_id", "key_field", "link_order"]
+slice_multi_link_entries.fields = ["slice_multi_link_id", "slice_multi_link_entry_uuid", "key_value", "key_description", "link_entry_order"]
 
 dbname = ""
 if pargs.db == "":
@@ -110,7 +110,7 @@ if pargs.excel != "":
 		if ws.title == "Plan":
 			# Plan is simple enough
 			for e in list(body):
-				plan.data.append(list(e[0:3] + ("Approved", "", "Sample Plan")))
+				plan.data.append(list(e[0:7]))
 
 		if ws.title == "Nodes":
 			# Nodes is one-row-per so no need to do fancy stuff here
@@ -120,9 +120,9 @@ if pargs.excel != "":
 				instances.data.append(list(e[9:14]))
 				# optional responders
 				if e[14] is not None and e[14] != "":
-					instance_responders.data.append(list(e[9:10]) + list(e[15:16]) + list(e[14:15]) + [1])
+					instance_responders.data.append(list(e[9:10]) + list(e[15:16]) + list(e[14:15]) + [1] + [e[18]])
 				if e[16] is not None and e[16] != "":
-					instance_responders.data.append(list(e[9:10]) + list(e[17:18]) + list(e[16:17]) + [2])
+					instance_responders.data.append(list(e[9:10]) + list(e[17:18]) + list(e[16:17]) + [2] + [e[19]])
 
 		if ws.title == "Data":
 			# Data can contain multiple pool entries; only use the first

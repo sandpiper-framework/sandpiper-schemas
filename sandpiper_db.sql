@@ -193,7 +193,6 @@ CREATE TABLE plans (
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, UNIQUE (primary_node_uuid, secondary_node_uuid)
 		, CHECK (primary_node_uuid <> secondary_node_uuid)
-		, CHECK (requested_status_by IN ('Primary', 'Secondary'))
 	);
 
 CREATE TABLE plan_slices (
@@ -346,12 +345,12 @@ INSERT INTO plan_statuses (plan_status, plan_status_description, plan_status_ord
 , ('Approved', 'Both actors have approved this plan, either explicitly or by being the one to propose its new status.', 20)
 , ('On Hold', 'One or both parties have disabled synchronization of data under this plan for the current time.', 30)
 , ('Terminated', 'One or both parties have decided that this plan is not suitable for use -- not that it''s old or outmoded, but that it is flawed or unacceptable.', 40)
-, ('Obsolete', 'One or both parties have decided that this plan holds no value for future use and should be permanently disabled.', 50)
+, ('Obsolete', 'One or both parties have decided that this plan holds no value for future use and should be permanently disabled.', 50);
 
 INSERT INTO plan_status_flows (plan_status_from, plan_status_to) VALUES
 -- Everything can be killed except the dead themselves, and nothing can be invoked anew once it has lived, but..
 -- Proposed plans can also be approved or rejected, but not on hold because they were never approved
-, ('Proposed', 'Approved')
+  ('Proposed', 'Approved')
 , ('Proposed', 'Rejected')
 , ('Proposed', 'Obsolete')
 -- The only thing Approved plans can't do is go back to being Invoked or Proposed; they're already in play

@@ -351,14 +351,14 @@ INSERT INTO plan_status_flows (plan_status_from, plan_status_to) VALUES
 -- Everything can be killed except the dead themselves, and nothing can be invoked anew once it has lived, but..
 -- Proposed plans can also be approved or rejected, but not on hold because they were never approved
   ('Proposed', 'Approved')
-, ('Proposed', 'Rejected')
+, ('Proposed', 'Terminated')
 , ('Proposed', 'Obsolete')
 -- The only thing Approved plans can't do is go back to being Invoked or Proposed; they're already in play
 , ('Approved', 'On Hold')
-, ('Approved', 'Rejected')
+, ('Approved', 'Terminated')
 -- On Hold plans can also be proposed or rejected; the only route to approved is through proposed
 , ('On Hold', 'Proposed')
-, ('On Hold', 'Rejected')
+, ('On Hold', 'Terminated')
 , ('On Hold', 'Obsolete')
 -- Rejected plans can be moved back to a proposed state or killed
 , ('Terminated', 'Proposed')

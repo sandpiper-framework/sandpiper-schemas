@@ -9,9 +9,17 @@ info:
   license:
     name: Artistic License 2.0
     url: "https://www.perlfoundation.org/artistic-license-20.html"
-  version: 0.9.10-2021081201
+  version: 0.9.11
 
 components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    httpBasic:
+      type: http
+      scheme: basic
   schemas:
     v4_uuid:
       description: An RFC4122 v4 UUID
@@ -35,6 +43,25 @@ components:
         message_text:
           type: string
           nullable: true
+    sandpiper_login_object:
+      description: A login & permission object used at the /login endpoint
+      type: object
+      required:
+        - username
+        - password
+        - plandocument
+      properties:
+        username:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+        plandocument:
+          type: string
+          format: byte
+          nullable: true
+
     plan_status_action:
       type: string
       enum:
@@ -45,6 +72,8 @@ components:
         - obsolete
     plan_status:
       type: string
+      description: >
+        The status of the plan as it currently stands.
       enum:
         - Proposed
         - Approved
@@ -133,8 +162,10 @@ components:
           type: integer
         grain_key:
           description: A unique value that identifies a key, pivotal value within the grain's content, e.g. a part number
+          type: string
         grain_reference:
           description: A value that may or may not be unique but provides an index to the grain that is not found in its contents, e.g. an internal system ID at the grain's genesis
+          type: string
         payload:
           $ref: "#/components/schemas/payload"
     grains:
@@ -283,7 +314,49 @@ components:
           - GRAIN_WITHOUT_PAYLOAD
         default: GRAIN_WITHOUT_PAYLOAD
 
+servers:
+  - url: "{server}/v1"
+    variables:
+      server:
+        default: https://sandpiper.example.com
+    description: Sandpiper V1 Server
+
+security:
+  - jwtAuth: []
+
 paths:
+  /login:
+    description: Authentication login point as well as a "hello" echo
+    get:
+      security: []
+      tags:
+        - actions
+      responses:
+        200:
+          description: OK
+    post:
+      security:
+        - httpBasic: []
+      tags:
+        - actions
+      requestBody:
+        content:
+          application/json:
+           schema:
+             $ref: "#/components/schemas/sandpiper_login_object"
+      responses:
+        200:
+          description: Successful login, returning JWT token and message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  message:
+                    $ref: "#/components/schemas/sandpiper_message"
+
   /plans:
     description: All plans available to the authenticated user
     get:
@@ -297,10 +370,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/plans_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
   /plans/{plan_uuid}:
     description: A specific plan
     get:
@@ -312,10 +381,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/plan_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
   /plans/{generator_action}:
     description: >-
       Generate a fragment plan or upload a previously-unknown plan as a new
@@ -349,10 +414,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
     get:
       tags:
         - actions
@@ -373,11 +434,7 @@ paths:
               - invoke
       responses:
         200:
-          description: OK
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
+          $ref: "#/components/responses/plan_response"
   /plans/{plan_uuid}/{status_action}:
     description: Modify a given plan's status
     parameters:
@@ -403,10 +460,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
   /slices/{slice_uuid}:
     description: A specific slice
     parameters:
@@ -418,10 +471,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/slice_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
   /slices/{slice_uuid}/grains:
     description: All grains within a specific slice
     parameters:
@@ -434,10 +483,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/grains_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"  
   /slices/{slice_uuid}/grains/{grain_uuid}:
     description: A specific grain within a specific slice
     parameters:
@@ -452,10 +497,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/grain_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
     delete:
       tags:
         - actions
@@ -463,22 +504,32 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
     put:
       tags:
         - actions
-      summary: Add a specific grain to a specific slice
+      summary: Add a previously-unknown grain to a specific slice
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/grain_msg"
       responses:
-        201:
+        201: # Added successfully
           $ref: "#/components/responses/message_response"
-        400:
-          description: Bad Request, e.g. receiving a Content-Range indicating partial content rather than a true PUT
-        401:
-          $ref: "#/components/responses/not_authed"
-        403:
-          $ref: "#/components/responses/forbidden"
-        415:
-          description: Unsupported Media Type
+        409: # Grain already exists and cannot be updated
+          $ref: "#/components/responses/message_response"
+    post:
+      tags:
+        - actions
+      summary: Link an existing grain to a specific slice
+      description: Link an already-extant grain to the given slice. This will return 409 if the grain does not exist. Payload will be ignored if supplied; once established, a grain's payload can never change without subsequently also having a new UUID.
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/grain_msg"
+      responses:
+        200:  # Linked
+          $ref: "#/components/responses/message_response"
+        409:  # Grain does not already exist, must use PUT instead
+          $ref: "#/components/responses/message_response"

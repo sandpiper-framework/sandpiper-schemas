@@ -271,49 +271,6 @@ components:
           schema:
             $ref: "#/components/schemas/grains_msg"
 
-  parameters:
-    plan_uuid:
-      name: plan_uuid
-      in: path
-      description: A unique plan ID
-      required: true
-      schema:
-        $ref: "#/components/schemas/v4_uuid"
-    slice_uuid:
-      name: slice_uuid
-      in: path
-      description: A unique slice ID
-      required: true
-      schema:
-        $ref: "#/components/schemas/v4_uuid"
-    grain_uuid:
-      name: grain_uuid
-      in: path
-      description: A unique grain UUID
-      required: true
-      schema:
-        $ref: "#/components/schemas/v4_uuid"
-    plan_detail:
-      name: detail
-      in: query
-      description: Optionally controls the level of detail that will be returned for a plan
-      schema:
-        type: string
-        enum:
-          - PLAN_WITH_DOCUMENT
-          - PLAN_WITHOUT_DOCUMENT
-        default: PLAN_WITHOUT_DOCUMENT
-    grain_detail:
-      name: detail
-      in: query
-      description: Optionally controls the delivery of grain contents or just metadata
-      schema:
-        type: string
-        enum:
-          - GRAIN_WITH_PAYLOAD
-          - GRAIN_WITHOUT_PAYLOAD
-        default: GRAIN_WITHOUT_PAYLOAD
-
 servers:
   - url: "{server}/v1"
     variables:
@@ -366,7 +323,15 @@ paths:
         Get the list of all plans stored on the respondent, optionally with
         their document contents as well.
       parameters:
-        - $ref: "#/components/parameters/plan_detail"
+        - in: query
+          name: plan_detail
+          description: Optionally controls the level of detail that will be returned for a plan
+          schema:
+            type: string
+            enum:
+              - PLAN_WITH_DOCUMENT
+              - PLAN_WITHOUT_DOCUMENT
+            default: PLAN_WITHOUT_DOCUMENT
       responses:
         200:
           $ref: "#/components/responses/plans_response"
@@ -377,7 +342,12 @@ paths:
         - objects
       summary: Access a specific plan using its unique identifier
       parameters:
-        - $ref: "#/components/parameters/plan_uuid"
+        - name: plan_uuid
+          in: path
+          description: A unique plan ID
+          required: true
+          schema:
+            $ref: "#/components/schemas/v4_uuid"
       responses:
         200:
           $ref: "#/components/responses/plan_response"
@@ -438,7 +408,12 @@ paths:
   /plans/{plan_uuid}/{status_action}:
     description: Modify a given plan's status
     parameters:
-      - $ref: "#/components/parameters/plan_uuid"
+      - name: plan_uuid
+        in: path
+        description: A unique plan ID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
       - name: status_action
         in: path
         description: >-
@@ -463,7 +438,12 @@ paths:
   /slices/{slice_uuid}:
     description: A specific slice
     parameters:
-      - $ref: "#/components/parameters/slice_uuid"
+      - name: slice_uuid
+        in: path
+        description: A unique slice ID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
     get:
       tags:
         - objects
@@ -474,8 +454,21 @@ paths:
   /slices/{slice_uuid}/grains:
     description: All grains within a specific slice
     parameters:
-      - $ref: "#/components/parameters/slice_uuid"
-      - $ref: "#/components/parameters/grain_detail"
+      - name: slice_uuid
+        in: path
+        description: A unique slice ID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
+      - name: grain_detail
+        in: query
+        description: Optionally controls the delivery of grain contents or just metadata
+        schema:
+          type: string
+          enum:
+            - GRAIN_WITH_PAYLOAD
+            - GRAIN_WITHOUT_PAYLOAD
+          default: GRAIN_WITHOUT_PAYLOAD
     get:
       tags:
         - object collections
@@ -486,14 +479,32 @@ paths:
   /slices/{slice_uuid}/grains/{grain_uuid}:
     description: A specific grain within a specific slice
     parameters:
-      - $ref: "#/components/parameters/slice_uuid"
-      - $ref: "#/components/parameters/grain_uuid"
+      - name: slice_uuid
+        in: path
+        description: A unique slice ID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
+      - name: grain_uuid
+        in: path
+        description: A unique grain UUID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
     get:
       tags:
         - objects
       summary: Get the metadata and optionally the content of a specific grain
       parameters:
-        - $ref: "#/components/parameters/grain_detail"
+        - name: grain_detail
+          in: query
+          description: Optionally controls the delivery of grain contents or just metadata
+          schema:
+            type: string
+            enum:
+              - GRAIN_WITH_PAYLOAD
+              - GRAIN_WITHOUT_PAYLOAD
+            default: GRAIN_WITHOUT_PAYLOAD
       responses:
         200:
           $ref: "#/components/responses/grain_response"

@@ -17,9 +17,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    httpBasic:
-      type: http
-      scheme: basic
   schemas:
     v4_uuid:
       description: An RFC4122 v4 UUID
@@ -292,8 +289,7 @@ paths:
         200:
           description: OK
     post:
-      security:
-        - httpBasic: []
+      security: []
       tags:
         - actions
       requestBody:

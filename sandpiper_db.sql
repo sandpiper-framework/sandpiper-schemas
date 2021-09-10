@@ -52,6 +52,8 @@ DROP TABLE IF EXISTS controllers;
 DROP TABLE IF EXISTS slice_types;
 DROP TABLE IF EXISTS unique_key_fields;
 DROP TABLE IF EXISTS multi_key_fields;
+DROP TABLE IF EXISTS plan_status_flows;
+DROP TABLE IF EXISTS plan_statuses;
 
 -- Begin main structure
 --- Locals
@@ -130,7 +132,7 @@ CREATE TABLE slices (
 		, slice_type TEXT NOT NULL REFERENCES slice_types (slice_type)
 		, file_name TEXT NULL
 		, slice_meta_data TEXT NULL
-		, slice_order INTEGER NOT NULL DEFAULT 0
+--		, slice_order INTEGER NOT NULL DEFAULT 0	-- REMOVED 2021-07-23, use plan_slices.plan_slice_order
 		, slice_grainlist_hash TEXT NULL
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, unique (pool_uuid, slice_description)
@@ -162,23 +164,35 @@ CREATE TABLE slice_grains (
 	);
 
 --- Plans
+CREATE TABLE plan_statuses (
+		  plan_status TEXT PRIMARY KEY
+		, plan_status_description TEXT NOT NULL
+		, plan_status_order INTEGER NOT NULL UNIQUE
+	);
+
+CREATE TABLE plan_status_flows (
+		  plan_status_rule_id INTEGER PRIMARY KEY AUTOINCREMENT
+		, plan_status_from TEXT NOT NULL REFERENCES plan_statuses (plan_status)
+		, plan_status_to TEXT NOT NULL REFERENCES plan_statuses (plan_status)
+		, UNIQUE (plan_status_from, plan_status_to)
+		, CHECK (plan_status_from <> plan_status_to)
+	);
+
 CREATE TABLE plans (
 		  plan_uuid CHAR(36) PRIMARY KEY
 		, primary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
-		, secondary_node_uuid CHAR(36) NULL REFERENCES nodes (node_uuid)
+		, secondary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
 -- NULL secondary node means the plan was invoked but not assigned to a known node secondary
-		, status TEXT NOT NULL
+		, status TEXT NOT NULL REFERENCES plan_statuses (plan_status)
 		, status_message TEXT NULL
+		, status_on DATETIME NOT NULL
+		, primary_approved_on DATETIME
+		, secondary_approved_on DATETIME
 		, plan_description TEXT NOT NULL
 		, local_description TEXT NULL
 		, created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 		, UNIQUE (primary_node_uuid, secondary_node_uuid)
 		, CHECK (primary_node_uuid <> secondary_node_uuid)
-		, CHECK (status IN ('Invoked', 'Proposed', 'Approved', 'On Hold', 'Rejected', 'Obsolete'))
-		, CHECK (
-				(status IN ('Proposed', 'Approved', 'On Hold', 'Rejected', 'Obsolete') AND secondary_node_uuid IS NOT NULL) OR
-				(status = 'Invoked' AND secondary_node_uuid IS NULL)
-			)
 	);
 
 CREATE TABLE plan_slices (
@@ -325,6 +339,32 @@ INSERT INTO multi_key_fields (multi_key_field) VALUES
 	, ('napa-branding-mfr'), ('napa-line-code'), ('napa-translation-pcc')
 	, ('swift-bic')
 	, ('tmc-vmrs-code');
+
+INSERT INTO plan_statuses (plan_status, plan_status_description, plan_status_order) VALUES
+  ('Proposed', 'A full plan that contains both actors'' information but has not yet been approved by both.', 10)
+, ('Approved', 'Both actors have approved this plan, either explicitly or by being the one to propose its new status.', 20)
+, ('On Hold', 'One or both parties have disabled synchronization of data under this plan for the current time.', 30)
+, ('Terminated', 'One or both parties have decided that this plan is not suitable for use -- not that it''s old or outmoded, but that it is flawed or unacceptable.', 40)
+, ('Obsolete', 'One or both parties have decided that this plan holds no value for future use and should be permanently disabled.', 50);
+
+INSERT INTO plan_status_flows (plan_status_from, plan_status_to) VALUES
+-- Everything can be killed except the dead themselves, and nothing can be invoked anew once it has lived, but..
+-- Proposed plans can also be approved or rejected, but not on hold because they were never approved
+  ('Proposed', 'Approved')
+, ('Proposed', 'Terminated')
+, ('Proposed', 'Obsolete')
+-- The only thing Approved plans can't do is go back to being Invoked or Proposed; they're already in play
+, ('Approved', 'On Hold')
+, ('Approved', 'Terminated')
+-- On Hold plans can also be proposed or rejected; the only route to approved is through proposed
+, ('On Hold', 'Proposed')
+, ('On Hold', 'Terminated')
+, ('On Hold', 'Obsolete')
+-- Rejected plans can be moved back to a proposed state or killed
+, ('Terminated', 'Proposed')
+, ('Terminated', 'Obsolete')
+-- Obsolete plans can only be proposed
+, ('Obsolete', 'Proposed');
 
 -- Activity tables
 --- General purpose -- could do with normalization but works for now

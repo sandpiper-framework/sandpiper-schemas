@@ -9,7 +9,7 @@ info:
   license:
     name: Artistic License 2.0
     url: "https://www.perlfoundation.org/artistic-license-20.html"
-  version: 0.9.11
+  version: 0.9.13
 
 components:
   securitySchemes:
@@ -58,7 +58,6 @@ components:
           type: string
           format: byte
           nullable: true
-
     plan_status_action:
       type: string
       enum:
@@ -163,6 +162,9 @@ components:
         grain_reference:
           description: A value that may or may not be unique but provides an index to the grain that is not found in its contents, e.g. an internal system ID at the grain's genesis
           type: string
+        grain_size_bytes:
+          description: Size of the grain's data in bytes
+          type: integer
         payload:
           $ref: "#/components/schemas/payload"
     grains:
@@ -190,6 +192,22 @@ components:
       properties:
         grains:
           $ref: "#/components/schemas/grains"
+        message:
+          $ref: "#/components/schemas/sandpiper_message"
+    grain_ids:
+      description: One or more grain IDs
+      type: array
+      items:
+        type: integer
+    grain_ids_msg:
+      description: One or more grain IDs with a sandpiper message
+      type: object
+      required:
+        - grain_ids
+        - message
+      properties:
+        grains:
+          $ref: "#/components/schemas/grain_ids"
         message:
           $ref: "#/components/schemas/sandpiper_message"
     plan_msg:
@@ -267,7 +285,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/grains_msg"
-
+    grain_ids_response:
+      description: A list of grain IDs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/grain_ids_msg"
 servers:
   - url: "{server}/v1"
     variables:
@@ -468,10 +491,26 @@ paths:
     get:
       tags:
         - object collections
-      summary: Get all grains within a specific slice
+      summary: Get all grains within a specific slice as full objects
       responses:
         200:
           $ref: "#/components/responses/grains_response"
+  /slices/{slice_uuid}/grain_id_list:
+    description: All grains within a specific slice, but in a highly optimized format. Useful when loading huge lists of grains at high frequency.
+    parameters:
+      - name: slice_uuid
+        in: path
+        description: A unique slice ID
+        required: true
+        schema:
+          $ref: "#/components/schemas/v4_uuid"
+    get:
+      tags:
+        - object collections
+      summary: Get all grains within a specific slice as a one-dimensional list of IDs
+      responses:
+        200:
+          $ref: "#/components/responses/grain_ids_response"
   /slices/{slice_uuid}/grains/{grain_uuid}:
     description: A specific grain within a specific slice
     parameters:

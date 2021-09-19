@@ -33,4 +33,10 @@ There are a handful good graphical XSD editors like [Eclipse](https://www.eclips
 
 ### Database Schema
 
+The Database Schema is a single SQL file that contains all the data and tables for a reference database implenentation in SQLite 3. To use it, you can run this file inside an SQLite .db file, and it will drop/create tables and their relationships.
+
+Many tools exist to interact with SQLite, from raw Python (natively supported) to database clients like [dBeaver](https://dbeaver.io/) (open source) and the dedicated [SQLite Browser](https://sqlitebrowser.org/) (open source).
+
 ### Framework Documentation
+
+The Framework Documentation is a markdown file containing a Sandpiper technical overview, reasoning, concepts, and implementation details. A PDF copy of the last version is available [here](https://sandpiperframework.net/wp-content/uploads/2021/04/Sandpiper_0.9.0.pdf). We created this before our API work had completed, so it is missing some critical details, but the overview, reasoning, and model are all still correct.

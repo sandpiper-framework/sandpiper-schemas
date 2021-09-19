@@ -27,6 +27,10 @@ We do our proving and much of the editing in the [Swagger Editor](https://github
 
 ### Plan Document
 
+The Plan Document is an XML file that codifies the agreement between two partners, and cannot be modified without both partners approving the change. The structure of this file is governed by an XML Schema Definition (XSD), found in sandpiper_plan.xsd.
+
+There are a handful good graphical XSD editors like [Eclipse](https://www.eclipse.org) (Open Source; look for the Java and DSL Developer package), [oXygen XML](https://www.oxygenxml.com) (proprietary), and [XMLSpy](https://www.altova.com/xmlspy-xml-editor) (proprietary). We do all the editing at a text/source code level, to avoid artifacts, so if no graphical tool works for you, most good editors include an XSD plugin or mode.
+
 ### Database Schema
 
 ### Framework Documentation

@@ -10,7 +10,7 @@ Please feel free to visit us at https://sandpiperframework.net
 
 ## Overview
 
-Four eventual deliverables will live here.
+Four eventual specifications will live here.
 
 1. [API specification](#api_specification)
 1. [Plan Document schema](#plan_document)

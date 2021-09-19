@@ -21,6 +21,10 @@ Currently we have the API spec, plan document schema, and database schema relati
 
 ### API Specification
 
+The full Sandpiper API specification is provided as an OpenAPI 3 YAML schema. It is entirely contained in sandpiper_api.yaml.
+
+We do our proving and much of the editing in the [Swagger Editor](https://github.com/swagger-api/swagger-editor). For an offline copy, you can just download the source code of the latest release, unzip it to a local folder somewhere, and use a web browser to open the index.html file that sits in the root directory. You can also use the editor online at [editor.swagger.io](https://editor.swagger.io/).
+
 ### Plan Document
 
 ### Database Schema

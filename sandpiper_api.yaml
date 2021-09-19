@@ -198,7 +198,7 @@ components:
       description: One or more grain IDs
       type: array
       items:
-        type: integer
+        $ref: "#/components/schemas/v4_uuid"
     grain_ids_msg:
       description: One or more grain IDs with a sandpiper message
       type: object

@@ -15,7 +15,7 @@ Four eventual specifications will live here.
 1. [API specification](#api-specification)
 1. [Plan Document schema](#plan-document)
 1. [Database schema](#database-schema)
-1. [Framework documentation](#framework-documention)
+1. [Framework documentation](#framework-documentation)
 
 Currently we have the API spec, plan document schema, and database schema relatively stable and present in the repository. An out-of-date version of the documentation can be found on the Sandpiper Framework website, and will be merged here with caveats in a separate branch while we update it.
 

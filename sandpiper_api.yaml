@@ -9,7 +9,7 @@ info:
   license:
     name: Artistic License 2.0
     url: "https://www.perlfoundation.org/artistic-license-20.html"
-  version: 0.9.13
+  version: 0.9.14
 
 components:
   securitySchemes:

@@ -1,6 +1,6 @@
 # sandpiper-schemas
 
-Schema specifications for the Sandpiper Framework API, database, and documents
+Sandpiper Framework API documentation and schemas
 
 ## About
 

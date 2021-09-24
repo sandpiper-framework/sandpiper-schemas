@@ -206,7 +206,7 @@ components:
         - grain_ids
         - message
       properties:
-        grains:
+        grain_ids:
           $ref: "#/components/schemas/grain_ids"
         message:
           $ref: "#/components/schemas/sandpiper_message"

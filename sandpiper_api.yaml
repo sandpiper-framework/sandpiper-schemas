@@ -9,7 +9,7 @@ info:
   license:
     name: Artistic License 2.0
     url: "https://www.perlfoundation.org/artistic-license-20.html"
-  version: 0.9.14
+  version: 0.9.15
 
 components:
   securitySchemes:
@@ -244,11 +244,6 @@ components:
         message:
           $ref: "#/components/schemas/sandpiper_message"
   responses:
-    not_authed:
-      description: Access denied, requester is not logged in or authenticated
-    forbidden:
-      description: Access denied, the current user does not have access to this
-            endpoint
     message_response:
       description: A standalone Sandpiper message
       content:
@@ -291,6 +286,13 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/grain_ids_msg"
+    not_authorized_response:
+      description: Any content requested from a valid endpoint but that is not available, due to security or other factor, should return a 403 Forbidden error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/sandpiper_message"
+
 servers:
   - url: "{server}/v1"
     variables:
@@ -354,6 +356,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/plans_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /plans/{plan_uuid}:
     description: A specific plan
     get:
@@ -370,6 +374,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/plan_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /plans/{generator_action}:
     description: >-
       Generate a fragment plan or upload a previously-unknown plan as a new
@@ -403,6 +409,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
     get:
       tags:
         - actions
@@ -424,6 +432,9 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/plan_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
+
   /plans/{plan_uuid}/{status_action}:
     description: Modify a given plan's status
     parameters:
@@ -454,6 +465,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /slices/{slice_uuid}:
     description: A specific slice
     parameters:
@@ -470,6 +483,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/slice_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /slices/{slice_uuid}/grains:
     description: All grains within a specific slice
     parameters:
@@ -495,6 +510,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/grains_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /slices/{slice_uuid}/grain_id_list:
     description: All grains within a specific slice, but in a highly optimized format. Useful when loading huge lists of grains at high frequency.
     parameters:
@@ -511,6 +528,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/grain_ids_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
   /slices/{slice_uuid}/grains/{grain_uuid}:
     description: A specific grain within a specific slice
     parameters:
@@ -543,6 +562,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/grain_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
     delete:
       tags:
         - actions
@@ -550,6 +571,8 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/message_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
     put:
       tags:
         - actions
@@ -562,6 +585,8 @@ paths:
       responses:
         201: # Added successfully
           $ref: "#/components/responses/message_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
         409: # Grain already exists and cannot be updated
           $ref: "#/components/responses/message_response"
     post:
@@ -577,5 +602,7 @@ paths:
       responses:
         200:  # Linked
           $ref: "#/components/responses/message_response"
+        403:
+          $ref: "#/components/responses/not_authorized_response"
         409:  # Grain does not already exist, must use PUT instead
           $ref: "#/components/responses/message_response"

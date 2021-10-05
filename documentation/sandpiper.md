@@ -1,9 +1,5 @@
 # The Sandpiper Framework Reference Documentation
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=4 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
 - [Introduction](#introduction)
   - [About Sandpiper](#about-sandpiper)
   - [Background](#background)
@@ -52,8 +48,6 @@
 - [Glossary](#glossary)
 - [Copyright Notice](#copyright-notice)
 - [Licensing](#licensing)
-
-<!-- /code_chunk_output -->
 
 ## Introduction
 
@@ -182,11 +176,6 @@ The node is a single Sandpiper instance or system^[While a server might run mult
 
 Note: a human interacting at Level 1-1 is technically a node, though their data state is unknown after retrieval.
 
-###### Attributes
-
-| Name | Plan Attribute | API Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|--|
-
 ##### Pools
 
 Within each Sandpiper node, product data is stored in broad banks called *Pools*. These represent a business or management-level division, so that a single node might contain product data spanning multiple business approaches yet being coordinated within one system.
@@ -199,11 +188,6 @@ A node's canonical pools contain the data that it owns and controls; changes mad
 
 A node's snapshot pools contain copies of the data in other nodes' canonical pools transferred in this way. A snapshot pool is just that: a snapshot of some or all of the data in a canonical pool from an external node, at its last-known state.
 
-###### Attributes
-
-| Name | Plan Attribute | API Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|--|
-
 ##### Slices
 
 <img src="SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
@@ -211,14 +195,6 @@ A node's snapshot pools contain copies of the data in other nodes' canonical poo
 A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
 
 A slice defines the single type of the data it contains (see [the slice types list](#slice-type)). All grains within a slice must be the same type. The slice also defines a filename for Level 1 transactions.
-
-###### Attributes
-
-| Attribute | Plan Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|
-| Unique ID    | uuid    | required    | UUID    | a4380ad7-31a7-4f31-864d-4c8de746ad6f
-| Slice Data Type | slicetype | required | Sandpiper slice types list | aces-file |
-| File Name | filename | optional | alpha string | ApplicationFile.xml |
 
 ##### Grains
 
@@ -230,12 +206,6 @@ The grain is the smallest unit on which a Sandpiper node can act, and can only b
 
 Grains are not part of the plan; they reside below the slice, the lowest level of agreement between actors.
 
-###### Attributes
-
-| Name | Plan Attribute | API Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|--|
-|Grain Key | *none* | grain_key | required | unicode string | "23490A"
-
 #### Reference Objects
 
 ##### Links
@@ -245,14 +215,6 @@ Links are references that allow slices to be tied to other systems and tagged wi
 The link is the primary means of attaching overarching structure to slice data. Every partnership will have a different preferred method for establishing things like line codes, hierarchies, and sets, so the link provides a few standard methods to do this and an extensible category for what it doesn't define.
 
 The link is also the way Sandpiper connects slice data to description or validation frameworks like reference database versions, business identities, and so on.
-
-###### Attributes
-
-| Name | Plan Attribute | API Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|--|
-| Key field reference pointer | keyfield | ? | required | Sandpiper Key Field List | "autocare-pcdb-partterminology" |
-| Key field value | keyvalue | ? | required | Text | "9999922" |
-| Description | description | ? | optional | Text | "Yak Milk Filter" |
 
 ##### The Root-Derivative Slice Group
 
@@ -277,14 +239,6 @@ Further, this pattern allows external granulators (triggered either manually or 
 The secondary actor in a Sandpiper relationship can subscribe to a slice, stating its intention to mirror that data and keep it synchronized with the primary actor.
 
 This subscription includes the secondary actor's stated preference for receipt of the data, particularly the frequency of synchronization, aka the period. Actors should not attempt to synchronize more frequently than the minimum period, and should define their own preferences around what load their infrastructure can safely handle. In future versions, this may also include whether it should be pushed or pulled, what methods should be employed, what schedule should be followed, and what credentials will be used.
-
-###### Attributes
-
-| Name | Plan Attribute | API Attribute | Presence | Allowed Values | Example |
-|--|--|--|--|--|--|--|
-| Slice UUID | sliceuuid | ? | required | uuid | cebafea0-421b-4dba-8b9e-d9cb60ce41de |
-| Minimum Period | minperiod | ? | required | decimal | 1.5 |
-| Minimum Period UOM | minperioduom | ? | required | "seconds","hours", or "days" | days
 
 ### Granulation
 
@@ -484,37 +438,6 @@ Authentication is a simple username and password, submitted by the initiator to 
 The respondent must first verify that the username and password are valid, and then, if a plan document is present, compare this plan document to its own understanding of the plans available between the two actors. Messages (including errors) are returned inside the "message" attribute of a JSON string; successes will also include the JWT standard "token" and "expires" attributes.
 
 The response may also include a planschemaerrors attribute to list any warnings or errors found with the plan schema.
-
-##### Level 1 and 2 Authentication/Negotiation Request JSON Object
-
-| Attribute | Description |
-|-|-|
-| username  | User Name |
-| password  | Password |
-| plandocument | Base64-encoded Plan Document |
-
-Example:
-
-    {     "username": "bobauto"
-        , "password": "password123"
-        , "plandocument": "[... base64 content ...]"
-    }
-
-##### Level 1 and 2 Authentication/Negotiation Response JSON Object
-
-| Attribute | Description |
-|-|-|
-| token    | The JWT
-| expires    | Expiration date and time
-| planschemaerrors    | Issues or warnings around the plan schema
-| message    | Response message or status text
-
-Valid values for the message attribute:
-
-| Response | Description |
-|-|-|
-| Successful Authentication With Plan | Login successful
-| Authentication Error | Invalid username and/or password
 
 ##### The Level 1 and 2 Java Web Token
 

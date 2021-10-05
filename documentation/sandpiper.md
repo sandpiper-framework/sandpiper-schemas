@@ -666,8 +666,6 @@ Transaction
 
 The Sandpiper Framework Reference Documentation. Copyright :copyright: 2021 The Sandpiper Authors.
 
-Written by Krister Kittelson, with significant input from the members of the Sandpiper project -- particularly Luke Smith and Doug Winsby.
-
 ## Licensing
 
 This documentation, part of the Sandpiper Framework software specification and package, is made available to you under the terms of the [Artistic License 2.0](https://www.perlfoundation.org/artistic-license-20.html). The full text of this license follows.

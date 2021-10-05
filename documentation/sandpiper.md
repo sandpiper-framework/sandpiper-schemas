@@ -160,7 +160,7 @@ For these reasons Sandpiper avoids updates except as a concept, and actually tre
 
 ### Object Model
 
-<img src="Object_Model_Links.png" alt="Sandpiper model diagram showing links on persistent objects" title="The Sandpiper Object Model" width="50%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/Object_Model_Links.png" alt="Sandpiper model diagram showing links on persistent objects" title="The Sandpiper Object Model" width="50%" style="float: right; clear: right; padding: 1em"/>
 
 The object model for Sandpiper defines a set of common abstractions for the product data each node stores. There are just four persistent objects (*Node*, *Pool*, *Slice*, and *Grain*) and two reference objects (*Link* and *Subscription*). All Sandpiper objects have a universally unique ID that will be used for actions exclusively whenever possible; in the attribute lists in each section here, this has been omitted, but is assumed.
 
@@ -190,7 +190,7 @@ A node's snapshot pools contain copies of the data in other nodes' canonical poo
 
 ##### Slices
 
-<img src="SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
 
@@ -226,7 +226,7 @@ All slices technically contain at least one grain; in the case of a Level 1 file
 
 In the root-derivative group pattern, we define a single Level 1 *Root Slice* with the full dataset, and one or more *Derivative Slices* containing granulated data extracted from the master. The derivative slices reference the root's unique ID using a link with system "root", indicating their source. These derivative slices use the *Slice Type* to indicate the kind of division they do (i.e. what kinds of grains are within), and actors can subscribe to them directly.
 
-<img src="Granulation_ExampleSimplePIES.png" alt="Master Slice with Index Slices" title="Master Slice with Index Slices" width="50%" style="padding: 1em; float: right; clear: right;"/>
+<img src="assets/Granulation_ExampleSimplePIES.png" alt="Master Slice with Index Slices" title="Master Slice with Index Slices" width="50%" style="padding: 1em; float: right; clear: right;"/>
 
 For example, in a PIES file, we might want to work with PIES items (which will use the part number as a key) as well as PIES market copy and PIES price sheets (which do not reference part numbers and have to be keyed differently). In this case we'd have four slices: the full root, a derivative slice by items, a derivative slice by price sheets, and a derivative slice by market copy.
 
@@ -261,7 +261,7 @@ In these sections, we'll refer to the source of the original data as the *PIM:* 
 
 Sandpiper's main goal is to facilitate repeatable, deterministic data transfer, and to do this it lays out a model for node interaction.
 
-<img src="Interaction_Model_Overview.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
+<img src="assets/Interaction_Model_Overview.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
 
 1. Outside well-defined communication channels, objects and roles are established. This segment is known as the *Extricate.*
     1. A system or human employing Sandpiper is known as an *Actor*.
@@ -296,7 +296,7 @@ Either actor may terminate the agreement. Failure to agree on a proposed change 
 
 #### Plan Domains
 
-<img src="Domains.png" title="Domain Summary" alt="Diagram showing primary, common, and secondary domains" width="50%" style="float: right; padding: 1em;">
+<img src="assets/Domains.png" title="Domain Summary" alt="Diagram showing primary, common, and secondary domains" width="50%" style="float: right; padding: 1em;">
 A Sandpiper plan establishes three domains and their ownership: The *Primary Domain* (owned by the primary actor), the *Secondary Domain* (owned by the secondary actor), and the *Communal Domain* (jointly shared between primary and secondary). To modify any part of the plan, both actors must agree to the change.
 
 ##### Primary Plan Domain
@@ -333,7 +333,7 @@ An exchange begins when two actors successfully complete the introduction. These
 
 ##### Negotiation
 
-<img src="Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
+<img src="assets/Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
 
 Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
 
@@ -361,7 +361,7 @@ Some levels may have sub-levels; these will be written in the format L-n, where 
 
 #### Level 0
 
-<img src="Level0.png" alt="Level 0 Conceptual Diagram" title="Level 0" width="40%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/Level0.png" alt="Level 0 Conceptual Diagram" title="Level 0" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 Though not actually actionable within Sandpiper, the framework defines a prototypical Level 0 to represent uncontrolled product data exchange. Level 0 represents human-to-human interaction where actual files are sent between humans operating computers, who make agreements between themselves about how these files should be processed, their scope, and so on.
 
@@ -377,13 +377,13 @@ This level is periodic and delivery-based. It has two sub-levels to serve either
 
 ##### Level 1-1: Basic Exchange
 
-<img src="Level1-1.png" alt="Level 1-1 Conceptual Diagram" title="Level 1-1" width="40%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/Level1-1.png" alt="Level 1-1 Conceptual Diagram" title="Level 1-1" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 A Level 1-1 basic exchange begins with the plan but never proceeds into synchronization; it allows a human to connect to a machine, complete the plan, and retrieve full files. Currently the only supported method for Level 1-1 is a human connecting to a Sandpiper server's web UI as a data portal.
 
 ##### Level 1-2: Advanced Exchange
 
-<img src="Level1-2.png" alt="Level 1-2 Conceptual Diagram" title="Level 1-2" width="40%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/Level1-2.png" alt="Level 1-2 Conceptual Diagram" title="Level 1-2" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 Level 1-2 advanced exchanges can only occur between two Sandpiper nodes, machine-to-machine. They do not not use portal-driven delivery; rather, nodes transfer files directly between nodes using the Sandpiper transport.
 
@@ -405,7 +405,7 @@ The secondary actor's node *must* archive or delete all previous data associated
 
 #### Level 2
 
-<img src="Level2.png" alt="Level 2 Conceptual Diagram" title="Level 2" width="40%" style="float: right; clear: right; padding: 1em"/>
+<img src="assets/Level2.png" alt="Level 2 Conceptual Diagram" title="Level 2" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 Level 2 provides the ability to use an interface-driven mode where data may be modified in more targeted pieces, still in the periodic subscription paradigm but at a lower level.
 
@@ -459,23 +459,23 @@ The capabilities of the data source will direct the workflow that's most efficie
 
 #### Classic PIM Input
 
-<img src="Input_ClassicPimL1.png" alt="Classic PIM Level 1 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
+<img src="assets/Input_ClassicPimL1.png" alt="Classic PIM Level 1 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
 Level 1, being file-based, is designed for classic PIMs that can't use or haven't yet been adapted to use the Sandpiper framework. The PIM outputs files, and the user loads them into the Sandpiper server using the commandline interface.
 
-<img src="Input_ClassicPimL2.png" alt="Classic PIM Level 2 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
+<img src="assets/Input_ClassicPimL2.png" alt="Classic PIM Level 2 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
 Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, yet classic PIMs have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a *Granulator.*)
 
 #### Sandpiper-Aware PIM Input
 
-<img src="Input_SandpiperAware.png" alt="Sandpiper-Aware PIM Input Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em;"/>
+<img src="assets/Input_SandpiperAware.png" alt="Sandpiper-Aware PIM Input Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em;"/>
 
 Sandpiper-Aware PIMs are able to use Sandpiper commands to do basic import and launch other tools. This may take the onus off of the user to manually import the data, though the process is likely only semi-automated.
 
 #### Sandpiper-Capable PIM Input
 
-<img src="Input_SandpiperCapable.png" alt="Sandpiper-Capable PIM Input Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
+<img src="assets/Input_SandpiperCapable.png" alt="Sandpiper-Capable PIM Input Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Capable PIMs can communicate directly with the Sandpiper server, so for day-to-day operations the user does not need to engage any external tools while updating data.
 
@@ -485,23 +485,23 @@ As with input, the capabilities of the PIM receiver will direct the most efficie
 
 #### Classic PIM Output
 
-<img src="Output_ClassicPimL1.png" alt="Classic PIM Level 1 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
+<img src="assets/Output_ClassicPimL1.png" alt="Classic PIM Level 1 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 
 The classic PIM, without additional development, can make use of a purely Level 1 output process. The Sandpiper server, after synchronization with the primary Sandpiper node, outputs files via the CLI. The PIM then imports these using established processes.
 
-<img src="Output_ClassicPimL2.png" alt="Classic PIM Level 2 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
+<img src="assets/Output_ClassicPimL2.png" alt="Classic PIM Level 2 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 
 With an integration process, a classic PIM can also use the results of Level 2 transactions. More advanced recipients often already have a process to do something similar (for example, by comparing existing files to data in the PIM). Using the Sandpiper API and/or CLI, an external migration program can offload this change comparison to the deterministic Sandpiper framework, yet feed the PIM in the way it's already operating.
 
 #### Sandpiper-Aware PIM Output
 
-<img src="Output_SandpiperAware.png" alt="Sandpiper-Aware PIM Output Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em"/>
+<img src="assets/Output_SandpiperAware.png" alt="Sandpiper-Aware PIM Output Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Aware PIMs may not directly integrate Sandpiper into their logic, but can trigger regular loads and audits using external commands.
 
 #### Sandpiper-Capable PIM Output
 
-<img src="Output_SandpiperCapable.png" alt="Sandpiper-Capable PIM Output Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
+<img src="assets/Output_SandpiperCapable.png" alt="Sandpiper-Capable PIM Output Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Capable PIMs speak directly to the Sandpiper server via the API, integrating the functions so that no external tooling or user intervention is required.
 

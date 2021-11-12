@@ -17,8 +17,6 @@ Four eventual specifications will live here.
 1. [Database schema](#database-schema)
 1. [Framework documentation](#framework-documentation)
 
-Currently we have the API spec, plan document schema, and database schema relatively stable and present in the repository. Our working copy of the documentation is present in the unstable branch of this repository; it is being brought up to date after an extended period of focusing on the other three areas.
-
 ### API Specification
 
 The full Sandpiper API specification is provided as an OpenAPI 3 YAML schema. It is entirely contained in sandpiper_api.yaml.

@@ -37,4 +37,4 @@ Many tools exist to interact with SQLite, from raw Python (natively supported) t
 
 ### Framework Documentation
 
-The Framework Documentation is a markdown file containing a Sandpiper technical overview, reasoning, concepts, and implementation details. A PDF copy of the last version is available [here](https://sandpiperframework.net/wp-content/uploads/2021/04/Sandpiper_0.9.0.pdf), and the source markdown file is in the unstable branch of this repository. We created this before our API work had completed, so it is missing some critical details, but the overview, reasoning, and model are all still correct.
+The Framework Documentation is a markdown file containing a Sandpiper technical overview, reasoning, concepts, and implementation details.

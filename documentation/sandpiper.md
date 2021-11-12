@@ -365,7 +365,7 @@ Some levels may have sub-levels; these will be written in the format L-n, where 
 
 Though not actually actionable within Sandpiper, the framework defines a prototypical Level 0 to represent uncontrolled product data exchange. Level 0 represents human-to-human interaction where actual files are sent between humans operating computers, who make agreements between themselves about how these files should be processed, their scope, and so on.
 
-The only mechanism for this exchange is human-to-human.
+Level 0 is essentially how product data exchange occurs in most scenarios today. The only mechanism for this exchange is human-to-human.
 
 #### Level 1
 

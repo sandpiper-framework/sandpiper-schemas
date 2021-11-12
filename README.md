@@ -31,7 +31,7 @@ There are a handful good graphical XSD editors like [Eclipse](https://www.eclips
 
 ### Database Schema
 
-The Database Schema is a single SQL file that contains all the data and tables for a reference database implementation in SQLite 3. To use it, you can run this file inside an SQLite .db file, and it will drop/create tables and their relationships, as well as insert valid values for things like plan status and grain type. 
+The Database Schema is a single SQL file that contains all the data and tables for a reference database implementation in SQLite 3. To use it, you can run this file inside an SQLite .db file, and it will drop/create tables and their relationships, as well as insert valid values for things like plan status and grain type.
 
 Many tools exist to interact with SQLite, from raw Python (natively supported) to database clients like [dBeaver](https://dbeaver.io/) (open source) and the dedicated [SQLite Browser](https://sqlitebrowser.org/) (open source).
 

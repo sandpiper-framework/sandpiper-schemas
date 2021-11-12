@@ -419,7 +419,7 @@ Level 3 is not currently defined in detail; it will be part of Sandpiper 2.0.
 
 ## The Sandpiper API and Protocol
 
-At Level 1 and Level 2, the basic method of interaction in Sandpiper is through a RESTful HTTPS API employing Java Web Tokens (JWT). At Level 3, higher-order communication becomes possible and communication shifts to a WebSocket channel.
+At Level 1 and Level 2, the basic method of interaction in Sandpiper is through a RESTful HTTPS API employing Java Web Tokens (JWT)^[The official definition of the Level 1 & 2 API and its methods is defined using OpenAPI; here we'll discuss the "why" and give an overview of the important points.]. At Level 3, higher-order communication becomes possible and communication shifts to a WebSocket channel.
 
 Sandpiper adopts this model for Level 1 & 2 both because it matches the periodic nature of these interactions and because the implementation of this pattern is well supported in most major programming environments. Level 3 introduces truly real-time bi-directional communication, with all its associated complexity; to require it for simpler modes would hinder adoption and create opportunities for errors.
 

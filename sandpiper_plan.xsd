@@ -78,7 +78,7 @@
             <xs:element maxOccurs="unbounded" minOccurs="0" name="MultiLink">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="1" name="MultLinkEntry">
+                        <xs:element maxOccurs="unbounded" minOccurs="1" name="MultiLinkEntry">
                             <xs:complexType>
                                 <xs:attributeGroup ref="Model"/>
                                 <xs:attribute name="keyvalue" type="FieldValue" use="required"/>
@@ -109,6 +109,7 @@
                                 <xs:attribute name="role">
                                     <xs:simpleType>
                                         <xs:restriction base="xs:string">
+                                            <xs:enumeration value="All"/>
                                             <xs:enumeration value="Synchronization"/>
                                             <xs:enumeration value="Authentication"/>
                                         </xs:restriction>
@@ -127,21 +128,15 @@
     </xs:complexType>
     <xs:complexType name="Controller">
         <xs:sequence>
-            <xs:element maxOccurs="1" minOccurs="1" name="Controller">
+            <xs:element name="Admin">
                 <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Admin">
-                            <xs:complexType>
-                                <xs:attribute name="contact" type="String_Medium"/>
-                                <xs:attribute name="email" type="Email"/>
-                            </xs:complexType>
-                        </xs:element>
-                    </xs:sequence>
-                    <xs:attributeGroup ref="Model"/>
-                    <xs:attributeGroup ref="Description_Main"/>
+                    <xs:attribute name="contact" type="String_Medium"/>
+                    <xs:attribute name="email" type="Email"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="Model"/>
+        <xs:attributeGroup ref="Description_Main"/>
     </xs:complexType>
     <!-- Main schema -->
     <xs:element name="Plan">

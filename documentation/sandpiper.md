@@ -90,7 +90,7 @@ Products are controlled by a *Creator*, the manufacturer or provider with ultima
 Sandpiper's focus is product data, which has two primary characteristics:
 
 1. It defines the product, such that changing existing product data (except as a correction or addition) usually means a material change to the product itself
-2. It is nearly stateless, in that it changes infrequently, is not time-sensitive, and is not context-sensitive
+1. It is nearly stateless, in that it changes infrequently, is not time-sensitive, and is not context-sensitive
 
 To give an example of the first primary characteristic of product data, if a sprocket has five teeth when first communicated, that could not be changed to six teeth in a second communication without raising an eyebrow; if the part truly changed from five to six teeth, it's been fundamentally altered and will not function the same way. It really is a new product, even if it supersedes the old for some reason. While Sandpiper doesn't prohibit any changes, making functional modifications like this without introducing a new number is at best ill-advised.
 

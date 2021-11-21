@@ -19,6 +19,7 @@
   - [Actors](#actors)
   - [The Plan](#the-plan)
     - [Plan Domains](#plan-domains)
+    - [The Plan Proposal Workflow](#the-plan-proposal-workflow)
   - [The Connection](#the-connection)
     - [The Introduction](#the-introduction)
     - [The Exchange](#the-exchange)
@@ -265,11 +266,13 @@ Sandpiper's main goal is to facilitate repeatable, deterministic data transfer, 
 
 1. Outside well-defined communication channels, objects and roles are established. This segment is known as the *Extricate.*
     1. A system or human employing Sandpiper is known as an *Actor*.
-    1. Before engaging, two actors must establish a governing agreement known as the *Plan*.
+    1. Before engaging, two actors must share login details
 1. All actor communication via Sandpiper occurs within a *Connection*.
     1. Prior to beginning substantive data transfer, actors begin with the *introduction*.
         1. Actors make *Contact* via the network
         1. Actors *Authenticate* to verify their respective identities
+            1. As part of authentication, actors confirm their existing agreement through a document known as the *Plan*.
+                1. If no Plan is yet available, or either actor wishes to amend the plan, they may still login but then must enter the *Plan Proposal Workflow*
     1. Once the introduction is complete, actors transfer product data during the *Exchange*.
         1. Exchanges are established and next steps are unlocked through *Negotiation*.
         1. Transferring product data and resolving pools as part of an exchange is known as *Synchronization*.
@@ -290,7 +293,7 @@ The secondary actor is the recipient of data. This actor can be a human or a ful
 
 The agreement between two actors is known as the Plan. This describes and confirms a shared understanding of the process, structure, and metadata surrounding synchronization, though not the product data itself. The Sandpiper API and management interfaces actually implement these details -- the Plan itself is not a method for establishing agreements, modifying slice scopes, and so on. Instead, the Plan represents the state of these facets at a given point in time, and the *Plan Document* encapsulates them in an implementation-independent XML format that can be compared between actors and signed off on by both.
 
-The plan itself has a UUID that uniquely identifies it among all plans in use globally.
+The Plan itself has a UUID that uniquely identifies it among all plans in use globally.
 
 Either actor may terminate the agreement. Failure to agree on a proposed change also results in a failed plan, and it must be put on hold until resolved.
 
@@ -325,7 +328,25 @@ One actor, known as the *Initiator*, connects to the other, known as the *Respon
 
 ##### Authentication
 
-In the authentication, the initiator supplies credentials to the respondent that prove its identity.
+In the authentication, the initiator supplies credentials to the respondent that prove its identity and provide a plan if available; if not, their permissions will be minimal and they must enter the plan proposal workflow.
+
+##### The Plan Proposal Workflow
+
+Often, actors starting a new relationship will not have a plan already in place, and actors with an existing relationship may want to modify the current plan. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI documentation for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
+
+###### Starting a New Plan
+
+On login with a blank Plan, the actor will have access only to the plans endpoint, where they can obtain (if secondary) or provide (if primary) a *fragment plan*. This plan contains only the primary actor's information and a one-time plan UUID -- one that can be used to track the fragment but must never be carried forward as the final plan's actual UUID.
+
+The secondary actor can then apply a new Plan UUID, enter their details in the Secondary domain, and add subscriptions to the Communal plan domain. They then provide this to the primary as a *proposed plan*.
+
+The primary can accept, modify, or reject this proposal.
+
+###### Modifying an Existing or Proposed Plan
+
+For actors with an existing plan, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan.
+
+ In the case of a modification, the primary must similarly provide a new plan UUID, and alter the details they want to adjust in the Primary or Communal domain. They must then propose this plan to the secondary for their acceptance, modification, or rejection.
 
 #### The Exchange
 

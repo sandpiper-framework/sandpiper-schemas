@@ -346,7 +346,9 @@ For actors with an existing plan, or one that is still waiting on approval, eith
 
 ##### Proposed Plan Approval
 
-Whether the plan is modified or completely new, once it has been proposed, the candidate plan goes through *Plan Approval*. The Sandpiper Framework defines the *Plan Status*, an attribute of plans shared between two actors, that tracks the state of the plan between the two participants.
+Whether the plan is modified or completely new, once it has been proposed, the candidate plan goes through *Plan Approval*. The Sandpiper Framework defines the *Plan Status*, an attribute of plans shared between two actors, that tracks the state of the plan between the two participants. The full set of statuses and their descriptions are available in [Appendix A: Plan Status](#plan-status).
+
+Plan fragments do not have a status; they may be retained for an Actor's records and processing, but because they are not complete, they are not part of the Sandpiper plan registry. Only upon proposal are they available for mutual recall and operation.
 
 #### The Exchange
 
@@ -581,6 +583,16 @@ asset-files         | 2+   | Binary digital assets    | Filename
 binary-blob         | 1    | Generic binary file    | *none*
 xml-file            | 1    | Generic XML file        | *none*
 text-file           | 1    | Generic text file      | *none*
+
+### Plan Status
+
+Status | Description | Possible Next Statuses
+--|--|--
+Proposed | A full plan that contains both actors' information but has not yet been approved by both. | Approved, Terminated, Obsolete
+Approved | Both actors have approved this plan, either explicitly or by being the one to propose its new status. | On Hold, Terminated
+On Hold | One or both parties have disabled synchronization of data under this plan for the current time. | Proposed, Terminated, Obsolete
+Terminated | One or both parties have decided that this plan is not suitable for use -- not that it's old or outmoded, but that it is flawed or unacceptable. | Proposed, Obsolete
+Obsolete | One or both parties have decided that this plan holds no value for future use and should be permanently disabled. | Proposed
 
 ## Glossary
 

@@ -360,7 +360,7 @@ An exchange begins when two actors successfully complete the introduction. These
 
 Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
 
-In this step, the initiator proposes proceeding using a given plan, referencing its UUID. The respondent can agree to proceed with this plan; if it does not agree, the connection is aborted.
+In this step, the initiator proposes proceeding using a given plan, which is embedded in the login payload as a base64-encoded XML file. The respondent can agree to proceed with this plan; if it does not agree, the connection is aborted.
 
 When the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
 

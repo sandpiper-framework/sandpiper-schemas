@@ -332,7 +332,7 @@ In the authentication, the initiator supplies credentials to the respondent that
 
 ##### The Plan Proposal Workflow
 
-Often, actors starting a new relationship will not have a plan already in place, and actors with an existing relationship may want to modify the current plan. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI documentation for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
+Often, actors starting a new relationship will not have a plan already in place, or actors with an existing relationship may want to modify it. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI schema for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
 
 ###### Starting a New Plan
 
@@ -344,7 +344,7 @@ The primary can accept, modify, or reject this proposal.
 
 ###### Modifying an Existing or Proposed Plan
 
-For actors with an existing plan, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan.
+For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan.
 
  In the case of a modification, the modifying actor must similarly provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They must then propose this plan to the other party for their acceptance, modification, or rejection.
 

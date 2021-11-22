@@ -346,7 +346,7 @@ The primary can accept, modify, or reject this proposal.
 
 For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan.
 
- In the case of a modification, the modifying actor must similarly provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They must then propose this plan to the other party for their acceptance, modification, or rejection.
+In the case of a modification, the modifying actor must similarly provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They must then propose this plan to the other party for their acceptance, modification, or rejection.
 
 #### The Exchange
 

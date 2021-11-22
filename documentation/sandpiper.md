@@ -334,7 +334,7 @@ In the authentication, the initiator supplies credentials to the respondent that
 
 Often, actors starting a new relationship will not have a plan already in place, or actors with an existing relationship may want to modify it. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI schema for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
 
-###### Starting a New Plan
+###### Plan Modification
 
 On login with a blank Plan, the actor will have access only to the plans endpoint, where they can obtain (if secondary) or provide (if primary) a *fragment plan*. This plan contains only the primary actor's information and a one-time plan UUID -- one that can be used to track the fragment but must never be carried forward as the final plan's actual UUID.
 
@@ -342,11 +342,11 @@ The secondary actor can then apply a new Plan UUID, enter their details in the S
 
 The primary can accept, modify, or reject this proposal.
 
-###### Modifying an Existing or Proposed Plan
+For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan. The modifying actor can start from the existing plan, provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They can then propose this plan to the other party for their acceptance, modification, or rejection.
 
-For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan.
+##### Proposed Plan Approval
 
-In the case of a modification, the modifying actor must similarly provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They must then propose this plan to the other party for their acceptance, modification, or rejection.
+Whether the plan is modified or completely new, once it has been proposed, the candidate plan goes through *Plan Approval*. The Sandpiper Framework defines the *Plan Status*, an attribute of plans shared between two actors, that tracks the state of the plan between the two participants.
 
 #### The Exchange
 

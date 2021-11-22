@@ -356,7 +356,7 @@ An exchange begins when two actors successfully complete the introduction. These
 
 ##### Negotiation
 
-<img src="assets/Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
+<img src="assets/Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="50%" style="padding: 1em; float: right;"/>
 
 Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
 

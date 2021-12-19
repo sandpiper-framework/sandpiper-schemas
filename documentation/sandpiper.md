@@ -342,13 +342,17 @@ The secondary actor can then apply a new Plan UUID, enter their details in the S
 
 The primary can accept, modify, or reject this proposal.
 
-For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan. The modifying actor can start from the existing plan, provide a new plan UUID, and alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain. They can then propose this plan to the other party for their acceptance, modification, or rejection.
+For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan, but they do need to provide a clear indication that this is a modification or replacement of an older plan. This can be done using the replaces_plan_uuid payload value in the API (see the YAML file for details).
+
+In this case, rather than starting from a fragment, the modifying actor can start from the existing plan, alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain, and provide a new plan UUID. Finally, they can then propose this plan to the other party.
 
 ##### Proposed Plan Approval
 
 Whether the plan is modified or completely new, once it has been proposed, the candidate plan goes through *Plan Approval*. The Sandpiper Framework defines the *Plan Status*, an attribute of plans shared between two actors, that tracks the state of the plan between the two participants. The full set of statuses and their descriptions are available in [Appendix A: Plan Status](#plan-status).
 
 Plan fragments do not have a status; they may be retained for an Actor's records and processing, but because they are not complete, they are not part of the Sandpiper plan registry. Only upon proposal are they available for mutual recall and operation.
+
+When an initiator connects to a respondent who has new plans to propose, it is the respondent's job to notify the initiator using the login message that there are new pending plans to review. This is necessary because either side can modify the agreement, but in a REST API only one side can initiate communication.
 
 #### The Exchange
 

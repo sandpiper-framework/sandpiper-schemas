@@ -89,6 +89,9 @@ components:
       properties:
         plan_uuid:
           $ref: "#/components/schemas/v4_uuid"
+        replaces_plan_uuid:
+          $ref: "#/components/schemas/v4_uuid"
+          nullable: true
         plan_description:
           type: string
         plan_status:

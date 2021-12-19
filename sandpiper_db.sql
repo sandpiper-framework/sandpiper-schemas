@@ -180,6 +180,8 @@ CREATE TABLE plan_status_flows (
 
 CREATE TABLE plans (
 		  plan_uuid CHAR(36) PRIMARY KEY
+		, replaces_plan_uuid char(36) NULL
+-- Replaces indicates that this plan was intended to supersede an existing agreement
 		, primary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
 		, secondary_node_uuid CHAR(36) NOT NULL REFERENCES nodes (node_uuid)
 -- NULL secondary node means the plan was invoked but not assigned to a known node secondary

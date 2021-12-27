@@ -13,8 +13,9 @@
     <xs:simpleType name="uuid">
         <xs:restriction base="xs:string">
             <xs:length fixed="true" value="36"/>
-            <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
-            />
+            <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"/>
+            <!-- Allow blank UUID consisting of all zeros, meaning "fragment" -->
+            <xs:pattern value="[0]{8}-[0]{4}-[0]{4}-[0]{4}-[0]{12}"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="String_Medium">

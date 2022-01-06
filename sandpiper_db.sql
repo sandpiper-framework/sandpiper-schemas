@@ -354,7 +354,7 @@ INSERT INTO message_codes (message_code, message_description, message_comment) V
 	, ('1001', 'Invalid message code received', NULL)
 	, ('1002', 'Invalid message text received', NULL)
 	, ('1003', 'Sandpiper unavailable', 'The respondent system is working but the Sandpiper layer is not functional')
-	, ('2000', 'Auth OK', 'The authorization message category is used for communcation about login and authentication. This code is a generic "All is well" message')
+	, ('2000', 'Auth OK', 'The authorization message category is used for communication about login and authentication. This code is a generic "All is well" message')
 	, ('2001', 'Plan accepted, no proposed plans pending', 'Authentication with a given plan was successful, and there are no proposals that need to be evaluated')
 	, ('2002', 'Plan accepted, proposed plans pending', 'Authentication with a given plan was successful, and there are proposals that need evaluation')
 	, ('2003', 'No plan supplied, no plans pending', 'Authentication without a plan was successful, and there are no proposals that need to be evaluated')

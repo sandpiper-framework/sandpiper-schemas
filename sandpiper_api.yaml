@@ -9,7 +9,7 @@ info:
   license:
     name: Artistic License 2.0
     url: "https://www.perlfoundation.org/artistic-license-20.html"
-  version: 0.9.15
+  version: 0.9.16
 
 components:
   securitySchemes:
@@ -22,6 +22,11 @@ components:
       description: An RFC4122 v4 UUID
       type: string
       format: uuid
+    v4_uuid_nullable:
+      description: An RFC4122 V4 UUID that may also be null
+      type: string
+      format: uuid
+      nullable: true
     payload:
       description: A payload for an encoded binary object
       type: string
@@ -90,8 +95,7 @@ components:
         plan_uuid:
           $ref: "#/components/schemas/v4_uuid"
         replaces_plan_uuid:
-          $ref: "#/components/schemas/v4_uuid"
-          nullable: true
+          $ref: "#/components/schemas/v4_uuid_nullable"
         plan_description:
           type: string
         plan_status:
@@ -576,27 +580,11 @@ paths:
           $ref: "#/components/responses/message_response"
         403:
           $ref: "#/components/responses/not_authorized_response"
-    put:
-      tags:
-        - actions
-      summary: Add a previously-unknown grain to a specific slice
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/grain_msg"
-      responses:
-        201: # Added successfully
-          $ref: "#/components/responses/message_response"
-        403:
-          $ref: "#/components/responses/not_authorized_response"
-        409: # Grain already exists and cannot be updated
-          $ref: "#/components/responses/message_response"
     post:
       tags:
         - actions
-      summary: Link an existing grain to a specific slice
-      description: Link an already-extant grain to the given slice. This will return 409 if the grain does not exist. Payload will be ignored if supplied; once established, a grain's payload can never change without subsequently also having a new UUID.
+      summary: Link an existing grain to a specific slice, or provide a new grain
+      description: Link an already-extant grain to the given slice, or create a new grain with this UUID in this slice if it has never been used before. If the grain UUID exists in any other slice, but the payload is present in this POST action, the server must respond with an error 409 -- once established, a grain's payload can never change without subsequently also having a new UUID, and it could overwhelm the server to constantly be checking contents against existing contents.
       requestBody:
         content:
           "application/json":
@@ -607,5 +595,5 @@ paths:
           $ref: "#/components/responses/message_response"
         403:
           $ref: "#/components/responses/not_authorized_response"
-        409:  # Grain does not already exist, must use PUT instead
+        409:  # Grain already exists but payload was provided. Payloads cannot be updated once created
           $ref: "#/components/responses/message_response"

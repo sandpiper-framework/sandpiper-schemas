@@ -701,6 +701,9 @@ Level
 Link
 : A reference object used by persistent objects to contain multiple relationships and categorization points
 
+Message
+: A code and text used during interactions to communicate basic status and error information
+
 Negotiation
 : Interaction model. Step in which actors establish an exchange and agree to its terms
 

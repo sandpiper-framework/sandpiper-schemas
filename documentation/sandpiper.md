@@ -29,6 +29,7 @@
     - [Level 2](#level-2)
     - [Level 3](#level-3)
 - [The Sandpiper API and Protocol](#the-sandpiper-api-and-protocol)
+  - [The Sandpiper Message](#the-sandpiper-message)
   - [Level 1 and 2 API](#level-1-and-2-api)
     - [Authentication and Negotiation](#authentication-and-negotiation)
   - [Level 3 API and Protocol](#level-3-api-and-protocol)
@@ -451,6 +452,20 @@ Level 3 is not currently defined in detail; it will be part of Sandpiper 2.0.
 At Level 1 and Level 2, the basic method of interaction in Sandpiper is through a RESTful HTTPS API employing Java Web Tokens (JWT)^[The official definition of the Level 1 & 2 API and its methods is defined using OpenAPI; here we'll discuss the "why" and give an overview of the important points.]. At Level 3, higher-order communication becomes possible and communication shifts to a WebSocket channel.
 
 Sandpiper adopts this model for Level 1 & 2 both because it matches the periodic nature of these interactions and because the implementation of this pattern is well supported in most major programming environments. Level 3 introduces truly real-time bi-directional communication, with all its associated complexity; to require it for simpler modes would hinder adoption and create opportunities for errors.
+
+### The Sandpiper Message
+
+At any level, it's important to have some basic way to communicate structured information about the interaction. Sandpiper tackles this using the *Message*, a combination of a four-digit code with specific meaning, and an optional free text field with additional details.
+
+The Sandpiper message codes are split into five areas, indicated by their first digit. These are:
+
+1. System -- 1xxx - used for lower level messaging that is independent of work area and relationship
+1. Authorization -- 2xxx -- used for communication about login and authentication
+1. Plan -- 3xxx -- used to convey information about plan workflow events
+1. Data -- 4xxx -- used for communication about data updates
+1. User -- 9xxx -- used to convey information that the standard codes can't address
+
+The full list can be found in [Appendix A](#message-codes).
 
 ### Level 1 and 2 API
 

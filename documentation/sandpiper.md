@@ -46,6 +46,8 @@
     - [Data Integrations](#data-integrations)
 - [Appendix A: Reference Values](#appendix-a-reference-values)
   - [Slice Type](#slice-type)
+  - [Plan Status](#plan-status)
+  - [Message Codes](#message-codes)
 - [Glossary](#glossary)
 - [Copyright Notice](#copyright-notice)
 - [Licensing](#licensing)
@@ -597,6 +599,42 @@ Approved | Both actors have approved this plan, either explicitly or by being th
 On Hold | One or both parties have disabled synchronization of data under this plan for the current time. | Proposed, Terminated, Obsolete
 Terminated | One or both parties have decided that this plan is not suitable for use -- not that it's old or outmoded, but that it is flawed or unacceptable. | Proposed, Obsolete
 Obsolete | One or both parties have decided that this plan holds no value for future use and should be permanently disabled. | Proposed
+
+### Message Codes
+
+| Message Code | Message Description | Comments
+|---|---|---|
+1000 | System OK | The system message category is used for lower-level messaging that is independent of work area and relationship. This code is a generic "All is well" message
+1001 | Invalid message code received |
+1002 | Invalid message text received |
+1003 | Sandpiper unavailable | The respondent system is working but the Sandpiper layer is not functional
+2000 | Auth OK | The authorization message category is used for communication about login and authentication. This code is a generic "All is well" message
+2001 | Plan accepted, no proposed plans pending | Authentication with a given plan was successful, and there are no proposals that need to be evaluated
+2002 | Plan accepted, proposed plans pending | Authentication with a given plan was successful, and there are proposals that need evaluation
+2003 | No plan supplied, no plans pending | Authentication without a plan was successful, and there are no proposals that need to be evaluated
+2004 | No plan supplied, plans pending | Authentication without a plan was successful, and there are proposals that need to be evaluated
+2005 | Invalid plan supplied | Particular problem with this plan supplied in the message_text attribute: "Unknown plan", "Corrupt or invalid plan XML", "Obsolete or unusable plan"
+2006 | Login OK with unrecoverable error | There is some issue that means both sides can't continue until humans intervene; no content can be conveyed
+3000 | Plan OK | The plan message category is used to convey information about plan workflow events
+3001 | Plan status change Invalid | The requested plan status change is not valid given the current plan status. Message_text: "Plans cannot go from X to Y"
+3002 | Proposed plan XML invalid | The proposed plan's XML does not validate against the plan schema
+3003 | Proposed plan UUID already exists | The UUID for the proposed plan is in use somewhere else, whether on another plan or a different data object
+3004 | One or both proposed plan actors invalid | The proposed plan references one or more actors who are not part of this relationship, either in the secondary or primary roles
+3005 | Proposed plan content invalid | One or more references in the plan refer to values that are not valid
+3006 | Respondent information in plan does not match expectation | The proposed plan has data about the respondent that does not match what the respondent supplies in its own plans & plan fragments
+4000 | Data OK | The data message category is used for communication about data updates. This code is a generic "All is well" message
+4001 | Delete not available to your role | Reason in message_text
+4002 | Creation not available to your role | Reason in message_text
+4003 | Data UUID already exists | This uuid is in use elsewhere, potentially in another relationship. This revelation of other information is a compromise to allow good-faith collisions to be seen
+4004 | Data UUID invalid | The routing layer of a server may also catch this before it gets to the Sandpiper layer, but for implementations where it does not, this code may be used
+4005 | Data contents invalid | Something inside the payload violates rules established in the content domain, which the standard itself must leave up to the actors and processes
+4006 | Grain order overlaps | This action would cause an overlap with an existing grain order
+4007 | Grain size exceeds limits | The respondent system cannot handle grains of this size
+4008 | Payload encoding unsupported | Reserved for future use when payload encodings other than the default will be supported
+4009 | Corrupt payload detected | This is a hard encoding error (e.g. an illegal character in a base64 string), not contents themselves, which, as long as the encoding itself is faithful, will not trigger this message
+4010 | Invalid metadata | General purpose issues with the metadata around a data object, such as the grain size not matching the payload
+9000 | User OK | The user message category is used to convey information that the standard codes cannot address. This is a generic "All is well" message, though message_text may be used to add more information
+9001 | User Exception | Use to raise unspecified errors, with the message text containing whatever detail is required.
 
 ## Glossary
 

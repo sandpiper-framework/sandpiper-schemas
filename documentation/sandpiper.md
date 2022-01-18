@@ -193,6 +193,7 @@ A node's canonical pools contain the data that it owns and controls; changes mad
 A node's snapshot pools contain copies of the data in other nodes' canonical pools transferred in this way. A snapshot pool is just that: a snapshot of some or all of the data in a canonical pool from an external node, at its last-known state.
 
 ##### Slices
+
 <img src="assets/SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.

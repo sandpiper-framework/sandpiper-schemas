@@ -16,6 +16,7 @@
     - [Reference Objects](#reference-objects)
   - [Granulation](#granulation)
 - [Interaction Model](#interaction-model)
+  - [Interaction Objects and UUIDs](#interaction-objects-and-uuids)
   - [Actors](#actors)
   - [The Plan](#the-plan)
     - [Plan Domains](#plan-domains)

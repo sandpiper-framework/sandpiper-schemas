@@ -289,7 +289,7 @@ Data transfer is only one-way: in any connection only one actor will receive pro
 
 Many objects in the interaction model have UUIDs, but unlike in the data model, most of these are intended to persist even when the information about that object has changed.
 
-Recall that the reason for strictly unique stateless UUIDs in the data model is that they can be used to mathematically determine changes in a dataset regardless of the data that the UUID refers to; the UUID is representative of the content even though it is not *derived from* the content. But the interaction is not what's being synchronized, only the product data, and so when it makes sense to use a persistent ID to help establish and assist with exchange, a semi-permanent UUID is employed.
+Recall that the reason for strictly unique stateless UUIDs in the data model is that they can be used to mathematically determine changes in a dataset regardless of the data that the UUID refers to; the UUID is representative of the content even though it is not *derived from* the content. But the interaction is not what's being synchronized, only the product data, and so when it makes sense to use a persistent ID to help establish and assist with exchange, a semi-permanent UUID is employed. In future versions of Sandpiper we will readdress this synchronization and whether it can be extended to the interaction model as well.
 
 ### Actors
 
@@ -299,13 +299,25 @@ The primary actor is the sender of data, responsible for providing information a
 
 The secondary actor is the recipient of data. This actor can be a human or a full Sandpiper node. The former is known as *Basic Secondary Actors*, because it cannot engage in a true Sandpiper exchange, and the latter are known as *Advanced Secondary Actors*. Advanced secondary actors are responsible for providing information about their snapshot pools as well as processing updates provided by the primary actor.
 
-Actors have a UUID that persists across all of their interactions and all their plans.
+Actors have a UUID that persists across all of their interactions and all their plans. While actors can choose to change this UUID themselves, they will effectively be coming into their agreements as a brand new actor and must coordinate this with their partners out-of-band.
+
+#### The Instance
+
+Actors have an *Instance* object that describes their environment and capabilities. This includes the *Software*, with a version string and description, as well as the *Capability*, stating the actor's Sandpiper level. Actors with higher capability levels must either support all lower levels as well, or offer no slices at the simpler level.
+
+There are no UUIDs on the instance or software objects.
+
+#### The Controller
+
+Actors have a *Controller* that describes the people and processes in place to synchronize data. At this time it is a simple administrator description, name, and email address, as part of an attempt to avoid over-engineering contact data.
+
+The controller has a UUID that persists across all interactions and plans.
 
 ### The Plan
 
 The agreement between two actors is known as the Plan. This describes and confirms a shared understanding of the process, structure, and metadata surrounding synchronization, though not the product data itself. The Sandpiper API and management interfaces actually implement these details -- the Plan itself is not a method for establishing agreements, modifying slice scopes, and so on. Instead, the Plan represents the state of these facets at a given point in time, and the *Plan Document* encapsulates them in an implementation-independent XML format that can be compared between actors and signed off on by both.
 
-The Plan itself has a UUID that uniquely identifies it among all plans in use globally. Any change to the plan results in a new UUID.
+The Plan itself has a UUID that uniquely identifies it among all plans in use globally. Any change to the plan results in a new UUID (though note that a change to a plan's status, being external to the document, will not necessitate a new UUID).
 
 Either actor may terminate the agreement. Failure to agree on a proposed change also results in a failed plan, and it must be put on hold until resolved.
 

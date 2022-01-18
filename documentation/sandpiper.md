@@ -301,6 +301,8 @@ The secondary actor is the recipient of data. This actor can be a human or a ful
 
 Actors have a UUID that persists across all of their interactions and all their plans. While actors can choose to change this UUID themselves, they will effectively be coming into their agreements as a brand new actor and must coordinate this with their partners out-of-band.
 
+Actors also are the lone interaction object that can use links to describe themselves. This is useful for things like connecting the actor's unique ID to other independent industry classification systems like DUNS numbers.
+
 #### The Instance
 
 Actors have an *Instance* object that describes their environment and capabilities. This includes the *Software*, with a version string and description, as well as the *Capability*, stating the actor's Sandpiper level. Actors with higher capability levels must either support all lower levels as well, or offer no slices at the simpler level.

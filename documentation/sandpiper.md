@@ -716,6 +716,9 @@ Granulator
 Initiator
 : A Sandpiper actor who initiates a connection with another actor, known as the respondent
 
+Instance
+: The environment an Actor operates in, including the Sandpiper software information and their capabilities
+
 Level
 : A specified amount of capability for a Sandpiper interaction. Lower levels are less capable and higher levels are more capable
 
@@ -724,6 +727,12 @@ Link
 
 Message
 : A code and text used during interactions to communicate basic status and error information
+
+Message Code
+: The code portion of a Sandpiper message. A four-digit number sequence, the leading digit of which is its category
+
+Message Text
+: The free-text portion of a Sandpiper message. Used to communicate ancillary information that is not described by the message code
 
 Negotiation
 : Interaction model. Step in which actors establish an exchange and agree to its terms
@@ -742,6 +751,9 @@ Plan
 
 Plan Document
 : An XML document that unambiguously encapsulates the state of an agreement between actors
+
+Plan Status
+: The state of a plan between two actors, essentially like a part lifecycle for the agreement
 
 Pool
 : The first division of data within a node, providing owner-level segmentation. There are two types, Canonical and Snapshot

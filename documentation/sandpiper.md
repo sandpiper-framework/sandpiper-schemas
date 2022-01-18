@@ -283,6 +283,12 @@ Sandpiper's main goal is to facilitate repeatable, deterministic data transfer, 
 
 Data transfer is only one-way: in any connection only one actor will receive product data.
 
+### Interaction Objects and UUIDs
+
+Many objects in the interaction model have UUIDs, but unlike in the data model, most of these are intended to persist even when the information about that object has changed.
+
+Recall that the reason for strictly unique stateless UUIDs in the data model is that they can be used to mathematically determine changes in a dataset regardless of the data that the UUID refers to; the UUID is representative of the content even though it is not *derived from* the content. But the interaction is not what's being synchronized, only the product data, and so when it makes sense to use a persistent ID to help establish and assist with exchange, a semi-permanent UUID is employed.
+
 ### Actors
 
 In the context of a connection, nodes, humans, and systems assume a role as an actor. Any connection has only two actors: a *Primary Actor* and a *Secondary Actor.*
@@ -291,7 +297,7 @@ The primary actor is the sender of data, responsible for providing information a
 
 The secondary actor is the recipient of data. This actor can be a human or a full Sandpiper node. The former is known as *Basic Secondary Actors*, because it cannot engage in a true Sandpiper exchange, and the latter are known as *Advanced Secondary Actors*. Advanced secondary actors are responsible for providing information about their snapshot pools as well as processing updates provided by the primary actor.
 
-Actors have a UUID that persists across all of their interactions and all their plans. Unlike in the data model, this UUID is not intended to change every time its owning object's information changes. Companies and people are outside the Sandpiper model of stateless exchange; our interactions are highly context-driven, and the benefits of a persistent slow-changing ID in this case far outweigh the problems.
+Actors have a UUID that persists across all of their interactions and all their plans.
 
 ### The Plan
 

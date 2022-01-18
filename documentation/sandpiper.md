@@ -193,7 +193,6 @@ A node's canonical pools contain the data that it owns and controls; changes mad
 A node's snapshot pools contain copies of the data in other nodes' canonical pools transferred in this way. A snapshot pool is just that: a snapshot of some or all of the data in a canonical pool from an external node, at its last-known state.
 
 ##### Slices
-
 <img src="assets/SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
 
 A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
@@ -292,11 +291,13 @@ The primary actor is the sender of data, responsible for providing information a
 
 The secondary actor is the recipient of data. This actor can be a human or a full Sandpiper node. The former is known as *Basic Secondary Actors*, because it cannot engage in a true Sandpiper exchange, and the latter are known as *Advanced Secondary Actors*. Advanced secondary actors are responsible for providing information about their snapshot pools as well as processing updates provided by the primary actor.
 
+Actors have a UUID that persists across all of their interactions and all their plans. Unlike in the data model, this UUID is not intended to change every time its owning object's information changes. Companies and people are outside the Sandpiper model of stateless exchange; our interactions are highly context-driven, and the benefits of a persistent slow-changing ID in this case far outweigh the problems.
+
 ### The Plan
 
 The agreement between two actors is known as the Plan. This describes and confirms a shared understanding of the process, structure, and metadata surrounding synchronization, though not the product data itself. The Sandpiper API and management interfaces actually implement these details -- the Plan itself is not a method for establishing agreements, modifying slice scopes, and so on. Instead, the Plan represents the state of these facets at a given point in time, and the *Plan Document* encapsulates them in an implementation-independent XML format that can be compared between actors and signed off on by both.
 
-The Plan itself has a UUID that uniquely identifies it among all plans in use globally.
+The Plan itself has a UUID that uniquely identifies it among all plans in use globally. Any change to the plan results in a new UUID.
 
 Either actor may terminate the agreement. Failure to agree on a proposed change also results in a failed plan, and it must be put on hold until resolved.
 

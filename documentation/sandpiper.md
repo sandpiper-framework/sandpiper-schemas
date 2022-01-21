@@ -167,7 +167,7 @@ For these reasons Sandpiper avoids updates except as a concept, and actually tre
 
 <img src="assets/Object_Model_Links.png" alt="Sandpiper model diagram showing links on persistent objects" title="The Sandpiper Object Model" width="50%" style="float: right; clear: right; padding: 1em"/>
 
-The object model for Sandpiper defines a set of common abstractions for the product data each node stores. There are just four persistent objects (*Node*, *Pool*, *Slice*, and *Grain*) and two reference objects (*Link* and *Subscription*). All Sandpiper objects have a universally unique ID that will be used for actions exclusively whenever possible; in the attribute lists in each section here, this has been omitted, but is assumed.
+The object model for Sandpiper defines a set of common abstractions for the product data each node stores. There are just four persistent objects (*Node*, *Pool*, *Slice*, and *Grain*) and two reference objects (*Link* and *Subscription*). All Sandpiper objects have a universally unique ID that will be used for actions exclusively whenever possible.
 
 The node represents the root of one self-contained Sandpiper environment, with one controller. It contains pools of product data, each with one owner. These pools are further subdivided into slices, each representing one set of the same type of data and specifying how it is internally organized. That data is finally broken into grains by the method of organization named on the slice.
 
@@ -290,6 +290,8 @@ Data transfer is only one-way: in any connection only one actor will receive pro
 Many objects in the interaction model have UUIDs, but unlike in the data model, most of these are intended to persist even when the information about that object has changed.
 
 Recall that the reason for strictly unique stateless UUIDs in the data model is that they can be used to mathematically determine changes in a dataset regardless of the data that the UUID refers to; the UUID is representative of the content even though it is not *derived from* the content. But the interaction is not what's being synchronized, only the product data, and so when it makes sense to use a persistent ID to help establish and assist with exchange, a semi-permanent UUID is employed. In future versions of Sandpiper we will readdress this synchronization and whether it can be extended to the interaction model as well.
+
+One special point: even when two actors are using the same content in their slices or grains, the data model UUIDs themselves must *never* be shared between actors. It's tempting to re-use these IDs to save storage space when pulling grains from a snapshot pool into a canonical pool, for example, but this opens an attack vector whereby a malicious actor with a list of another actor's grain UUIDs can add them to their own pools, tricking the receiver into fully populating this fraudulent pool with the real data from the original.
 
 ### Actors
 

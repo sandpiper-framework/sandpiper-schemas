@@ -338,7 +338,7 @@ INSERT INTO unique_key_fields (unique_key_field) VALUES
 	  ('autocare-vcdb-version'), ('autocare-pcdb-version'), ('autocare-qdb-version'), ('autocare-padb-version')
 	, ('napa-validvehicles-version'), ('napa-translation-version')
 	, ('primary-reference'), ('secondary-reference')
-	, ('master-slice');
+	, ('master-slice'), ('content-author');
 
 INSERT INTO multi_key_fields (multi_key_field) VALUES
 	  ('autocare-branding-brand'), ('autocare-branding-brandowner'), ('autocare-branding-parent'), ('autocare-branding-subbrand')

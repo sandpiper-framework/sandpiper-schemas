@@ -35,19 +35,23 @@
     - [Authentication and Negotiation](#authentication-and-negotiation)
   - [Level 3 API and Protocol](#level-3-api-and-protocol)
 - [Implementation Examples](#implementation-examples)
-  - [Input Workflow](#input-workflow)
-    - [Classic PIM Input](#classic-pim-input)
-    - [Sandpiper-Aware PIM Input](#sandpiper-aware-pim-input)
-    - [Sandpiper-Capable PIM Input](#sandpiper-capable-pim-input)
-  - [Output Workflow](#output-workflow)
-    - [Classic PIM Output](#classic-pim-output)
-    - [Sandpiper-Aware PIM Output](#sandpiper-aware-pim-output)
-    - [Sandpiper-Capable PIM Output](#sandpiper-capable-pim-output)
+  - [Input / Output](#input-output)
+    - [Input Workflow](#input-workflow)
+      - [Classic PIM Input](#classic-pim-input)
+      - [Sandpiper-Aware PIM Input](#sandpiper-aware-pim-input)
+      - [Sandpiper-Capable PIM Input](#sandpiper-capable-pim-input)
+    - [Output Workflow](#output-workflow)
+      - [Classic PIM Output](#classic-pim-output)
+      - [Sandpiper-Aware PIM Output](#sandpiper-aware-pim-output)
+      - [Sandpiper-Capable PIM Output](#sandpiper-capable-pim-output)
+  - [Interaction Scenarios](#interaction-scenarios)
+    - [Data Brokers](#data-brokers)
   - [Tips and Best Practices](#tips-and-best-practices)
     - [UUIDs](#uuids)
     - [Data Integrations](#data-integrations)
 - [Appendix A: Reference Values](#appendix-a-reference-values)
   - [Slice Type](#slice-type)
+  - [Link Fields](#link-fields)
   - [Plan Status](#plan-status)
   - [Message Codes](#message-codes)
 - [Glossary](#glossary)
@@ -215,11 +219,17 @@ Grains are not part of the plan; they reside below the slice, the lowest level o
 
 ##### Links
 
-Links are references that allow slices to be tied to other systems and tagged with nonstandard metadata.
+Links are references that allow Sandpiper data objects to be tied to other systems and tagged with nonstandard metadata.
 
 The link is the primary means of attaching overarching structure to slice data. Every partnership will have a different preferred method for establishing things like line codes, hierarchies, and sets, so the link provides a few standard methods to do this and an extensible category for what it doesn't define.
 
-The link is also the way Sandpiper connects slice data to description or validation frameworks like reference database versions, business identities, and so on.
+The link similarly connects slice data to description or validation frameworks like reference database versions, business identities, and so on.
+
+Links are also the way to add the same kinds of connections to actors themselves, for example company codes in DUNS and SWIFT.
+
+A link can either be unique, in that only one of the same type is allowed on an object, or multi, in that many of the same type are allowed on an object.
+
+See [Link Fields](#link-fields) for a list of all the fields available.
 
 ##### The Root-Derivative Slice Group
 
@@ -522,11 +532,13 @@ These will be implemented and expanded with Sandpiper 2.0.
 
 ## Implementation Examples
 
-### Input Workflow
+### Input / Output
+
+#### Input Workflow
 
 The capabilities of the data source will direct the workflow that's most efficient. Classic PIMs require some user intervention, and more modern PIMs reduce that need.
 
-#### Classic PIM Input
+##### Classic PIM Input
 
 <img src="assets/Input_ClassicPimL1.png" alt="Classic PIM Level 1 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
@@ -536,23 +548,23 @@ Level 1, being file-based, is designed for classic PIMs that can't use or haven'
 
 Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, yet classic PIMs have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a *Granulator.*)
 
-#### Sandpiper-Aware PIM Input
+##### Sandpiper-Aware PIM Input
 
 <img src="assets/Input_SandpiperAware.png" alt="Sandpiper-Aware PIM Input Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em;"/>
 
 Sandpiper-Aware PIMs are able to use Sandpiper commands to do basic import and launch other tools. This may take the onus off of the user to manually import the data, though the process is likely only semi-automated.
 
-#### Sandpiper-Capable PIM Input
+##### Sandpiper-Capable PIM Input
 
 <img src="assets/Input_SandpiperCapable.png" alt="Sandpiper-Capable PIM Input Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Capable PIMs can communicate directly with the Sandpiper server, so for day-to-day operations the user does not need to engage any external tools while updating data.
 
-### Output Workflow
+#### Output Workflow
 
 As with input, the capabilities of the PIM receiver will direct the most efficient workflow.
 
-#### Classic PIM Output
+##### Classic PIM Output
 
 <img src="assets/Output_ClassicPimL1.png" alt="Classic PIM Level 1 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 
@@ -562,17 +574,41 @@ The classic PIM, without additional development, can make use of a purely Level 
 
 With an integration process, a classic PIM can also use the results of Level 2 transactions. More advanced recipients often already have a process to do something similar (for example, by comparing existing files to data in the PIM). Using the Sandpiper API and/or CLI, an external migration program can offload this change comparison to the deterministic Sandpiper framework, yet feed the PIM in the way it's already operating.
 
-#### Sandpiper-Aware PIM Output
+##### Sandpiper-Aware PIM Output
 
 <img src="assets/Output_SandpiperAware.png" alt="Sandpiper-Aware PIM Output Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Aware PIMs may not directly integrate Sandpiper into their logic, but can trigger regular loads and audits using external commands.
 
-#### Sandpiper-Capable PIM Output
+##### Sandpiper-Capable PIM Output
 
 <img src="assets/Output_SandpiperCapable.png" alt="Sandpiper-Capable PIM Output Workflow" title="Sandpiper-Capable PIM" width="40%" style="padding: 1em"/>
 
 Sandpiper-Capable PIMs speak directly to the Sandpiper server via the API, integrating the functions so that no external tooling or user intervention is required.
+
+### Interaction Scenarios
+
+#### Data Brokers
+
+When we say data broker, what we mean is an intermediary who specializes in providing persistent, reliable “data hosting” for providers. Most suppliers are not going to have the in-house team, resources, and/or desire to maintain an always-on server that can act as a Sandpiper respondent. This is how the industry works today, in fact, and data brokers serve a crucial role in that capacity. They also often provide additional services like format conversion and a healthy ecosystem of supplier datasets to choose from.
+
+This leads to a natural human abstraction: we tend to think that, if a customer of ours is receiving our data through a broker, then we are giving that data to our customer. We think that we have a direct data relationship. But we don’t — if we did, we’d send the data directly. Imagine if the customer had issues downloading through the broker’s interfaces. Would they need to talk to us, or to the broker? It’s clear that there are actually two relationships: between us and the broker, and between the broker and the customer.
+
+Sandpiper is a two-actor framework, because the fundamental transfer of product data doesn’t happen as a multicast free-for-all. We transfer data based on our relationships.
+
+<img src="assets/Sandpiper_Data_Broker.png" alt="Sandpiper Data Broker Scenario" title="Sandpiper Data Broker Scenario"/>
+
+In this diagram, Actor A is a supplier with data to communicate. Actor B is serving as the broker, and Actor C is the consumer.
+
+Actor A and Actor B have a plan to synchronize A’s Pool 1. Actor B can’t turn around and provide that data with the same plan to Actor C, because Actor B doesn’t own it. Instead, the broker needs to copy its copy of A’s data (a.k.a. a snapshot pool) into a new pool that it controls (a.k.a. a canonical pool), and then provide that data under its own agreement with Actor C. In this way, the source data remains unchanged, which is important to prevent any transformations Actor B might unknowingly or necessarily have to carry out as part of its internal infrastructure. It also future-proofs for our plans for Sandpiper to allow auditing and messaging about data through a long chain of handlers.
+
+Notably this requires the broker to maintain two copies of the data. Grain UUIDs absolutely cannot be reused: this is an attack vector whereby a malicious party could, if they knew any of another party’s UUIDs, create their own slices referencing them, which the broker would happily free-associate into the attacker’s pool in full.
+
+Maintaining this separation could be burdensome in large data environments. But:
+
+1. Pragmatically, it’s less burdensome than having to divert expert programmers to trace a hidden data modification through network traffic, logs, and transaction histories. Storage is cheap compared to the hard costs of developer salaries and the projected costs of lost business, trust, and opportunity
+
+2. There are well-established strategies for overlapping blob storage. If it becomes an issue, the backend of a broker’s solution can do hash-based deduplication of grain payloads, reducing this overhead to the cost of an 8kb row rather than the full size of the content
 
 ### Tips and Best Practices
 
@@ -657,7 +693,6 @@ napa-line-code | Multi | NAPA Line Code |
 napa-translation-pcc | Multi | NAPA Translation PCC / MPCC |
 swift-bic | Multi | SWIFT Business Identifier Code |
 tmc-vmrs-code | Multi | Technology and Maintenance Council Vehicle Maintenance and Reporting Standards Code |
-
 
 ### Plan Status
 

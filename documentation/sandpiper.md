@@ -20,7 +20,6 @@
   - [Actors](#actors)
   - [The Plan](#the-plan)
     - [Plan Domains](#plan-domains)
-    - [The Plan Proposal Workflow](#the-plan-proposal-workflow)
   - [The Connection](#the-connection)
     - [The Introduction](#the-introduction)
     - [The Exchange](#the-exchange)
@@ -368,7 +367,21 @@ One actor, known as the *Initiator*, connects to the other, known as the *Respon
 
 In the authentication, the initiator supplies credentials to the respondent that prove its identity and provide a plan if available; if not, their permissions will be minimal and they must enter the plan proposal workflow.
 
-##### The Plan Proposal Workflow
+#### The Exchange
+
+An exchange begins when two actors successfully complete the introduction. These actors enter into negotiation, where they verify that their understandings of the plan are the same before proceeding.
+
+##### Negotiation
+
+<img src="assets/Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="50%" style="padding: 1em; float: right;"/>
+
+Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
+
+In this step, the initiator proposes proceeding using a given plan, which is embedded in the login payload as a base64-encoded XML file, or to proceed without a plan. The respondent either agrees, and further actions can begin, or disagrees, and the connection is aborted.
+
+When the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
+
+###### The Plan Proposal Workflow
 
 Often, actors starting a new relationship will not have a plan already in place, or actors with an existing relationship may want to modify it. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI schema for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
 
@@ -384,27 +397,13 @@ For actors with an existing plan, or one that is still waiting on approval, eith
 
 In this case, rather than starting from a fragment, the modifying actor can start from the existing plan, alter the details they want to adjust in their actor domain (Primary or Secondary) and/or the Communal domain, and provide a new plan UUID. Finally, they can then propose this plan to the other party.
 
-##### Proposed Plan Approval
+###### Proposed Plan Approval
 
 Whether the plan is modified or completely new, once it has been proposed, the candidate plan goes through *Plan Approval*. The Sandpiper Framework defines the *Plan Status*, an attribute of plans shared between two actors, that tracks the state of the plan between the two participants. The full set of statuses and their descriptions are available in [Appendix A: Plan Status](#plan-status).
 
 Plan fragments do not have a status; they may be retained for an Actor's records and processing, but because they are not complete, they are not part of the Sandpiper plan registry. Only upon proposal are they available for mutual recall and operation.
 
 When an initiator connects to a respondent who has new plans to propose, it is the respondent's job to notify the initiator using the login message that there are new pending plans to review. This is necessary because either side can modify the agreement, but in a REST API only one side can initiate communication.
-
-#### The Exchange
-
-An exchange begins when two actors successfully complete the introduction. These actors enter into negotiation, where they verify that their understandings of the plan are the same before proceeding.
-
-##### Negotiation
-
-<img src="assets/Exchange_Negotiation.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="50%" style="padding: 1em; float: right;"/>
-
-Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
-
-In this step, the initiator proposes proceeding using a given plan, which is embedded in the login payload as a base64-encoded XML file. The respondent can agree to proceed with this plan; if it does not agree, the connection is aborted.
-
-When the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
 
 ##### Transaction
 

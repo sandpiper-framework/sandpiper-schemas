@@ -24,6 +24,8 @@
     - [The Introduction](#the-introduction)
     - [The Exchange](#the-exchange)
       - [The Plan Proposal Workflow](#the-plan-proposal-workflow)
+      - [Transaction](#transaction)
+      - [Confirmation](#confirmation)
   - [Levels](#levels)
     - [Level 0](#level-0)
     - [Level 1](#level-1)
@@ -827,6 +829,9 @@ PIM
 Plan
 : The agreement between actors
 
+Plan Fragment
+: A partial plan provided by the primary actor to serve as the seed for a new agreement
+
 Plan Document
 : An XML document that unambiguously encapsulates the state of an agreement between actors
 
@@ -844,6 +849,9 @@ Product
 
 Product Data
 : The core data that defines a product or its use
+
+Proposed Plan
+: A plan that has been offered by an actor for evaluation by their partner
 
 Respondent
 : A Sandpiper actor who accepts contact from another actor, known as the initiator

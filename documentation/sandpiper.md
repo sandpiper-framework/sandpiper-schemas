@@ -23,6 +23,7 @@
   - [The Connection](#the-connection)
     - [The Introduction](#the-introduction)
     - [The Exchange](#the-exchange)
+      - [The Plan Proposal Workflow](#the-plan-proposal-workflow)
   - [Levels](#levels)
     - [Level 0](#level-0)
     - [Level 1](#level-1)
@@ -377,21 +378,31 @@ An exchange begins when two actors successfully complete the introduction. These
 
 Negotiation attempts to establish an unambiguous course of action, or to safely discontinue the exchange so that administrators can update their systems. If the negotiation fails, the connection is aborted and both actors' administrators are notified of the discrepancy so that humans can resolve the issue.
 
-In this step, the initiator proposes proceeding using a given plan, which is embedded in the login payload as a base64-encoded XML file, or to proceed without a plan. The respondent either agrees, and further actions can begin, or disagrees, and the connection is aborted.
+In this step, the initiator indicates its intent to proceed using a given plan, which is embedded in the login payload as a base64-encoded XML file, or to proceed without a plan, in which case the plan document area of the login payload is left empty. The respondent either agrees, and further actions can begin, or disagrees, and the connection is aborted.
 
-When the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
+When the initiator supplied a plan during authentication and the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
 
 ###### The Plan Proposal Workflow
 
-Often, actors starting a new relationship will not have a plan already in place, or actors with an existing relationship may want to modify it. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI schema for more details about specific payloads and parameters). Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in.
+Often, actors starting a new relationship will not have a plan already in place, or actors with an existing relationship may want to modify it. To assist, sandpiper provides a workflow to develop these in a semi-automated fashion, through the API's plans endpoint (see the OpenAPI schema for more details about specific payloads and parameters).
 
-###### Plan Modification
+Humans may still be needed to fill in the details of their subscriptions, and to approve the new plan, but there is no need to have the full document ready to go before logging in. Instead, the initiator can log in with a blank plan; in that case they will be given access only to the plans endpoint. From there they can proceed with new plan creation or act on existing plans to which they have been party.
 
-On login with a blank Plan, the actor will have access only to the plans endpoint, where they can obtain (if secondary) or provide (if primary) a *fragment plan*. This plan contains only the primary actor's information and a one-time plan UUID -- one that can be used to track the fragment but must never be carried forward as the final plan's actual UUID.
+###### New Plan Creation
 
-The secondary actor can then apply a new Plan UUID, enter their details in the Secondary domain, and add subscriptions to the Communal plan domain. They then provide this to the primary as a *proposed plan*.
+<img src="assets/Plan_Creation_Example.png" alt="Example of plan creation" title="Plan Creation Example" width="100%" style="padding: 1em;"/>
 
-The primary can accept, modify, or reject this proposal.
+New plans start with a *Fragment Plan* -- a stub plan document that contains only the primary actor's information and a plan UUID.^[Remember that any substantive modification to any Sandpiper object will result in a new UUID, and fragments are no exception; once it is filled out further, it must receive a new UUID]
+
+The primary actor is responsible for supplying the fragment plan, because it is their information that populates it. The /plans/invoke endpoint provides (if the primary is the respondent) or accepts (if the primary is the initiator) these documents.
+
+Once they have obtained a fragment from the primary, the secondary actor can then enter their details in the Secondary domain, add subscriptions to the Communal plan domain, and apply a new Plan UUID. They provide this to the primary as a *Proposed Plan*.
+
+The primary can accept, modify, or reject this proposal (see [Proposed Plan Approval](#proposed-plan-approval)).
+
+###### Existing Plan Modification
+
+<img src="assets/Plan_Modification_Example.png" alt="Example of plan modification" title="Plan Modification Example" width="100%" style="padding: 1em;"/>
 
 For actors with an existing plan, or one that is still waiting on approval, either side may at some point want to change their agreement. In this case, there is no need to begin with a fragment plan, but they do need to provide a clear indication that this is a modification or replacement of an older plan. This can be done using the replaces_plan_uuid payload value in the API (see the YAML file for details).
 
@@ -407,7 +418,7 @@ When an initiator connects to a respondent who has new plans to propose, it is t
 
 ##### Transaction
 
-After agreeing to the plan, the actors now assume the roles (primary or secondary) specified by the plan.
+After agreeing to the plan, the actors now assume the roles (primary or secondary) specified by the plan. Transactions cannot begin if no plan has been supplied during the negotiation phase.
 
 Using the subscription UUID, the secondary actor requests synchronization of data. This subscription specifies the method for that synchronization, and the actors execute it.
 

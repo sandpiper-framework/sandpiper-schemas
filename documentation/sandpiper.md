@@ -682,15 +682,9 @@ text-file           | 1    | Generic text file      | *none*
 
 | Field | Unique or Multi | Description |
 | -- | -- | -- |
-| autocare-vcdb-version | Unique | Auto Care VCdb Version Date |
-| autocare-pcdb-version | Unique | Auto Care PCdb Version Date |
-| autocare-qdb-version  | Unique | Auto Care Qdb Version Date |
-| autocare-padb-version | Unique | Auto Care PAdb Version Date |
-| napa-validvehicles-version | Unique | NAPA Validvehicles Version Date |
-| napa-translation-version | Unique | NAPA Translation Version Date |
 | primary-reference | Unique | Code or string defined by the primary actor to tie an object to an internal reference point, e.g. a product hierarchy node |
 | secondary-reference | Unique | Code or string defined by the secondary actor to tie an object to an internal reference point, e.g. a product line code |
-| master-slice | Unique | Meant to be used only on slices. Gives the UUID of the root slice from which this slice derives |
+| context-slice | Unique | Meant to be used only on slices. Gives the UUID of the root slice from which this slice derives |
 | content-author | Unique | Meant to be used only on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
 autocare-branding-brand | Multi | Auto Care Brand Table BrandID |
 autocare-branding-brandowner | Multi | Auto Care Brand Table BrandOwnerID |

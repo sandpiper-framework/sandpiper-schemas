@@ -243,7 +243,7 @@ However, at Level 2, this information may not be present in the individual piece
 
 <img src="assets/Context-Slice.png" alt="Context Slice with referencing ACES Apps slice" title="Context slice with ACES Apps" width="50%" style="padding: 1em; float: right; clear: right;"/>
 
-In the context slice pattern, we define a Level 2 slice with slice-type "key-values", a format that assumes all grain keys are the name of a field, attribute, or property, and the payload of the grains inside the slice contains the values associated with that key. Then, any slice can indicate that it inherits that context with a unique link pointing to the context slice's UUID (link type "context-slice").
+In the context slice pattern, we define a Level 2 slice with slice-type "key-values", a format that assumes all grain keys are the name of a field, attribute, or property, and the payload of the grains inside the slice contains the values associated with that key^[Note that this is still a proper slice -- with UUIDs that reflect the unique state of the content within. So a change to any of the key values will necessitate a new grain UUID, even if the grain key does not change. In this way context can also be synchronized using the same methods as any other Sandpiper slice]. Then, any slice can indicate that it inherits that context with a unique link pointing to the context slice's UUID (link type "context-slice").
 
 ##### Subscriptions
 

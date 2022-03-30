@@ -328,17 +328,16 @@ CREATE TABLE plan_slice_multi_link_entries (
 
 -- Key value table data
 INSERT INTO slice_types (slice_type) VALUES
-	  ('aces-file'), ('aces-apps')
+	  ('key-values')
+	, ('aces-file'), ('aces-apps')
 	, ('partspro-file'), ('napa-interchange-file')
 	, ('pies-file'), ('pies-items'), ('pies-pricesheets')
 	, ('asset-file'), ('asset-archive'), ('asset-files')
 	, ('binary-blob'), ('xml-file'), ('text-file');
 
 INSERT INTO unique_key_fields (unique_key_field) VALUES
-	  ('autocare-vcdb-version'), ('autocare-pcdb-version'), ('autocare-qdb-version'), ('autocare-padb-version')
-	, ('napa-validvehicles-version'), ('napa-translation-version')
-	, ('primary-reference'), ('secondary-reference')
-	, ('master-slice'), ('content-author');
+	  ('primary-reference'), ('secondary-reference')
+	, ('context-slice'), ('content-author');
 
 INSERT INTO multi_key_fields (multi_key_field) VALUES
 	  ('autocare-branding-brand'), ('autocare-branding-brandowner'), ('autocare-branding-parent'), ('autocare-branding-subbrand')

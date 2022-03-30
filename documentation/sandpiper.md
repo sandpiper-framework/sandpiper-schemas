@@ -217,6 +217,8 @@ The grain is the smallest unit on which a Sandpiper node can act, and can only b
 
 Grains are not part of the plan; they reside below the slice, the lowest level of agreement between actors.
 
+All slices technically contain at least one grain; in the case of a Level 1 file, it's just that there's one single, large grain: the full file. But for Level 2 slices, the information in the full file can be broken into grains that allow different perspectives of access and synchronization, e.g. by PIES item, by ACES item, and more.
+
 #### Reference Objects
 
 ##### Links
@@ -233,23 +235,15 @@ A link can either be unique, in that only one of the same type is allowed on an 
 
 See [Link Fields](#link-fields) for a list of all the fields available.
 
-##### The Root-Derivative Slice Group
+##### The Context Slice
 
-A Level 1 slice contains a full file that can only be communicated in full. But what if we want to break it into parts that can be synchronized individually? This becomes possible in Level 2 transactions, where we can more finely subdivide the data in a full file and use these pieces to deterministically synchronize primary and secondary data pools.
+A Level 1 slice contains a full file that can only be communicated in full. Often these files contain important contextual information that applies to the rest of the information in the file -- for example, validity periods, reference database versions, and so on.
 
-To do this cleanly, we'll define a root slice and one or more derivative slices, using links to designate the relationship. This is know as a *Root-Derivative Slice Group*, and it allows a Sandpiper node to support both Level 1 full file slices and Level 2+ operations on that same data.
+However, at Level 2, this information may not be present in the individual pieces being granulated. In the classic Level 1 scenario it's assumed that, by virtue of being in the full file (as a header, a footer, preamble, etc.), this information will be used by a processing system for all elements inside. When we break the information up, we lose the context. Sandpiper solves this problem with a special slice: The *Context Slice*.
 
-All slices technically contain at least one grain; in the case of a Level 1 file, it's just that there's one single, large grain: the full file. But for Level 2 slices, the information in the full file can be broken into grains that allow different perspectives of access and synchronization, e.g. by PIES item, by ACES item, and more.
+<img src="assets/Context-Slice.png" alt="Context Slice with referencing ACES Apps slice" title="Context slice with ACES Apps" width="50%" style="padding: 1em; float: right; clear: right;"/>
 
-In the root-derivative group pattern, we define a single Level 1 *Root Slice* with the full dataset, and one or more *Derivative Slices* containing granulated data extracted from the master. The derivative slices reference the root's unique ID using a link with system "root", indicating their source. These derivative slices use the *Slice Type* to indicate the kind of division they do (i.e. what kinds of grains are within), and actors can subscribe to them directly.
-
-<img src="assets/Granulation_ExampleSimplePIES.png" alt="Master Slice with Index Slices" title="Master Slice with Index Slices" width="50%" style="padding: 1em; float: right; clear: right;"/>
-
-For example, in a PIES file, we might want to work with PIES items (which will use the part number as a key) as well as PIES market copy and PIES price sheets (which do not reference part numbers and have to be keyed differently). In this case we'd have four slices: the full root, a derivative slice by items, a derivative slice by price sheets, and a derivative slice by market copy.
-
-In this way, a file with multiple segments can be broken out for processing at Level 2, yet Level 1 remains accessible and useful for full set analysis, for file areas that cannot be easily granulated, like prerolls and headers, and for use in integration environments where the full file must be used for some branches even though granular updates can be used for others.
-
-Further, this pattern allows external granulators (triggered either manually or by a detected change in the database) to automatically update a derivative slice using the updated root information. This reduces process dependencies and ensures reliable change propagation in a batch environment.
+In the context slice pattern, we define a Level 2 slice with slice-type "key-values", a special format that assumes all grain keys are the name of a field, attribute, or property, and the payload of the grains inside the slice contains the values associated with that key. Then, any slice can indicate that it inherits that context with a unique link pointing to the context slice's UUID (link type "context-slice").
 
 ##### Subscriptions
 
@@ -664,6 +658,7 @@ This section contains the valid reference values for this version of the Sandpip
 
 Type | Level | Description | Grain Key References
 --|--|--|--
+key-values          | 2+   | Unique keys and their values | Key Name
 aces-file           | 1    | Auto Care ACES file    | *none*
 aces-apps           | 2+   | ACES application elements    | ?
 partspro-file       | 1    | NAPA partspro file    | *none*
@@ -684,7 +679,7 @@ text-file           | 1    | Generic text file      | *none*
 | -- | -- | -- |
 | primary-reference | Unique | Code or string defined by the primary actor to tie an object to an internal reference point, e.g. a product hierarchy node |
 | secondary-reference | Unique | Code or string defined by the secondary actor to tie an object to an internal reference point, e.g. a product line code |
-| context-slice | Unique | Meant to be used only on slices. Gives the UUID of the root slice from which this slice derives |
+| context-slice | Unique | Meant to be used only on slices. Gives the UUID of the slice that contains important contextual metadata not present in individual elements |
 | content-author | Unique | Meant to be used only on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
 autocare-branding-brand | Multi | Auto Care Brand Table BrandID |
 autocare-branding-brandowner | Multi | Auto Care Brand Table BrandOwnerID |

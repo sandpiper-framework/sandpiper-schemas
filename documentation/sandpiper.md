@@ -661,6 +661,7 @@ Type | Level | Description | Grain Key References
 key-values          | 2+   | Unique keys and their values | Key Name
 aces-file           | 1    | Auto Care ACES file    | *none*
 aces-apps           | 2+   | ACES application elements    | ?
+aces-assets         | 2+   | ACES asset elements   | ?
 partspro-file       | 1    | NAPA partspro file    | *none*
 napa-interchange-file | 1  | NAPA interchange file  | *none*
 pies-file           | 1    | Auto Care PIES file    | *none*

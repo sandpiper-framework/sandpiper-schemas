@@ -56,6 +56,9 @@
   - [Link Fields](#link-fields)
   - [Plan Status](#plan-status)
   - [Message Codes](#message-codes)
+- [Appendix B: Granulation Strategies](#appendix-b-granulation-strategies)
+  - [Files](#granulation-strategies-for-files)
+  - [ACES](#granulation-strategies-for-aces)
 - [Glossary](#glossary)
 - [Copyright Notice](#copyright-notice)
 - [Licensing](#licensing)
@@ -205,7 +208,7 @@ A node's snapshot pools contain copies of the data in other nodes' canonical poo
 
 A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
 
-A slice defines the single type of the data it contains (see [the slice types list](#slice-type)). All grains within a slice must be the same type. The slice also defines a filename for Level 1 transactions.
+A slice defines the single type of the data it contains (see [the slice types list](#slice-type)). All grains within a slice must be the same slice type, which carries with it a single granulation strategy to be used when breaking the data into manageable pieces. The slice also defines a filename for Level 1 transactions.
 
 ##### Grains
 
@@ -656,23 +659,24 @@ This section contains the valid reference values for this version of the Sandpip
 
 ### Slice Type
 
-Type | Level | Description | Grain Key References
---|--|--|--
-key-values          | 2+   | Unique keys and their values | Key Name
-aces-file           | 1    | Auto Care ACES file    | *none*
-aces-apps           | 2+   | ACES application elements    | ?
-aces-assets         | 2+   | ACES asset elements   | ?
-partspro-file       | 1    | NAPA partspro file    | *none*
-napa-interchange-file | 1  | NAPA interchange file  | *none*
-pies-file           | 1    | Auto Care PIES file    | *none*
-pies-items          | 2+   | PIES item elements    | Part Number
-pies-pricesheets    | 2+   | PIES pricesheet elements    | ?
-asset-file          | 1    | Single digital asset (image, video, etc.)     | *none*
-asset-archive          | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | *none*
-asset-files         | 2+   | Binary digital assets    | Filename
-binary-blob         | 1    | Generic binary file    | *none*
-xml-file            | 1    | Generic XML file        | *none*
-text-file           | 1    | Generic text file      | *none*
+Type | Level | Description | Granulation Group | Coarse Strategy | Fine Strategy
+--|--|--|--|--|--
+key-values          | 2+   | Unique keys and their values | Key Values | *none* | Key Value UUID
+aces-file           | 1    | Auto Care ACES file    | [ACES](#granulation-strategies-for-aces) | *none* | [File UUID](#granulation-strategy-file-uuid)
+aces-app-elements   | 2+   | ACES application elements    | [ACES](#granulation-strategies-for-aces) | [ACES Part](#granulation-strategy-aces-part) | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-asset-elements | 2+   | ACES asset elements   | [ACES](#granulation-strategies-for-aces) | ACES AssetName | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [ACES](#granulation-strategies-for-aces) | ACES AssetName | [ACES UUID](#granulation-strategy-aces-uuid)
+partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
+napa-interchange-file | 1  | NAPA interchange file  | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
+pies-file           | 1    | Auto Care PIES file    | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
+pies-items          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
+pies-pricesheets    | 2+   | PIES pricesheet elements    | PIES | ? | ?
+asset-archive          | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+asset-file          | 1    | Single digital asset (image, video, etc.)     | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+asset-files         | 2+   | Binary digital assets  | [Files](#granulation-strategies-for-files) | [File Path](#granulation-strategy-file-path) | [File UUID](#granulation-strategy-file-uuid)
+binary-blob         | 1    | Generic binary file    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+xml-file            | 1    | Generic XML file       | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+text-file           | 1    | Generic text file      | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 
 ### Link Fields
 
@@ -742,6 +746,64 @@ Obsolete | One or both parties have decided that this plan holds no value for fu
 9000 | User OK | The user message category is used to convey information that the standard codes cannot address. This is a generic "All is well" message, though message_text may be used to add more information
 9001 | User Exception | Use to raise unspecified errors, with the message text containing whatever detail is required.
 
+## Appendix B: Granulation Strategies
+
+This section contains the details of and instructions for splitting data into grains.
+
+### Granulation Strategies for Files
+
+Files, being opaque sets of arbitrary binary information, are not themselves easy to granulate. However, as units they can easily be segmented, because they are already universally handled as discrete bundles across every major operating system in use today.
+
+#### Granulation Strategy: File Path
+
+(TBA)
+
+#### Granulation Strategy: File UUID
+
+(TBA)
+
+### Granulation Strategies for ACES
+
+ACES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). It is validated against an XSD, with additional, looser best practice guidelines that are somewhat inconsistently followed.
+
+ACES XML files are a monolithic delivery format consisting of a root element, <code>ACES</code>, containing a preamble <code>Header</code>, zero or more <code>App</code> elements, zero or more <code>Asset</code> elements, zero or one <code>DigitalAsset</code> element (containing one or more <code>DigitalFileInformation</code> elements), and a final <code>Trailer</code>.
+
+ACES files can be of two types: Full or Partial. Partial files can be additions, updates, or deletes of existing data, whereas Full files are understood to represent the entire universe of ACES data. Sandpiper does not support the partial facility of ACES, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
+
+The <code>Header</code> element serves as the preamble to the file and contains sender information, effective dates, and so on. In version of ACES lower than 4.0 this is the only opportunity to indicate the branding of the parts (via the <code>BrandAAIAID</code> element); from 4.0 onwards branding can also be specified as an attribute of the <code>Part</code> element.
+
+<code>App</code>s and <code>Asset</code>s both serve as connection points to specific configurations of vehicles and equipment; this is also known as *fitment data*. <code>Asset</code>s link this data to digital asset files -- photographs, diagrams, and so on. <code>App</code>s tie fitment data to part numbers, and provide an optional cross link to <code>Asset</code>s in the same file. In this way a diagram of an engine wiring layout or exhaust system can be connected to a configuration, and through the asset link, to a part number (which the best practices indicate should match the same configuration, though no schema restriction enforces this).
+
+<code>DigitalFileInformation</code> elements are intended to provide format and location metadata about the files referenced in <code>Asset</code> elements. All live inside a single <code>DigitalAsset</code> container element.
+
+The following granulation strategies are valid for any ACES version as long as the text of this introduction remains accurate.
+
+#### ACES Context Nodes
+
+Context data is provided in the <code>Header</code> element preamble. Some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner.
+
+While Sandpiper can only act on what it sees, and it cannot see inside the content itself, we'll note that, when you integrate the data into your systems, specific context must alway trump more general context. In other words, in the case of an overlap between Sandpiper's stated context and the actual data inside the content, the data inside always wins.
+
+This only applies to context (which for ACES we consider to be overridable) and not to grain key values (which must always match the delivered data); in the case of a key-data mismatch, the secondary actor must raise an exception, and consider the slice corrupted.
+
+#### ACES Strategy Details
+
+The three main ACES content elements (<code>App</code>, <code>Asset</code>, and <code>DigitalFileInformation</code>) can be granulated coarsely (<code>App</code> by Part value, <code>Asset</code> by AssetName value, and <code>DigitalFileInformation</code> by AssetName value) or finely (i.e. Sandpiper Native, all using a UUID).
+
+It is important to establish the same context node for all slices that share a common origin; this will serve as the link tying them together into a single set.
+
+Also, be aware that some of these three elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three types, even if it is always empty. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken.
+
+These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
+
+##### Granulation Strategy: ACES Part
+
+When using the ACES Part strategy, the grain key must be a pipe-delimited pair of the BrandAAIAID (drawn from <code>App/Part/@BrandAAIAID</code> or, when not present, from the context of the data set. In a full traditional ACES file this would reside in <Code>ACES/Header/BrandAAIAID</code>). If no brand is specified at any point (which, while allowed by the ACES schema definition, is highly inadvisable), use "ZZZZ".
+
+##### Granulation Strategy: ACES UUID
+
+When granulating ACES data finely, the standard Sandpiper UUID method is employed.
+
 ## Glossary
 
 Actor
@@ -782,6 +844,9 @@ Grain Key
 
 Granulator
 : External tool that parses data stored in full Sandpiper slices and extracts grains into associated granular slices
+
+Granulation Strategy
+: A method of breaking data into grains.
 
 Initiator
 : A Sandpiper actor who initiates a connection with another actor, known as the respondent

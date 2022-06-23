@@ -682,10 +682,10 @@ text-file           | 1    | Generic text file      | [Files](#granulation-strat
 
 | Field | Unique or Multi | Description |
 | -- | -- | -- |
-| primary-reference | Unique | Code or string defined by the primary actor to tie an object to an internal reference point, e.g. a product hierarchy node |
-| secondary-reference | Unique | Code or string defined by the secondary actor to tie an object to an internal reference point, e.g. a product line code |
-| context-slice | Unique | Meant to be used only on slices. Gives the UUID of the slice that contains important contextual metadata not present in individual elements |
-| content-author | Unique | Meant to be used only on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
+primary-reference | Unique | Code or string defined by the primary actor to tie an object to an internal reference point, e.g. a product hierarchy node |
+secondary-reference | Unique | Code or string defined by the secondary actor to tie an object to an internal reference point, e.g. a product line code |
+context-slice | Unique | Meant to be used only on slices. Gives the UUID of the slice that contains important contextual metadata not present in individual elements |
+content-author | Unique | Meant to be used only on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
 autocare-branding-brand | Multi | Auto Care Brand Table BrandID |
 autocare-branding-brandowner | Multi | Auto Care Brand Table BrandOwnerID |
 autocare-branding-parent | Multi | Auto Care Brand Table ParentID |

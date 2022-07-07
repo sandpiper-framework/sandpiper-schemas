@@ -863,10 +863,11 @@ The ref strategy can be used arbitrarily as long as the data will fit in the con
 
 In this method, the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. If no brand is specified at any point (which, while allowed by the ACES schema definition, is highly inadvisable), use "ZZZZ" for both brand and subbrand.
 
+##### Granulation Strategy: ACES AssetName
 
-##### Granulation Strategy: ACES Part
+<code>DigitalFileInformation</code> elements do not allow a <code>ref</code> attribute, and therefore can only be granulated by UUID or by some other value. For the latter, we have chosen the <code>AssetName</code> element, since it is required and can be referenced back to any <code>Asset</code> elements that depend on it (via their own <code>AssetName</code> elements).
 
-When using the ACES Part strategy, the grain key must be a pipe-delimited pair of the BrandAAIAID (drawn from <code>App/Part/@BrandAAIAID</code> or, when not present, from the context of the data set. In a full traditional ACES file this would reside in <Code>ACES/Header/BrandAAIAID</code>). If no brand is specified at any point (which, while allowed by the ACES schema definition, is highly inadvisable), use "ZZZZ".
+Unlike with ACES <code>App</code> elements, for which we remove the optional <code>ref</code> attribute to limit data duplication, the <code>AssetName</code> element is required by the ACES schema and must be preserved. This allows existing XML tooling to validate elements against the standard.
 
 ##### Granulation Strategy: ACES UUID
 

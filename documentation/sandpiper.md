@@ -1000,7 +1000,7 @@ Transaction
 
 ## Copyright Notice
 
-The Sandpiper Framework Reference Documentation. Copyright :copyright: 2021 The Sandpiper Authors.
+The Sandpiper Framework Reference Documentation. Copyright :copyright: 2022 The Sandpiper Authors.
 
 ## Licensing
 

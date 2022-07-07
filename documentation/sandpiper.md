@@ -767,6 +767,8 @@ Files, being opaque sets of arbitrary binary information, are not themselves eas
 
 ### Granulation Strategies for ACES
 
+#### ACES Background and Introduction
+
 ACES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). It is validated against an XSD, with additional, looser best practice guidelines that are somewhat inconsistently followed.
 
 ACES XML files are a monolithic delivery format consisting of a root element, <code>ACES</code>, containing a preamble <code>Header</code>, zero or more <code>App</code> elements, zero or more <code>Asset</code> elements, zero or one <code>DigitalAsset</code> element (containing one or more <code>DigitalFileInformation</code> elements), and a final <code>Trailer</code>.
@@ -775,13 +777,73 @@ ACES files can be of two types: Full or Partial. Partial files can be additions,
 
 The <code>Header</code> element serves as the preamble to the file and contains sender information, effective dates, and so on. In versions of ACES lower than 4.0 this is the only opportunity to indicate the branding of the parts (via the <code>BrandAAIAID</code> element); from 4.0 onwards branding can also be specified as an attribute of the <code>Part</code> element.
 
-<code>App</code>s and <code>Asset</code>s both serve as connection points to specific configurations of vehicles and equipment; this is also known as *fitment data*. <code>Asset</code>s link this data to digital asset files -- photographs, diagrams, and so on. <code>App</code>s tie fitment data to part numbers, and provide an optional cross link to <code>Asset</code>s in the same file. In this way a diagram of an engine wiring layout or exhaust system can be connected to a configuration, and through the asset link, to a part number (which the best practices indicate should match the same configuration, though no schema restriction enforces this).
+<code>App</code>s and <code>Asset</code>s both serve as connection points to specific configurations of vehicles and equipment; this is also known as *fitment data*. <code>Asset</code>s link this data to digital asset files -- photographs, diagrams, and so on. <code>App</code>s tie fitment data to part numbers, and provide an optional cross link to <code>Asset</code>s in the same file. In this way a diagram of an engine wiring layout or exhaust system can be connected to a configuration, and through the asset link, to a part number (which the best practices indicate should share most of their configuration, though no schema restriction enforces this). <code>App</code> and <code>Asset</code> elements have a <code>ref</code> attribute to be used as a reference key by partners.
 
 <code>DigitalFileInformation</code> elements are intended to provide format and location metadata about the files referenced in <code>Asset</code> elements. All live inside a single <code>DigitalAsset</code> container element.
 
-The following granulation strategies are valid for any ACES version as long as the text of this introduction remains accurate.
+Traditionally, partners deliver complete XML application files, containing the whole universe of fitment data for a very broad category (usually brand, subbrand, or product line). The receiver validates the XML against the ACES XSD, and, if validation was successful, imports the XML into their internal data integration environment.
 
-#### ACES Context Nodes
+#### Granulating ACES for Sandpiper
+
+The following granulation strategies are valid for any ACES version as long as the above introductory text remains accurate.
+
+The basic method is to extract an ACES XML file's context information as well as its three main content areas, stage them in a stripped form, and resolve these (through deletes followed by adds) against existing information.
+
+```mermaid
+flowchart LR
+    %%{init: {"theme":"default", "flowchart": {"curve": "basis", "nodeSpacing": 60, "rankSpacing": 50} } }%%
+    classDef doc fill:Green, color:White;
+    classDef elem fill:LightGreen;
+    classDef proc fill:DarkRed, color:White;
+    classDef datastore fill:DarkCyan, color:White, stroke:Black;
+    classDef invisi fill:None, stroke:None;
+
+    axml>ACES XML]
+
+    subgraph g[" "]
+        rgran>App]
+        agran>Asset]
+        dgran>DigitalFileInformation]
+        cgran>Header]
+    end
+
+    subgraph s[" "]
+        stag[(Stage)]
+        sand[(Sandpiper)]
+    end
+
+    subgraph o[" "]
+        resv[[Resolve]]
+    end
+
+    axml -- ref --> rgran & agran
+    axml -- AssetName --> dgran
+    axml --> cgran
+
+    rgran -- aces-app-elements --> stag
+    agran -- aces-asset-elements --> stag
+    dgran -- aces-digitalfileinfo-elements --> stag
+    cgran -- key-values --> stag
+
+    stag & sand --> resv
+
+    class g,s,o invisi
+    class rgran,dgran,cgran,agran elem
+    class axml doc
+    class comp,resv proc
+    class stag,sand datastore
+
+```
+
+The three main ACES content elements (<code>App</code>, <code>Asset</code>, and <code>DigitalFileInformation</code>) can be granulated coarsely (<code>App</code> by ref value, <code>Asset</code> by ref value, and <code>DigitalFileInformation</code> by AssetName value) or finely (i.e. Sandpiper Native, all using a UUID).
+
+The context information (from the <code>Header</code> element) is similarly extracted, though no key values are needed. It is important to establish the same context node for all slices that share a common origin; this will serve as the link tying them together into a single set.
+
+Also, be aware that some of these elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three content element types, even if it is always empty. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken.
+
+These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
+
+##### ACES Context Nodes
 
 Context data is provided in the <code>Header</code> element preamble. Some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner.
 
@@ -789,15 +851,18 @@ While Sandpiper can only act on what it sees, and it cannot see inside the conte
 
 This only applies to context (which for ACES we consider to be overridable) and not to grain key values (which must always match the delivered data); in the case of a key-data mismatch, the secondary actor must raise an exception, and consider the slice corrupted.
 
-#### ACES Strategy Details
+##### Granulation Strategy: ACES Ref
 
-The three main ACES content elements (<code>App</code>, <code>Asset</code>, and <code>DigitalFileInformation</code>) can be granulated coarsely (<code>App</code> by Part value, <code>Asset</code> by AssetName value, and <code>DigitalFileInformation</code> by AssetName value) or finely (i.e. Sandpiper Native, all using a UUID).
+Both ACES <code>App</code> and <code>Asset</code> elements can contain an attribute, <code>ref</code>, a free string that can be any value that trading partners choose to understand. It has not been heavily used, and is ideal for Sandpiper to employ for granulation.
 
-It is important to establish the same context node for all slices that share a common origin; this will serve as the link tying them together into a single set.
+The generating system (or a sufficiently-aware granulator) *must* fill every <code>App</code>'s and <code>Asset</code>'s <code>ref</code> attribute with an identifier that can be used to establish the scope of a single grain. This grain must contain one or more <code>App</code> or <code>Asset</code> elements depending on the slice type (aces-asset-elements for assets and aces-app-elements for apps). Uniqueness is not required; if a million <code>App</code>s share the same ref value, the grain storing them would have a million elements in its payload.
 
-Also, be aware that some of these three elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three types, even if it is always empty. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken.
+###### Granulating ACES Apps by Part Number
 
-These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
+The ref strategy can be used arbitrarily as long as the data will fit in the constraints of the ACES XSD for the field, and Sandpiper also specifies a standard method for using ref to granulate by part number.
+
+In this method, the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. If no brand is specified at any point (which, while allowed by the ACES schema definition, is highly inadvisable), use "ZZZZ" for both brand and subbrand.
+
 
 ##### Granulation Strategy: ACES Part
 

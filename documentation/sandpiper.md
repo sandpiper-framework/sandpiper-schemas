@@ -861,7 +861,7 @@ The generating system (or a sufficiently-aware granulator) *must* fill every <co
 
 The ref strategy can be used arbitrarily as long as the data will fit in the constraints of the ACES XSD for the field, and Sandpiper also specifies a standard method for using ref to granulate by part number.
 
-In this method, the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. If no brand is specified at any point (which, while allowed by the ACES schema definition, is highly inadvisable), use "ZZZZ" for both brand and subbrand.
+In this method, the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.
 
 ##### Granulation Strategy: ACES AssetName
 

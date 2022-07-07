@@ -662,16 +662,19 @@ This section contains the valid reference values for this version of the Sandpip
 Type | Level | Description | Granulation Group | Coarse Strategy | Fine Strategy
 --|--|--|--|--|--
 key-values          | 2+   | Unique keys and their values | Key Values | *none* | Key Value UUID
-aces-file           | 1    | Auto Care ACES file    | [ACES](#granulation-strategies-for-aces) | *none* | [File UUID](#granulation-strategy-file-uuid)
-aces-app-elements   | 2+   | ACES application elements    | [ACES](#granulation-strategies-for-aces) | [ACES Part](#granulation-strategy-aces-part) | [ACES UUID](#granulation-strategy-aces-uuid)
-aces-asset-elements | 2+   | ACES asset elements   | [ACES](#granulation-strategies-for-aces) | ACES AssetName | [ACES UUID](#granulation-strategy-aces-uuid)
-aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [ACES](#granulation-strategies-for-aces) | ACES AssetName | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-file           | 1    | Auto Care ACES file       | [ACES](#granulation-strategies-for-aces) | *none* | [File UUID](#granulation-strategy-file-uuid)
+aces-app-element    | 2+   | Single ACES application element | [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-app-elements   | 2+   | ACES application elements | [ACES](#granulation-strategies-for-aces) | [ACES Ref](#granulation-strategy-aces-ref) | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-asset-element  | 2+   | Single ACES asset element | [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-asset-elements | 2+   | ACES asset elements       | [ACES](#granulation-strategies-for-aces) | [ACES Ref](#granulation-strategy-aces-ref) | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-digitalfileinfo-element | 2+ | Single ACES DigitalFileInformation element |  [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
+aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [ACES](#granulation-strategies-for-aces) | [ACES AssetName](#granulation-strategy-aces-digitalfileinfo) | [ACES UUID](#granulation-strategy-aces-uuid)
 partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
-napa-interchange-file | 1  | NAPA interchange file  | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
-pies-file           | 1    | Auto Care PIES file    | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
+napa-interchange-file | 1  | NAPA interchange file | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
+pies-file           | 1    | Auto Care PIES file   | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
 pies-items          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
 pies-pricesheets    | 2+   | PIES pricesheet elements    | PIES | ? | ?
-asset-archive          | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+asset-archive       | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-file          | 1    | Single digital asset (image, video, etc.)     | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-files         | 2+   | Binary digital assets  | [Files](#granulation-strategies-for-files) | [File Path](#granulation-strategy-file-path) | [File UUID](#granulation-strategy-file-uuid)
 binary-blob         | 1    | Generic binary file    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)

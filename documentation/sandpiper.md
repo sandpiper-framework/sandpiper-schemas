@@ -773,7 +773,7 @@ ACES is an XML delivery format specified by the [Auto Care Association](https://
 
 ACES XML files are a monolithic delivery format consisting of a root element, <code>ACES</code>, containing a preamble <code>Header</code>, zero or more <code>App</code> elements, zero or more <code>Asset</code> elements, zero or one <code>DigitalAsset</code> element (containing one or more <code>DigitalFileInformation</code> elements), and a final <code>Trailer</code>.
 
-ACES files can be of two types: Full or Partial. Partial files can be additions, updates, or deletes of existing data, whereas Full files are understood to represent the entire universe of ACES data. Sandpiper does not support the partial facility of ACES, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
+ACES files can be of two types: Full or Partial. Partial files can be additions to or deletes from existing data, whereas Full files are understood to represent the entire universe of ACES data. Sandpiper does not support the partial facility of ACES, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
 
 The <code>Header</code> element serves as the preamble to the file and contains sender information, effective dates, and so on. In versions of ACES lower than 4.0 this is the only opportunity to indicate the branding of the parts (via the <code>BrandAAIAID</code> element); from 4.0 onwards branding can also be specified as an attribute of the <code>Part</code> element.
 

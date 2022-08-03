@@ -853,6 +853,19 @@ The ref and granulation passes would modify the XML to look like this:
 </App>
 ```
 
+Then, the final grain payload is stirpped of the ref attribute:
+
+```xml
+<App action="A" id="-1">
+    <BaseVehicle id="1"/>   <!-- 2002 Suzuki Aerio -->
+    <EngineBase id="13"/>   <!-- 2.0L 2000cc L4 -->
+    <Qty>1</Qty>
+    <PartType id="5808"/>  <!-- Catalytic Converter -->
+    <Position id="30"/>  <!-- Rear -->
+    <Part>ABCDEFG</Part>
+</App>
+```
+
 Note that all whitespace and comments are preserved; the only modification is to the container <code>App</code> element.
 
 ##### Granulation Strategy: ACES AssetName

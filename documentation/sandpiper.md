@@ -813,6 +813,12 @@ Both ACES <code>App</code> and <code>Asset</code> elements can contain an attrib
 
 The generating system (or a sufficiently-aware granulator) *must* fill every <code>App</code>'s and <code>Asset</code>'s <code>ref</code> attribute with an identifier that can be used to establish the scope of a single grain. This grain must contain one or more <code>App</code> or <code>Asset</code> elements depending on the slice type (aces-asset-elements for assets and aces-app-elements for apps). Uniqueness is not required; if a million <code>App</code>s share the same ref value, the grain storing them would have a million elements in its payload.
 
+When the granulator takes this file in, it is responsible for creating stateless versions of the file's contents. <code>App</code> elements bear two stateful mandatory attributes that must be modified: <code>id</code> and <code>action</code>.
+
+Outside Sandpiper, the <code>id</code> attribute is used as a running record number, and does not uniquely identify the element outside the context of the file. For example, an element with <code>id</code> "1" in one publication could have <code>id</code> "1000" in the next file produced. This would mean that, in the right scenario, every single granulation run could effectively produce a complete turnover of every grain in the data set. For that reason, the granulator must set the <code>id</code> to "-1".
+
+The <code>action</code> attribute allows, in theory, ACES records that delete from and add to the destination data set. As explained above, this is not supported in Sandpiper; <code>action</code> must always be "A", and if the granulator encounters any other value, it should raise an error.
+
 ###### Granulating ACES Apps by Part Number
 
 The ref strategy can be used arbitrarily as long as the data will fit in the constraints of the ACES XSD for the field, and Sandpiper also specifies a standard method for using ref to granulate by part number.

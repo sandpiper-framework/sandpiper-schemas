@@ -789,51 +789,7 @@ The following granulation strategies are valid for any ACES version as long as t
 
 The basic method is to extract an ACES XML file's context information as well as its three main content areas, stage them in a stripped form, and resolve these (through deletes followed by adds) against existing information.
 
-```mermaid
-flowchart LR
-    %%{init: {"theme":"default", "flowchart": {"curve": "basis", "nodeSpacing": 60, "rankSpacing": 50} } }%%
-    classDef doc fill:Green, color:White;
-    classDef elem fill:LightGreen;
-    classDef proc fill:DarkRed, color:White;
-    classDef datastore fill:DarkCyan, color:White, stroke:Black;
-    classDef invisi fill:None, stroke:None;
-
-    axml>ACES XML]
-
-    subgraph g[" "]
-        rgran>App]
-        agran>Asset]
-        dgran>DigitalFileInformation]
-        cgran>Header]
-    end
-
-    subgraph s[" "]
-        stag[(Stage)]
-        sand[(Sandpiper)]
-    end
-
-    subgraph o[" "]
-        resv[[Resolve]]
-    end
-
-    axml -- ref --> rgran & agran
-    axml -- AssetName --> dgran
-    axml --> cgran
-
-    rgran -- aces-app-elements --> stag
-    agran -- aces-asset-elements --> stag
-    dgran -- aces-digitalfileinfo-elements --> stag
-    cgran -- key-values --> stag
-
-    stag & sand --> resv
-
-    class g,s,o invisi
-    class rgran,dgran,cgran,agran elem
-    class axml doc
-    class comp,resv proc
-    class stag,sand datastore
-
-```
+<img src="assets/ACES_Granulation_Overview.png" alt="Overview of ACES Granulation" title="ACES Granulation Overview" style="padding: 1em"/>
 
 The three main ACES content elements (<code>App</code>, <code>Asset</code>, and <code>DigitalFileInformation</code>) can be granulated coarsely (<code>App</code> by ref value, <code>Asset</code> by ref value, and <code>DigitalFileInformation</code> by AssetName value) or finely (i.e. Sandpiper Native, all using a UUID).
 

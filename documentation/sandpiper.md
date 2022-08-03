@@ -825,6 +825,36 @@ The ref strategy can be used arbitrarily as long as the data will fit in the con
 
 In this method, the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.
 
+###### Example ACES App Granulation
+
+Given this naive XML output from a classic PIM:
+
+```xml
+<App action="A" id="13023">
+    <BaseVehicle id="1"/>   <!-- 2002 Suzuki Aerio -->
+    <EngineBase id="13"/>   <!-- 2.0L 2000cc L4 -->
+    <Qty>1</Qty>
+    <PartType id="5808"/>  <!-- Catalytic Converter -->
+    <Position id="30"/>  <!-- Rear -->
+    <Part>ABCDEFG</Part>
+</App>
+```
+
+The ref and granulation passes would modify the XML to look like this:
+
+```xml
+<App action="A" id="-1" ref="ZZZY||ABCDEFG">
+    <BaseVehicle id="1"/>   <!-- 2002 Suzuki Aerio -->
+    <EngineBase id="13"/>   <!-- 2.0L 2000cc L4 -->
+    <Qty>1</Qty>
+    <PartType id="5808"/>  <!-- Catalytic Converter -->
+    <Position id="30"/>  <!-- Rear -->
+    <Part>ABCDEFG</Part>
+</App>
+```
+
+Note that all whitespace and comments are preserved; the only modification is to the container <code>App</code> element.
+
 ##### Granulation Strategy: ACES AssetName
 
 <code>DigitalFileInformation</code> elements do not allow a <code>ref</code> attribute, and therefore can only be granulated by UUID or by some other value. For the latter, we have chosen the <code>AssetName</code> element, since it is required and can be referenced back to any <code>Asset</code> elements that depend on it (via their own <code>AssetName</code> elements).

@@ -815,7 +815,7 @@ The generating system (or a sufficiently-aware granulator) *must* fill every <co
 
 When the granulator takes this file in, it is responsible for creating stateless versions of the file's contents. <code>App</code> elements bear two stateful mandatory attributes that must be modified: <code>id</code> and <code>action</code>.
 
-Outside Sandpiper, the <code>id</code> attribute is used as a running record number, and does not uniquely identify the element outside the context of the file. For example, an element with <code>id</code> "1" in one publication could have <code>id</code> "1000" in the next file produced. This would mean that, in the right scenario, every single granulation run could effectively produce a complete turnover of every grain in the data set. For that reason, the granulator must set the <code>id</code> to "-1".
+Outside Sandpiper, the <code>id</code> attribute is used as a running record number, and does not uniquely identify the element outside the context of the file. For example, an element with <code>id</code> "1" in one publication could have <code>id</code> "1000" in the next file produced. This would mean that, in the right scenario, every single granulation run could effectively produce a complete turnover of every grain in the data set. For that reason, the granulator must set the <code>id</code> to "-0".
 
 The <code>action</code> attribute allows, in theory, ACES records that delete from and add to the destination data set. As explained above, this is not supported in Sandpiper; <code>action</code> must always be "A", and if the granulator encounters any other value, it should raise an error.
 
@@ -843,7 +843,7 @@ Given this naive XML output from a classic PIM:
 The ref and granulation passes would modify the XML to look like this:
 
 ```xml
-<App action="A" id="-1" ref="ZZZY||ABCDEFG">
+<App action="A" id="-0" ref="ZZZY||ABCDEFG">
     <BaseVehicle id="1"/>   <!-- 2002 Suzuki Aerio -->
     <EngineBase id="13"/>   <!-- 2.0L 2000cc L4 -->
     <Qty>1</Qty>

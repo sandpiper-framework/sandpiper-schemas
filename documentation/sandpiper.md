@@ -853,7 +853,7 @@ The ref and granulation passes would modify the XML to look like this:
 </App>
 ```
 
-Then, the final grain payload is stirpped of the ref attribute:
+Then, the final grain payload is stripped of the ref attribute:
 
 ```xml
 <App action="A" id="-1">

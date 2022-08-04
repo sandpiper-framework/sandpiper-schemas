@@ -856,7 +856,7 @@ The ref and granulation passes would modify the XML to look like this:
 Then, the final grain payload is stripped of the ref attribute:
 
 ```xml
-<App action="A" id="-1">
+<App action="A" id="-0">
     <BaseVehicle id="1"/>   <!-- 2002 Suzuki Aerio -->
     <EngineBase id="13"/>   <!-- 2.0L 2000cc L4 -->
     <Qty>1</Qty>

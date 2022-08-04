@@ -55,6 +55,29 @@
             <xs:enumeration value="3"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="SliceTypes">
+        <xs:restriction base="String_Medium">
+            <xs:enumeration value="aces-file"/>
+            <xs:enumeration value="aces-app-element"/>
+            <xs:enumeration value="aces-app-elements"/>
+            <xs:enumeration value="aces-asset-element"/>
+            <xs:enumeration value="aces-asset-elements"/>
+            <xs:enumeration value="aces-digitalfileinfo-element"/>
+            <xs:enumeration value="aces-digitalfileinfo-elements"/>
+            <xs:enumeration value="partspro-file"/>
+            <xs:enumeration value="napa-interchange-file"/>
+            <xs:enumeration value="pies-file"/>
+            <xs:enumeration value="pies-items"/>
+            <xs:enumeration value="pies-pricesheets"/>
+            <xs:enumeration value="asset-archive"/>
+            <xs:enumeration value="asset-file"/>
+            <xs:enumeration value="asset-files"/>
+            <xs:enumeration value="key-values"/>
+            <xs:enumeration value="binary-blob"/>
+            <xs:enumeration value="xml-file"/>
+            <xs:enumeration value="text-file"/>
+        </xs:restriction>
+    </xs:simpleType>
     <!-- Attribute templates used in multiple places -->
     <xs:attributeGroup name="Model">
         <xs:attribute name="uuid" type="uuid" use="required"/>
@@ -187,7 +210,7 @@
                                                   <xs:attributeGroup ref="Model"/>
                                                   <xs:attributeGroup ref="Description_Main"/>
                                                   <xs:attribute name="slicetype"
-                                                  type="String_Medium" use="required"/>
+                                                  type="SliceTypes" use="required"/>
                                                   <xs:attribute name="filename" type="String_Medium"
                                                   use="optional"/>
                                                   </xs:complexType>

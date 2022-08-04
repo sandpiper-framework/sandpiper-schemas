@@ -661,7 +661,6 @@ This section contains the valid reference values for this version of the Sandpip
 
 Type | Level | Description | Granulation Group | Coarse Strategy | Fine Strategy
 --|--|--|--|--|--
-key-values          | 2+   | Unique keys and their values | Key Values | *none* | Key Value UUID
 aces-file           | 1    | Auto Care ACES file       | [ACES](#granulation-strategies-for-aces) | *none* | [File UUID](#granulation-strategy-file-uuid)
 aces-app-element    | 2+   | Single ACES application element | [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
 aces-app-elements   | 2+   | ACES application elements | [ACES](#granulation-strategies-for-aces) | [ACES Ref](#granulation-strategy-aces-ref) | [ACES UUID](#granulation-strategy-aces-uuid)
@@ -680,6 +679,7 @@ asset-files         | 2+   | Binary digital assets  | [Files](#granulation-strat
 binary-blob         | 1    | Generic binary file    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 xml-file            | 1    | Generic XML file       | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 text-file           | 1    | Generic text file      | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
+key-values          | 2+   | Unique keys and their values | Key Values | *none* | Key Value UUID
 
 ### Link Fields
 

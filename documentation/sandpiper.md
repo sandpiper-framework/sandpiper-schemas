@@ -892,7 +892,7 @@ Given this naive XML output from a classic PIM:
 </App>
 ```
 
-The ref and granulation passes would modify the XML to look like this:
+The ref and granulation passes would modify the XML to look like this (assuming part number granulation is the method):
 
 ```xml
 <App action="A" id="-0" ref="ZZZY||ABCDEFG">

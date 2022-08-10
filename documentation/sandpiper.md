@@ -920,6 +920,16 @@ Then, the final grain payload is stripped of the ref attribute:
 
 Note that all whitespace and comments are preserved; the only modification is to the container <code>App</code> element.
 
+The granulator then needs to match this payload information against known payloads already present. How it does this is up to the primary actor's implementation -- as long as it is always performed the same way and uses a well-established method. Because the primary is the one assigning the UUID on content creation, the secondary doesn't ever need to know what went into the comparison; the UUID is the method of change detection, not the content itself.
+
+If this grain is new, an entry needs to be created for it. It might look something like this (with the above payload simply marked "{xml}" here to avoid repeating it):
+
+grain_uuid | grain_key | encoding | payload
+-- | -- | -- | --
+85e53fc6-7402-4af1-a546-415f4cd6d302 | ZZZY\|\|ABCDEFG | UTF-8 | {xml}
+
+Finally, the granulator needs to remove any grains that are no longer present in this data set.
+
 ##### Granulation Strategy: ACES AssetName
 
 <code>DigitalFileInformation</code> elements do not allow a <code>ref</code> attribute, and therefore can only be granulated by UUID or by some other value. For the latter, we have chosen the <code>AssetName</code> element, since it is required and can be referenced back to any <code>Asset</code> elements that depend on it (via their own <code>AssetName</code> elements).

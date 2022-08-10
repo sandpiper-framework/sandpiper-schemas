@@ -795,13 +795,13 @@ The basic method is to extract an ACES XML file's context information as well as
 
 The three main ACES content elements (<code>App</code>, <code>Asset</code>, and <code>DigitalFileInformation</code>) can be granulated coarsely (<code>App</code> by ref value, <code>Asset</code> by ref value, and <code>DigitalFileInformation</code> by AssetName value) or finely (i.e. Sandpiper Native, all using a UUID).
 
-The context information (from the <code>Header</code> element) is similarly extracted, though no reference values are needed. It is important to establish the same context node for all slices that share a common origin; this will serve as the link tying them together into a single set.
+The context information (from the <code>Header</code> element) is similarly extracted, though no reference values are needed. It is important to establish the same context slice for all slices that share a common origin; this will serve as the link tying them together into a single set.
 
 Also, be aware that some of these elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three content element types, even if it is always empty. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken.
 
 These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
 
-##### ACES Context Nodes
+##### ACES Context Slices
 
 Context data is provided in the <code>Header</code> element preamble. Some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner.
 

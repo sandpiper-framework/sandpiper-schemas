@@ -803,7 +803,57 @@ These subscriptions can be a mix of coarse and fine granulation. However, second
 
 ##### ACES Context Slices
 
-Context data is provided in the <code>Header</code> element preamble. Some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner.
+Context data is provided in the <code>Header</code> element preamble and must be extracted into a [context slice](#the-context-slice). All ACES data slices must bear a link of type context-slice to one such slice.
+
+All elements in the ACES Header should be extracted for this purpose, though some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner. These may be stored in the context slice but should be used with caution or not at all.
+
+The <code>ApprovedFor</code>, <code>PartsApprovedFor</code>, and <code>RegionFor</code> header elements can contain a sequence of child elements and are handled as delimited values. Append an underscore and the child element name as a key suffix, i.e. ApprovedFor_Country, PartsApprovedFor_Country, and RegionFor_Region. This ensures that future extensions to these elements will remain compatible with this strategy.
+
+For example, given this header information:
+
+```XML
+<Header>
+    <Company>Bill's Auto Parts</Company>
+    <SenderName>Bill Smith</SenderName>
+    <SenderPhone>708-555-1212</SenderPhone>
+    <TransferDate>2028-01-01</TransferDate>
+    <BrandAAIAID>ZZZZ</BrandAAIAID>
+    <DocumentTitle>Widgets and Sprockets</DocumentTitle>
+    <EffectiveDate>2028-01-01</EffectiveDate>
+    <ApprovedFor>
+        <Country>US</Country>
+        <Country>CA</Country>
+    </ApprovedFor>
+    <SubmissionType>FULL</SubmissionType>
+    <VcdbVersionDate>2027-12-27</VcdbVersionDate>
+    <QdbVersionDate>2027-12-27</QdbVersionDate>
+    <PcdbVersionDate>2027-12-27</PcdbVersionDate>
+</Header>
+```
+
+The context slice would look be similar to this:
+
+slice_uuid | slice_description | slicetype | filename
+-- | -- | -- | --
+3846e1a0-8fe2-49ba-be65-10b2fe87ac6f | Bill's Auto Parts ACES | key-values | *null*
+
+The context slice grains would look something like this:
+
+grain_uuid | grain_key | encoding | payload
+-- | -- | -- | --
+8866af2d-68d5-47e1-b5b7-b1a9a2b23946 | Company | utf-8 | Bill's Auto Parts
+4fa83367-c3f1-4051-91b2-86eee41fefa1 | SenderName | utf-8 | Bill Smith
+2b5f5389-73d6-48cf-a8aa-6bd7aa5d911f | SenderPhone | utf-8 | 708-555-1212
+fa57abbf-8523-481d-a1b0-9c77408d411b | TransferDate | utf-8 | 2021-01-01
+6f435895-5989-4717-b771-f02707cd3497 | BrandAAIAID | utf-8 | ZZZZ
+be918b56-efd1-4bcc-9e07-5f97117d8c5e | DocumentTitle | utf-8 | Widgets and Sprockets
+f35e4a45-403c-44ae-9609-c764a4537407 | EffectiveDate | utf-8 | 2028-01-01
+b9ce2277-f0ce-4b0d-93d5-b7521955f5e9 | ApprovedFor_Country | utf-8 | US\|CA
+b69b32e7-34ac-440c-bb3f-c6527e7cb07c | PartsApprovedFor_Country | utf-8 | US\|CA
+cb9626e7-c0f3-40d8-bb90-293d7aaaf340 | SubmissionType | utf-8 | FULL
+34486189-a6c6-4edd-bb40-7aca186cb83d | VcdbVersionDate | utf-8 | 2027-12-27
+593e860f-9ab4-41c0-8fbd-d7ef5248380b | QdbVersionDate | utf-8 | 2027-12-27
+24847220-2e50-4777-963b-8d9affd496e1 | PcdbVersionDate | utf-8 | 2027-12-27
 
 While Sandpiper can only act on what it sees, and it cannot see inside the content itself, we'll note that, when you integrate the data into your systems, specific context must alway trump more general context. In other words, in the case of an overlap between Sandpiper's stated context and the actual data inside the content, the data inside always wins.
 

@@ -761,7 +761,35 @@ Files, being opaque sets of arbitrary binary information, are not themselves eas
 
 #### Granulation Strategy: File Path
 
-(TBA)
+The path of a file can be used to uniquely identify it; nearly all operating systems today already enforce this constraint. An absolute path stores the exact location and name of a file (e.g. "/home/sandpiper/file.txt"), whereas a relative path contains its location from a given starting point (e.g., assuming a start at "/home/sandpiper", "./file.txt").
+
+When granulating sets of files (as in slice type asset-files) Sandpiper uses a relative path. This is both for security (allowing absolute paths would mean that the processing system needs to make sure no delivered data can overwrite important system files, for example) and for flexibility (the origin and destination systems can have different root locations but preserve the structure of the original data).
+
+Different systems will have different requirements for file paths, including length (for example, older versions of Windows limit the total path to 260 characters) and content (e.g. "/" cannot be used in a filename on a UNIX system).
+
+Because Sandpiper is not a universal file transfer mechanism, we have erred on the side of caution and repeatability, and specify a restricted set of allowed content in a particular form. We also offer some strong suggestions. Above all else, these paths must be treated as static values, not subject to any additional processing, interpretation, or escaping.
+
+First, the hard requirements:
+
+1. A file path in Sandpiper must use the forward slash ("/") character as a directory separator. Windows paths should simply replace the backslash with a forward slash
+1. Filenames can only contain alphanumeric characters (A-Z, a-z, 0-9), dashes, dots, spaces^[Allowing spaces in path elements is a compromise; while it creates some ambiguity during processing, the practice is widespread enough that forbidding it would pose a barrier to adoption.], and underscores. No escaping is allowed
+1. All paths are relative and must begin with "./"
+1. Other than the leading "./", paths cannot include processing instructions like ".." (used in many systems to indicate the parent directory)
+1. Files must be treated as actual entities; symlinks and shortcuts are forbidden
+
+Second the strong suggestions:
+
+1. Individual path components should not exceed 255 characters
+1. Total path depth should not exceed 16 directories
+1. Total path length in characters should not exceed 4096
+
+For example, when granulating a set of three distinct assets that share a filename but reside in different directories, it might look like this:
+
+grain_uuid | grain_key | encoding | payload
+-- | -- | -- | --
+5bb23861-1d88-4997-819e-c1b54e6f2204 | ./web/wpt.jpg | binary | {binary}
+b540decb-f253-4c7a-87c1-cd2a4184c521 | ./print/wpt.jpg | binary | {binary}
+c552ee5a-3074-49b0-a83a-8330352f54c4 | ./thumbs/wpt.jpg | binary | {binary}
 
 ### Granulation Strategies for ACES
 

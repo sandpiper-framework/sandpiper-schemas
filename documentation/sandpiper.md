@@ -763,10 +763,6 @@ Files, being opaque sets of arbitrary binary information, are not themselves eas
 
 (TBA)
 
-#### Granulation Strategy: File UUID
-
-(TBA)
-
 ### Granulation Strategies for ACES
 
 #### ACES Background and Introduction

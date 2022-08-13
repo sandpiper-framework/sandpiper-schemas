@@ -934,7 +934,7 @@ Unlike with ACES <code>App</code> elements, for which we remove the optional <co
 
 ##### Granulation Strategy: ACES UUID
 
-When granulating ACES data finely, the standard Sandpiper UUID method is employed.
+Advanced, Sandpiper-native systems may track their own content changes internally and directly populate the <code>ref</code> attribute with a UUID. This allows for per-element change resolution. No special accomodations are necessary from a granulation strategy standpoint, because the data is already granulated as finely as the origin system desires. Synchronization through Sandpiper needs no further data to proceed.
 
 ## Glossary
 

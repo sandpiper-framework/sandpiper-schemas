@@ -853,7 +853,7 @@ cb9626e7-c0f3-40d8-bb90-293d7aaaf340 | SubmissionType | utf-8 | FULL
 
 While Sandpiper can only act on what it sees, and it cannot see inside the content itself, we'll note that, when you integrate the data into your systems, specific context must alway trump more general context. In other words, in the case of an overlap between Sandpiper's stated context and the actual data inside the content, the data inside always wins.
 
-This only applies to context (which for ACES we consider to be overridable) and not to grain key values (which must always match the delivered data); in the case of a key-data mismatch, the secondary actor must raise an exception, and consider the slice corrupted.
+This only applies to context (which for ACES we consider to be overridable) and not to grain key values (which must always match the delivered data); for grain keys (used in other slice types as a reference into the data), in the case of a key-data mismatch, the secondary actor must raise an exception, and consider the slice corrupted.
 
 ##### Granulation Strategy: ACES Ref
 

@@ -803,7 +803,7 @@ Context data is provided in the <code>Header</code> element preamble and must be
 
 All elements in the ACES Header should be extracted for this purpose, though some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner. These may be stored in the context slice but should be used with caution or not at all.
 
-The <code>ApprovedFor</code>, <code>PartsApprovedFor</code>, and <code>RegionFor</code> header elements can contain a sequence of child elements and are handled as delimited values. Append an underscore and the child element name as a key suffix, i.e. ApprovedFor_Country, PartsApprovedFor_Country, and RegionFor_Region. This ensures that future extensions to these elements will remain compatible with this strategy.
+The <code>ApprovedFor</code>, <code>PartsApprovedFor</code>, and <code>RegionFor</code> header elements can contain a sequence of child elements. These would not cleanly fit into a key-values payload, as this payload only allows actual value storage. Instead, they should be collapsed into a delimited list of values (using, as in all context slices, the pipe character as delimiter). Append an underscore and the child element name as a key suffix, i.e. ApprovedFor_Country, PartsApprovedFor_Country, and RegionFor_Region. This ensures that future extensions to these elements will remain compatible with this strategy.
 
 For example, given this header information:
 

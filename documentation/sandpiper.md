@@ -968,6 +968,12 @@ Advanced, Sandpiper-native systems may track their own content changes internall
 
 ### Granulation Strategies for PIES
 
+#### PIES Background and Introduction
+
+PIES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). Like their related standard, ACES, It is validated against an XSD, accompanied by best practice guidelines.
+
+PIES XML files are a monolithic delivery format with a root element <code>PIES</code>, containing a preamble, <code>Header</code>, and a postscript, <code>Footer</code>. Between these contextual containers are elements housing fundamentally different but related product information: <code>PriceSheets</code>, <code>MarketingCopy</code>, and <code>Items</code>.
+
 ## Glossary
 
 Actor

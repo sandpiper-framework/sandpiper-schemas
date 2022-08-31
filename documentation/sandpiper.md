@@ -974,6 +974,8 @@ PIES is an XML delivery format specified by the [Auto Care Association](https://
 
 PIES XML files are a monolithic delivery format with a root element <code>PIES</code>, containing a preamble, <code>Header</code>, and a postscript, <code>Footer</code>. Between these contextual containers are elements housing fundamentally different but related product information: <code>PriceSheets</code>, <code>MarketingCopy</code>, and <code>Items</code>.
 
+PIES files, like ACES, can be either Full or Partial. Partial files can contain additions, deletions, changes, and explicitly-unchanging items (unlike in ACES, where all operations are either additions or deletions). In contrast, Full files are understood to represent the entire universe of PIES data without reference to an existing dataset. As with ACES, Sandpiper does not support the partial facility, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
+
 ## Glossary
 
 Actor

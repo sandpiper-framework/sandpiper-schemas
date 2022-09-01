@@ -975,12 +975,12 @@ PIES is an XML delivery format specified by the [Auto Care Association](https://
 PIES XML files are a monolithic delivery format with a root element <code>PIES</code>, containing a preamble, <code>Header</code>, and a postscript, <code>Footer</code>. Between these contextual containers are elements housing fundamentally different but related product information:
 
 - <code>PriceSheets</code> contains pricing template information, to be referred to by <code>Item</code> elements
-- <code>MarketingCopy</code> contains marketing descriptions and features and benefits, usually tied to high-level codes like the brand or manufacturer categories. Item-specific information is provided in the <code>Item</code> data
+- <code>MarketingCopy</code> contains marketing descriptions and features and benefits, usually tied to high-level codes like the brand or manufacturer categories. Item-specific copy is provided in the <code>Item</code> directly
 - <code>Items</code> holds individual <code>Item</code> elements with product-specific information of all sorts, potentially referencing values defined in the <code>PriceSheets</code> and <code>MarketingCopy</code> segments
 
 PIES files, like ACES, can be either Full or Partial. Partial files can contain additions, deletions, changes, and explicitly-unchanging items (unlike in ACES, where all operations are either additions or deletions). In contrast, Full files are understood to represent the entire universe of PIES data without reference to an existing dataset. As with ACES, Sandpiper does not support the partial facility, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
 
-The <code>Header</code> element is the foreward to the file and provides much of its context information. Unlike in ACES, every item must carry its own brand code and no inheritance or inference is necessary.
+The <code>Header</code> element is the foreword to the file and provides much of its context information. Unlike in ACES, every item must carry its own brand code and no inheritance or inference is necessary.
 
 ## Glossary
 

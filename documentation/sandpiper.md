@@ -664,11 +664,8 @@ This section contains the valid reference values for this version of the Sandpip
 Type | Level | Description | Granulation Group | Coarse Strategy | Fine Strategy
 --|--|--|--|--|--
 aces-file           | 1    | Auto Care ACES file       | [ACES](#granulation-strategies-for-aces) | *none* | [File UUID](#granulation-strategy-file-uuid)
-aces-app-element    | 2+   | Single ACES application element | [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
 aces-app-elements   | 2+   | ACES application elements | [ACES](#granulation-strategies-for-aces) | [ACES Ref](#granulation-strategy-aces-ref) | [ACES UUID](#granulation-strategy-aces-uuid)
-aces-asset-element  | 2+   | Single ACES asset element | [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
 aces-asset-elements | 2+   | ACES asset elements       | [ACES](#granulation-strategies-for-aces) | [ACES Ref](#granulation-strategy-aces-ref) | [ACES UUID](#granulation-strategy-aces-uuid)
-aces-digitalfileinfo-element | 2+ | Single ACES DigitalFileInformation element |  [ACES](#granulation-strategies-for-aces) | *none* | [ACES UUID](#granulation-strategy-aces-uuid)
 aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [ACES](#granulation-strategies-for-aces) | [ACES AssetName](#granulation-strategy-aces-digitalfileinfo) | [ACES UUID](#granulation-strategy-aces-uuid)
 partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 napa-interchange-file | 1  | NAPA interchange file | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)

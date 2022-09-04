@@ -985,9 +985,13 @@ Between these contextual containers are elements housing fundamentally different
 - <code>MarketingCopy</code> contains marketing descriptions and features and benefits, tied to high-level codes like the brand or manufacturer categories. Item-specific copy is provided in the <code>Item</code> directly
 - <code>Items</code> holds individual <code>Item</code> elements each representing a single product, containing product-specific information of all sorts. This data potentially references values defined in the <code>PriceSheets</code> and <code>MarketingCopy</code> segments
 
-#### Granulation For PIES
+#### Granulating PIES for Sandpiper
 
 Because the <code>Items</code> segment is potentially dependent on the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, they must be synchronized together. However, the non-Items segments change much less frequently, are much smaller, and are not as well structured internally as the <code>Items</code> segment. For those reasons, we adopt a two-tiered granulation strategy, wherein <code>Items</code> is granulated finely, and <code>PriceSheets</code> and <code>MarketingCopy</code> are granulated coarsely.
+
+PIES XML files are taken in by the granulator, which extracts Item elements (inside the Items parent container), the MarketingCopy element if present, and the PriceSheets element if present. It stages these and resolves them with any existing information in the Sandpiper pool.
+
+<img src="assets/PIES_Granulation_Overview.png" alt="Overview of PIES Granulation" title="PIES Granulation Overview" style="padding: 1em"/>
 
 ## Glossary
 

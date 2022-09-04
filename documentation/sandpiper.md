@@ -993,6 +993,10 @@ PIES XML files are taken in by the granulator, which extracts Item elements (ins
 
 <img src="assets/PIES_Granulation_Overview.png" alt="Overview of PIES Granulation" title="PIES Granulation Overview" style="padding: 1em"/>
 
+Because PIES has no <code>ref</code> attribute like ACES, we need to define a unique grain key formula and reference that directly. In this case we mirror the method we used for [ACES granulation by part number](#granulating-aces-apps-by-part-number): the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.
+
+<code>PriceSheets</code> and <code>MarketingCopy</code>, in contrast, are consumed as single units with no grain keys; they are destined for slices with types pies-pricesheets-element and pies-marketingcopy-element, respectively.
+
 ## Glossary
 
 Actor

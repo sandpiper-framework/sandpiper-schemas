@@ -671,8 +671,8 @@ partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID]
 napa-interchange-file | 1  | NAPA interchange file | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 pies-file           | 1    | Auto Care PIES file   | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
 pies-item-elements          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
-pies-pricesheets    | 2+   | PIES PriceSheets segment    | PIES | ? | ?
-pies-marketingcopy  | 2+   | PIES MarketingCopy segment  | PIES | ? | ?
+pies-pricesheets-element    | 2+   | PIES PriceSheets segment    | PIES | ? | ?
+pies-marketingcopy-element  | 2+   | PIES MarketingCopy segment  | PIES | ? | ?
 asset-archive       | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-file          | 1    | Single digital asset (image, video, etc.)     | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-files         | 2+   | Binary digital assets  | [Files](#granulation-strategies-for-files) | [File Path](#granulation-strategy-file-path) | [File UUID](#granulation-strategy-file-uuid)

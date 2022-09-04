@@ -334,7 +334,7 @@ INSERT INTO slice_types (slice_type) VALUES
 	, ('aces-digitalfileinfo-elements')
 	, ('partspro-file'), ('napa-interchange-file')
 	, ('pies-file'), ('pies-item-elements')
-	, ('pies-pricesheets'), ('pies-marketingcopy')
+	, ('pies-pricesheets-element'), ('pies-marketingcopy-element')
 	, ('asset-file'), ('asset-archive'), ('asset-files')
 	, ('binary-blob'), ('xml-file'), ('text-file');
 

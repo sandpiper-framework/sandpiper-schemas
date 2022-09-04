@@ -985,7 +985,9 @@ Between these contextual containers are elements housing fundamentally different
 - <code>MarketingCopy</code> contains marketing descriptions and features and benefits, tied to high-level codes like the brand or manufacturer categories. Item-specific copy is provided in the <code>Item</code> directly
 - <code>Items</code> holds individual <code>Item</code> elements each representing a single product, containing product-specific information of all sorts. This data potentially references values defined in the <code>PriceSheets</code> and <code>MarketingCopy</code> segments
 
-PIES files, like ACES, can be either Full or Partial. Partial files can contain additions, deletions, changes, and explicitly-unchanging items (unlike in ACES, where all operations are either additions or deletions). In contrast, Full files are understood to represent the entire universe of PIES data without reference to an existing dataset. As with ACES, Sandpiper does not support the partial facility, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
+#### Granulation For PIES
+
+Because the <code>Items</code> segment is potentially dependent on the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, they must be synchronized together. However, the non-Items segments change much less frequently, are much smaller, and are not as well structured internally as the <code>Items</code> segment. For those reasons, we adopt a two-tiered granulation strategy, wherein <code>Items</code> is granulated finely, and <code>PriceSheets</code> and <code>MarketingCopy</code> are granulated coarsely.
 
 ## Glossary
 

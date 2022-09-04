@@ -674,7 +674,7 @@ aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [AC
 partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 napa-interchange-file | 1  | NAPA interchange file | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 pies-file           | 1    | Auto Care PIES file   | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
-pies-items          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
+pies-item-elements          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
 pies-pricesheets    | 2+   | PIES PriceSheets segment    | PIES | ? | ?
 pies-marketingcopy  | 2+   | PIES MarketingCopy segment  | PIES | ? | ?
 asset-archive       | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)

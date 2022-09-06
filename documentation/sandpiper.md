@@ -669,9 +669,9 @@ aces-digitalfileinfo-elements | 2+ | ACES DigitalFileInformation elements |  [AC
 partspro-file       | 1    | NAPA partspro file    | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 napa-interchange-file | 1  | NAPA interchange file | NAPA | *none* | [File UUID](#granulation-strategy-file-uuid)
 pies-file           | 1    | Auto Care PIES file   | PIES | *none* | [File UUID](#granulation-strategy-file-uuid)
-pies-item-elements          | 2+   | PIES item elements    | PIES | PIES Part | PIES UUID
-pies-pricesheets-element    | 2+   | PIES PriceSheets segment    | PIES | ? | ?
-pies-marketingcopy-element  | 2+   | PIES MarketingCopy segment  | PIES | ? | ?
+pies-item-elements          | 2+   | PIES item elements    | PIES | [PIES Item](#granulation-strategy-pies-item) | PIES UUID
+pies-pricesheets-element    | 2+   | PIES PriceSheets segment    | PIES | [PIES PriceSheets and MarketingCopy](#granulation-strategy-pies-pricesheets-and-marketingcopy) | *none*
+pies-marketingcopy-element  | 2+   | PIES MarketingCopy segment  | PIES | [PIES PriceSheets and MarketingCopy](#granulation-strategy-pies-pricesheets-and-marketingcopy) | *none*
 asset-archive       | 1    | Archive of digital assets (image, video, etc.) in zip, gzip, etc.    | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-file          | 1    | Single digital asset (image, video, etc.)     | [Files](#granulation-strategies-for-files) | *none* | [File UUID](#granulation-strategy-file-uuid)
 asset-files         | 2+   | Binary digital assets  | [Files](#granulation-strategies-for-files) | [File Path](#granulation-strategy-file-path) | [File UUID](#granulation-strategy-file-uuid)
@@ -982,7 +982,7 @@ Between these contextual containers are elements housing fundamentally different
 
 #### Granulating PIES for Sandpiper
 
-Because the <code>Items</code> segment is potentially dependent on the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, they must be synchronized together. However, the non-Items segments change much less frequently, are much smaller, and are not as well structured internally as the <code>Items</code> segment. For those reasons, we adopt a two-tiered granulation strategy, wherein <code>Items</code> is granulated finely, and <code>PriceSheets</code> and <code>MarketingCopy</code> are granulated coarsely.
+Because the <code>Items</code> segment is potentially dependent on the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, they must be synchronized together. However, the non-Items segments change much less frequently, are much smaller, and are not as well structured internally as the <code>Items</code> segment. For those reasons, we adopt a two-tiered granulation strategy, wherein <code>Items</code> is granulated semi-finely using a constructed key, and <code>PriceSheets</code> and <code>MarketingCopy</code> are granulated coarsely as singular blocks with no grain keys.
 
 PIES XML files are taken in by the granulator, which extracts Item elements (inside the Items parent container), the MarketingCopy element if present, and the PriceSheets element if present. It stages these and resolves them with any existing information in the Sandpiper pool.
 

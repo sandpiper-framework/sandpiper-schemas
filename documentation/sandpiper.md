@@ -228,13 +228,11 @@ All slices technically contain at least one grain; in the case of a Level 1 file
 
 Links are references that allow Sandpiper data objects to be tied to other systems and tagged with nonstandard metadata.
 
-The link is the primary means of attaching overarching structure to slice data. Every partnership will have a different preferred method for establishing things like line codes, hierarchies, and sets, so the link provides a few standard methods to do this and an extensible category for what it doesn't define.
-
-The link similarly connects slice data to description or validation frameworks like reference database versions, business identities, and so on.
-
-Links are also the way to add the same kinds of connections to actors themselves, for example company codes in DUNS and SWIFT.
+The link is the primary means of attaching overarching structure to slice data. Every partnership will have a different preferred method for establishing things like line codes, hierarchies, and sets, so the link provides a few standard methods to do this and an extensible category for what it doesn't define. The link similarly connects slice data to description or validation frameworks like reference database versions, business identities, and so on. It also provides a method to add the same kinds of connections to actors themselves, for example company codes in DUNS and SWIFT.
 
 A link can either be unique, in that only one of the same type is allowed on an object, or multi, in that many of the same type are allowed on an object.
+
+Links have a key field, identifying the type of reference being made, and a key value, a single string with the reference data itself.
 
 See [Link Fields](#link-fields) for a list of all the fields available.
 

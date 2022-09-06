@@ -1010,8 +1010,7 @@ To give an example, we'll use this PIES item:
     <BrandAAIAID>ZZZY</BrandAAIAID>
     <PartTerminologyID>5808</PartTerminologyID>
     <Descriptions>
-        <Description MaintenanceType="A" DescriptionCode="DES" LanguageCode="EN">EPA
-            Catalytic Converter</Description>
+        <Description MaintenanceType="A" DescriptionCode="DES" LanguageCode="EN">EPA Catalytic Converter</Description>
     </Descriptions>
     <ExtendedInformation>
         <ExtendedProductInformation MaintenanceType="A" EXPICode="CTO" LanguageCode="EN">US</ExtendedProductInformation>

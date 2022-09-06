@@ -988,6 +988,14 @@ PIES XML files are taken in by the granulator, which extracts Item elements (ins
 
 <img src="assets/PIES_Granulation_Overview.png" alt="Overview of PIES Granulation" title="PIES Granulation Overview" style="padding: 1em"/>
 
+##### Granulation Strategy: PIES Context
+
+Context data is provided in the <code>Header</code> element preamble and must be extracted into a [context slice](#the-context-slice). All PIES data slices must bear a link of type context-slice to one such slice.
+
+All elements in the PIES Header should be extracted for this purpose, though some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>SubmissionType</code>. Others are somewhat ambiguous and potentially dangerous, like <code>BlanketEffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner. These may be stored in the context slice but should be used with caution or not at all.
+
+Unlike ACES, PIES also includes one element of context in its <code>Footer</code>: <code>TransactionDate</code>. This is unused in and ignored by Sandpiper, because it is time bound.
+
 ##### Granulation Strategy: PIES Item
 
 Because PIES has no <code>ref</code> attribute like ACES, we need to define a unique grain key formula and reference that directly. In this case we mirror the method we used for [ACES granulation by part number](#granulating-aces-apps-by-part-number): the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.

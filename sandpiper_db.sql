@@ -330,9 +330,8 @@ CREATE TABLE plan_slice_multi_link_entries (
 INSERT INTO slice_types (slice_type) VALUES
 	  ('key-values')
 	, ('aces-file')
-	, ('aces-app-element'), ('aces-app-elements')
-	, ('aces-asset-element'), ('aces-asset-elements')
-	, ('aces-digitalfileinfo-element'), ('aces-digitalfileinfo-elements')
+	, ('aces-app-elements'), ('aces-asset-elements')
+	, ('aces-digitalfileinfo-elements')
 	, ('partspro-file'), ('napa-interchange-file')
 	, ('pies-file'), ('pies-item-elements')
 	, ('pies-pricesheets-element'), ('pies-marketingcopy-element')

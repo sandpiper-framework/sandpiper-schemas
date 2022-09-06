@@ -994,7 +994,7 @@ Context data is provided in the <code>Header</code> element preamble and must be
 
 All elements in the PIES Header should be extracted for this purpose, though some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>SubmissionType</code>. Others are somewhat ambiguous and potentially dangerous, like <code>BlanketEffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner. These may be stored in the context slice but should be used with caution or not at all.
 
-Unlike ACES, PIES also includes one element of context in its <code>Footer</code>: <code>TransactionDate</code>. This is unused in and ignored by Sandpiper, because it is time bound.
+Unlike ACES, PIES also includes one element of context in its <code>Trailer</code>: <code>TransactionDate</code>. This is unused in and ignored by Sandpiper, because it is time bound.
 
 ##### Granulation Strategy: PIES Item
 

@@ -1000,6 +1000,38 @@ Unlike ACES, PIES also includes one element of context in its <code>Trailer</cod
 
 Because PIES has no <code>ref</code> attribute like ACES, we need to define a unique grain key formula and reference that directly. In this case we mirror the method we used for [ACES granulation by part number](#granulating-aces-apps-by-part-number): the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.
 
+The final payload does not need the same level of processing as in ACES <code>App</code>s, because there are no temporal items sitting in the main element like ACES's <code>id</code> attribute. Some elements inside the item will still be somewhat time-bound (e.g. availability date information), but this is connected directly to the item and theoretically should not be changing frequently.
+
+For example, given this PIES item:
+
+```xml
+<Item MaintenanceType="A">
+    <PartNumber>ABCDEFG</PartNumber>
+    <BrandAAIAID>ZZZY</BrandAAIAID>
+    <PartTerminologyID>5808</PartTerminologyID>
+    <Descriptions>
+        <Description MaintenanceType="A" DescriptionCode="DES" LanguageCode="EN">EPA
+            Catalytic Converter</Description>
+    </Descriptions>
+    <ExtendedInformation>
+        <ExtendedProductInformation MaintenanceType="A" EXPICode="CTO" LanguageCode="EN"
+            >US</ExtendedProductInformation>
+        <ExtendedProductInformation MaintenanceType="A" EXPICode="LIF"
+            >2</ExtendedProductInformation>
+    </ExtendedInformation>
+</Item>
+```
+
+Note that all whitespace and comments are preserved as-is.
+
+The granulator then needs to match this payload information against known payloads already present. How it does this is up to the primary actor's implementation -- as long as it is always performed the same way and uses a well-established method. Because the primary is the one assigning the UUID on content creation, the secondary doesn't ever need to know what went into the comparison; the UUID is the method of change detection, not the content itself.
+
+If this grain is new, an entry needs to be created for it. It might look something like this (with the above payload simply marked "{xml}" here to avoid repeating it):
+
+grain_uuid | grain_key | encoding | payload
+-- | -- | -- | --
+10b125f2-1245-4d1e-a872-484653e939e8 | ZZZY\|\|ABCDEFG | UTF-8 | {xml}
+
 ##### Granulation Strategy: PIES PriceSheets and MarketingCopy
 
 <code>PriceSheets</code> and <code>MarketingCopy</code>, in contrast to <code>Item</code> elements, are consumed as single units with no grain keys; they are destined for slices with types pies-pricesheets-element and pies-marketingcopy-element, respectively.

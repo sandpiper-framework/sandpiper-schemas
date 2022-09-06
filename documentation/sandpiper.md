@@ -1014,10 +1014,8 @@ To give an example, we'll use this PIES item:
             Catalytic Converter</Description>
     </Descriptions>
     <ExtendedInformation>
-        <ExtendedProductInformation MaintenanceType="A" EXPICode="CTO" LanguageCode="EN"
-            >US</ExtendedProductInformation>
-        <ExtendedProductInformation MaintenanceType="A" EXPICode="LIF"
-            >2</ExtendedProductInformation>
+        <ExtendedProductInformation MaintenanceType="A" EXPICode="CTO" LanguageCode="EN">US</ExtendedProductInformation>
+        <ExtendedProductInformation MaintenanceType="A" EXPICode="LIF">2</ExtendedProductInformation>
     </ExtendedInformation>
 </Item>
 ```

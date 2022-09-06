@@ -822,7 +822,7 @@ Also, be aware that some of these elements can be interdependent; ACES was not b
 
 These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
 
-##### ACES Context Slices
+##### Granulation Strategy: ACES Context
 
 Context data is provided in the <code>Header</code> element preamble and must be extracted into a [context slice](#the-context-slice). All ACES data slices must bear a link of type context-slice to one such slice.
 
@@ -892,7 +892,7 @@ Outside Sandpiper, the <code>id</code> attribute is used as a running record num
 
 The <code>action</code> attribute allows, in theory, ACES records that delete from and add to the destination data set. As explained above, this is not supported in Sandpiper; <code>action</code> must always be "A", and if the granulator encounters any other value, it should raise an error.
 
-###### Granulating ACES Apps by Part Number
+###### Granulating ACES Apps by Part Number Using Ref
 
 The ref strategy can be used arbitrarily as long as the data will fit in the constraints of the ACES XSD for the field, and Sandpiper also specifies a standard method for using ref to granulate by part number.
 

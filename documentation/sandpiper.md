@@ -59,6 +59,7 @@
 - [Appendix B: Granulation Strategies](#appendix-b-granulation-strategies)
   - [Files](#granulation-strategies-for-files)
   - [ACES](#granulation-strategies-for-aces)
+  - [PIES](#granulation-strategies-for-pies)
 - [Glossary](#glossary)
 - [Copyright Notice](#copyright-notice)
 - [Licensing](#licensing)
@@ -960,6 +961,42 @@ Unlike with ACES <code>App</code> elements, for which we remove the optional <co
 ##### Granulation Strategy: ACES UUID
 
 Advanced, Sandpiper-native systems may track their own content changes internally and directly populate the <code>ref</code> attribute with a UUID. This allows for per-element change resolution. No special accomodations are necessary from a granulation strategy standpoint, because the data is already granulated as finely as the origin system desires. Synchronization through Sandpiper needs no further data to proceed.
+
+### Granulation Strategies for PIES
+
+#### PIES Background and Introduction
+
+PIES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). Like their related standard, ACES, It is validated against an XSD, accompanied by best practice guidelines.
+
+PIES XML files are a monolithic delivery format with a root element <code>PIES</code>, containing a preamble, <code>Header</code>, and a postscript, <code>Trailer</code>.
+
+PIES files, like ACES, can be either Full or Partial. Partial files can contain additions, deletions, changes, and explicitly-unchanging items (unlike in ACES, where all operations are either additions or deletions). In contrast, Full files are understood to represent the entire universe of PIES data without reference to an existing dataset. As with ACES, Sandpiper does not support the partial facility, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
+
+The <code>Header</code> element is the foreword to the file and provides much of its context information. Unlike in ACES, every item must carry its own brand code and no inheritance or inference is necessary. The <code>Trailer</code> is the postscript to the file, containing only an optional record count value and a mandatory transaction date.
+
+Between these contextual containers are elements housing fundamentally different but related product information:
+
+- <code>PriceSheets</code> contains pricing template information, to be referred to by <code>Item</code> elements
+- <code>MarketingCopy</code> contains marketing descriptions and features and benefits, tied to high-level codes like the brand or manufacturer categories. Item-specific copy is provided in the <code>Item</code> directly
+- <code>Items</code> holds individual <code>Item</code> elements each representing a single product, containing product-specific information of all sorts. This data potentially references values defined in the <code>PriceSheets</code> and <code>MarketingCopy</code> segments
+
+#### Granulating PIES for Sandpiper
+
+Because the <code>Items</code> segment is potentially dependent on the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, they must be synchronized together. However, the non-Items segments change much less frequently, are much smaller, and are not as well structured internally as the <code>Items</code> segment. For those reasons, we adopt a two-tiered granulation strategy, wherein <code>Items</code> is granulated finely, and <code>PriceSheets</code> and <code>MarketingCopy</code> are granulated coarsely.
+
+PIES XML files are taken in by the granulator, which extracts Item elements (inside the Items parent container), the MarketingCopy element if present, and the PriceSheets element if present. It stages these and resolves them with any existing information in the Sandpiper pool.
+
+<img src="assets/PIES_Granulation_Overview.png" alt="Overview of PIES Granulation" title="PIES Granulation Overview" style="padding: 1em"/>
+
+##### Granulation Strategy: PIES Item
+
+Because PIES has no <code>ref</code> attribute like ACES, we need to define a unique grain key formula and reference that directly. In this case we mirror the method we used for [ACES granulation by part number](#granulating-aces-apps-by-part-number): the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.
+
+##### Granulation Strategy: PIES PriceSheets and MarketingCopy
+
+<code>PriceSheets</code> and <code>MarketingCopy</code>, in contrast to <code>Item</code> elements, are consumed as single units with no grain keys; they are destined for slices with types pies-pricesheets-element and pies-marketingcopy-element, respectively.
+
+The context information (from the <code>Header</code> element) is similarly extracted, and like the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, it will have no grain key. It is important to establish the same context slice for all slices that share a common origin; this will serve as the link tying them together into a single set.
 
 ## Glossary
 

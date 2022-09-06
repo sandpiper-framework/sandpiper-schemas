@@ -1002,7 +1002,7 @@ Because PIES has no <code>ref</code> attribute like ACES, we need to define a un
 
 The final payload does not need the same level of processing as in ACES <code>App</code>s, because there are no temporal items sitting in the main element like ACES's <code>id</code> attribute. Some elements inside the item will still be somewhat time-bound (e.g. availability date information), but this is connected directly to the item and theoretically should not be changing frequently.
 
-For example, given this PIES item:
+To give an example, we'll use this PIES item:
 
 ```xml
 <Item MaintenanceType="A">
@@ -1022,7 +1022,7 @@ For example, given this PIES item:
 </Item>
 ```
 
-Note that all whitespace and comments are preserved as-is.
+The granulator ingests this element, preserving all whitespace and comments, and constructs a key from the branding and part number present (in this case, "ZZZY||ABCDEFG").
 
 The granulator then needs to match this payload information against known payloads already present. How it does this is up to the primary actor's implementation -- as long as it is always performed the same way and uses a well-established method. Because the primary is the one assigning the UUID on content creation, the secondary doesn't ever need to know what went into the comparison; the UUID is the method of change detection, not the content itself.
 

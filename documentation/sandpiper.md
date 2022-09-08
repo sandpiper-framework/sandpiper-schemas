@@ -1033,8 +1033,6 @@ grain_uuid | grain_key | encoding | payload
 
 <code>PriceSheets</code> and <code>MarketingCopy</code>, in contrast to <code>Item</code> elements, are consumed as single units with no grain keys; they are destined for slices with types pies-pricesheets-element and pies-marketingcopy-element, respectively.
 
-The context information (from the <code>Header</code> element) is similarly extracted, and like the <code>PriceSheets</code> and <code>MarketingCopy</code> areas, it will have no grain key. It is important to establish the same context slice for all slices that share a common origin; this will serve as the link tying them together into a single set.
-
 ## Glossary
 
 Actor

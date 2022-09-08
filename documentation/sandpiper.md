@@ -996,6 +996,38 @@ All elements in the PIES Header should be extracted for this purpose, though som
 
 Unlike ACES, PIES also includes one element of context in its <code>Trailer</code>: <code>TransactionDate</code>. This is unused in and ignored by Sandpiper, because it is time bound.
 
+For example, given this header information:
+
+```XML
+<Header>
+    <PIESVersion>7.1</PIESVersion>
+    <SubmissionType>FULL</SubmissionType>
+    <BlanketEffectiveDate>2099-01-01</BlanketEffectiveDate>
+    <ParentAAIAID>ZZZW</ParentAAIAID>
+    <BrandOwnerAAIAID>ZZZX</BrandOwnerAAIAID>
+    <PCdbVersionDate>2098-12-27</PCdbVersionDate>
+    <PAdbVersionDate>2098-12-27</PAdbVersionDate>
+</Header>
+```
+
+The context slice might look like this:
+
+slice_uuid | slice_description | slicetype | filename
+-- | -- | -- | --
+a0a484f8-8875-4b48-a513-1e9305488bf7 | Bill's Auto Parts PIES | key-values | *null*
+
+The context slice grains would look something like this:
+
+grain_uuid | grain_key | encoding | payload
+-- | -- | -- | --
+0e987472-419a-49e1-b0a6-469faf5d1297 | PIESVersion | utf-8 | 7.1
+9b80ec6c-b3d7-435c-8c88-0faf54f3c005 | SubmissionType | utf-8 | FULL
+df633634-cff5-49f3-9ae0-dd8edf2756f0 | BlanketEffectiveDate | utf-8 | 2099-01-01
+02cf2813-b300-483d-bfa5-e48409964514 | ParentAAIAID | utf-8 | ZZZW
+649accf3-5212-475c-a8f2-6c83129a2544 | BrandOwnerAAIAID | utf-8 | ZZZX
+f6f67d56-5152-431e-bbfc-8399331652fc | PCdbVersionDate | utf-8 | 2098-12-27
+b9073521-27dd-4a0b-93fd-419bfa4f997a | PAdbVersionDate | utf-8 | 2098-12-27
+
 ##### Granulation Strategy: PIES Item
 
 Because PIES has no <code>ref</code> attribute like ACES, we need to define a unique grain key formula and reference that directly. In this case we mirror the method we used for [ACES granulation by part number](#granulating-aces-apps-by-part-number): the grain key must be a pipe-delimited triad of the BrandAAIAID, SubBrandAAIAID, and part number. For example, if part ABC has brand ZZZY and subbrand ZZZZ, the ref value would be "ZZZY|ZZZZ|ABC". Leave values blank if entirely unknown -- "||ABC" would indicate part number ABC of unknown brand or subbrand.

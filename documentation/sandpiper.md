@@ -98,7 +98,7 @@ The framework does not make special accommodations for other kinds of data, whic
 
 #### Products
 
-Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer. In Sandpiper, the singular part number per creator is a pivotal point and thus required.].
+Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products, potentially with pragmatic consideration of branding information -- for example, a single creator may manage multiple brands with overlapping part numbers^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer and brand. In Sandpiper, the singular part number per creator brand is a pivotal point and thus required.].
 
 #### Product Data
 
@@ -215,7 +215,7 @@ A slice defines the single type of the data it contains (see [the slice types li
 
 A slice is broken into *Grains*, each representing one unit of meaning or scope. It can be thought of as the element level of the data.
 
-Grains have a *Grain Key* containing a single text value, to safely and atomically operate on the data in pieces smaller than a whole slice. This value must be a single unicode key that directly references one key value within the data, e.g. a part number or a [UUID](#UUIDs). It must not be an artificially packed or delimited set of values referring to more than one key within the data.
+Grains have a *Grain Key* containing a single text value, to safely and atomically operate on the data in pieces smaller than a whole slice. This value must be a single unicode key that directly references one key value within the data, e.g. a part number or a [UUID](#UUIDs). It must not be an artificially packed or delimited set of values referring to more than one key within the data. Some exception is allowed for part number keys, in the case of a creator controlling multiple brands; in this case a simple pipe-delimited key, containing only branding and part number, may be used. However, under no circumstances should a key contain multiple part numbers, multiple brands, or a similar non-unique, self-contained value.
 
 The grain is the smallest unit on which a Sandpiper node can act, and can only be directly addressed in Level 2 and higher transactions.
 

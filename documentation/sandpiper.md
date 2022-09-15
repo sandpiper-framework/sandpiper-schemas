@@ -98,7 +98,7 @@ The framework does not make special accommodations for other kinds of data, whic
 
 #### Products
 
-Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products, potentially with pragmatic consideration of branding information -- for example, a single creator may manage multiple brands with overlapping part numbers^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer and brand. In Sandpiper, the singular part number per creator brand is a pivotal point and thus required.].
+Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products, potentially with pragmatic consideration of branding information -- for example, a single creator may manage multiple brands with overlapping part numbers^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer and branding. In Sandpiper, the singular part number within creator branding is a pivotal point and thus required.].
 
 #### Product Data
 

@@ -1104,7 +1104,7 @@ Grain Key
 : A reference to a single key value that can be used by Sandpiper to operate on data on a grain-by-grain basis
 
 Granulator
-: External tool that parses data stored in full Sandpiper slices and extracts grains into associated granular slices
+: External tool that parses data, splitting it into grains and resolving them against grains in existing slices
 
 Granulation Strategy
 : A method of breaking data into grains.

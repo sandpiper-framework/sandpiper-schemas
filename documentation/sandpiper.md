@@ -556,13 +556,13 @@ Level 1, being file-based, is designed for classic PIMs that can't use or haven'
 
 <img src="assets/Input_ClassicPimL2.png" alt="Classic PIM Level 2 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
-Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, yet classic PIMs have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a *Granulator.*)
+Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, and classic PIMs also have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a *Granulator.*)
 
 ##### Sandpiper-Aware PIM Input
 
 <img src="assets/Input_SandpiperAware.png" alt="Sandpiper-Aware PIM Input Workflow" title="Sandpiper-Aware PIM" width="40%" style="padding: 1em;"/>
 
-Sandpiper-Aware PIMs are able to use Sandpiper commands to do basic import and launch other tools. This may take the onus off of the user to manually import the data, though the process is likely only semi-automated.
+Sandpiper-Aware PIMs are able to use Sandpiper commands to do basic imports and launch other tools. This may take the onus off of the user to manually import the data, though the process is likely only semi-automated.
 
 ##### Sandpiper-Capable PIM Input
 
@@ -578,7 +578,7 @@ As with input, the capabilities of the PIM receiver will direct the most efficie
 
 <img src="assets/Output_ClassicPimL1.png" alt="Classic PIM Level 1 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 
-The classic PIM, without additional development, can make use of a purely Level 1 output process. The Sandpiper server, after synchronization with the primary Sandpiper node, outputs files via the CLI. The PIM then imports these using established processes.
+The classic PIM, without additional development, can make use of a purely Level 1 output process. The Sandpiper server, after synchronization with the primary Sandpiper node, outputs complete files. The PIM then imports these using established processes.
 
 <img src="assets/Output_ClassicPimL2.png" alt="Classic PIM Level 2 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 

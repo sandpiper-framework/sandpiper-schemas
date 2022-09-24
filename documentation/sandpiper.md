@@ -263,7 +263,7 @@ Because this is its focus, the server does not attempt to parse or understand th
 
 For Level 1, which operates at the slice only, this makes no difference; the grain is never engaged. For Level 2 and higher, though, Sandpiper exposes commands to input grains, allowing external toolchains (for short, called *Granulators*) to parse full data into grains.
 
-In these sections, we'll refer to the source of the original data as the *PIM:* the Product Information Manager.^[The word "PIM" is ambiguous; it could mean a single program that handles all product information, a combination of systems, or just a human being handling spreadsheets. We use it here as a convenient catch-all term.] The Sandpiper framework classifies PIMs in three tiers:
+In these sections, we'll refer to the source of the original data as the *PIM:* the Product Information Manager.^[The word "PIM" is ambiguous; it could mean a single program that handles all product information, a combination of systems, or just a human being handling spreadsheets. We use it here as a convenient catch-all term.] The Sandpiper framework classifies PIMs in four tiers:
 
 | Tier               | Description
 | --                 | --

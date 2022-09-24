@@ -76,7 +76,7 @@ Sandpiper tries to do this one thing well, and does not attempt to branch into o
 
 This is the reference documentation for the Sandpiper Framework, a cross-platform, open-source product data synchronization initiative. Increasingly, product data resides in more systems, is more difficult to update, is less verifiable, and requires increasingly variable and proprietary methods to deliver.
 
-The founding members of the team come from the automotive aftermarket industry, where the broad range of products sold (from consumer electronics to pistons and everything between) combine with stringent certifications of fitment and detail to create massive catalogs of data that must be updated regularly. A medium-sized aftermarket supplier will have tens of thousands of SKUs, hundreds of thousands of pictures, and millions of rows of fitment data to communicate to dozens of receivers monthly. To complicate matters further, no unambiguous standard for partial data delivery exists, meaning all of this data has to be sent in full to propagate even a single change.
+The founding members of the team come from the automotive aftermarket industry, where the broad range of products sold (from consumer electronics to pistons and everything between) combines with stringent certifications of fitment and detail to create massive catalogs of data that must be updated regularly. A medium-sized aftermarket supplier will have tens of thousands of SKUs, hundreds of thousands of pictures, and millions of rows of fitment data to communicate to dozens of receivers monthly. To complicate matters further, no unambiguous standard for partial data delivery exists, meaning that propagate even a single change all of this data has to be sent in full.
 
 Yet while this project began in the automotive world, the problem is one that extends to all product data, regardless of industry; though various industry- and partner-specific standards and formats exist to describe products, there's no standard way to actually *send* them, to change just one piece of one product's data, or to make sure that what *was* sent actually covers what was requested. This applies as much to T-shirts as it does to spark plugs.
 
@@ -84,11 +84,11 @@ We believe the Sandpiper framework can make this process a little less painful f
 
 ### Basic Terms
 
-Before we go further, there are a few basic terms to introduce, since they're used so often. For more detailed explanations, you can refer to the later parts of the document.
+Before we go further, there are a few basic terms to introduce, since they're used so often. For more detailed explanations, you can refer to later parts of the document.
 
-In Sandpiper, individuals or individual systems involved in exchanging and hosting data are known as *Nodes*. When they interact, these nodes are known as *Actors*.
+In Sandpiper, individuals or individual systems capable of exchanging and hosting data are known as *Nodes*. When they interact, these nodes are known as *Actors*.
 
-Actors exchange data about *Products*. Products (or SKUs, units, items, parts, and so on) are usually goods -- though they can also be services. Sandpiper specializes in the core data that defines these products, which we call *Product Data*: information that, were it to change, would also mean the product or its use itself had changed.
+Actors exchange data about *Products*. Products (or SKUs, units, items, parts, and so on) are usually goods -- though they could also be services. Sandpiper specializes in the core data that defines these products, which we call *Product Data*: information that, were it to change, would also mean the product or its use had itself changed.
 
 The framework does not make special accommodations for other kinds of data, which we call *Non-Product Data*, even when it is product adjacent.
 
@@ -98,7 +98,7 @@ The framework does not make special accommodations for other kinds of data, whic
 
 #### Products
 
-Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products, potentially with pragmatic consideration of branding information -- for example, a single creator may manage multiple brands with overlapping part numbers^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer and branding. In Sandpiper, the singular part number within creator branding is a pivotal point and thus required.].
+Products are controlled by a *Creator*, the manufacturer or provider with ultimate authority over its form and availability. A product has a single *Part Number* that is unique among all its creator's products, potentially with pragmatic consideration of branding information -- for example, a single creator may manage multiple brands with overlapping part numbers between them^[In the real world, part numbers can and do overlap between manufacturers. However, only in the case of poorly controlled and structured business data does this happen within the *same* manufacturer and branding. In Sandpiper, the singular part number within creator branding is a pivotal point and thus required.].
 
 #### Product Data
 
@@ -137,21 +137,21 @@ Some examples of non-product data:
 
 In some scenarios, product data begins to approach non-product data, particularly when dealing with non-critical attributes. For example, for purely functional products like oil seals, the color is most likely not critical to the part's function, and sometimes this changes frequently. To remain flexible in these cases, Sandpiper doesn't enforce true statelessness of the product itself, only of the data at any given point in time.
 
-As far as Sandpiper is concerned, a change to any product data creates a new state or revision of that product's data, rather than creating a new product. The creator and part number are the only elements that can't change without the product being considered new.
+As far as Sandpiper is concerned, a change to any product data creates a new state or revision of that product's data, rather than creating a new product. The creator and part number (potentially including branding) are the only elements that can't change without the product being considered new.
 
 ### Data Synchronization
 
-Sandpiper achieves its goal of reproducible, atomic data synchronization by strictly defining updates as either full replacements of all known data within a well-described set, or as additions and deletions of individual records within those sets using universally unique IDs (UUIDs).
+Sandpiper achieves its goal of reproducible, atomic data synchronization by strictly defining updates as either full replacements of all known data within a well-described set, or as additions and deletions of individual records within those sets using [universally unique IDs](#uuids) (UUIDs).
 
 #### Full Replacements
 
-One way to assure reproducibility is by simply replacing all of one type of data in one go, for example, all fitment data for water pumps. The sender provides a complete universe, and the receiver is expected to more or less remove their old data and replace it with the new.
+One way to assure reproducibility is by simply replacing all of one type of data in one go -- for example, all fitment data for water pumps. The sender provides a complete universe, and the receiver is expected to archive or remove their old data, replacing it with the new.
 
-This does not provide a reliable way to update data in smaller pieces, and the scale of these updates becomes so large that it's not practical to do so more frequently than once a day at the most. For very large sets this can even be quarterly or yearly.
+This does not provide a reliable way to update data in smaller pieces, and the scale of these full replacement updates can become so large that it's not practical to perform them more frequently than once a day at the most. For very large sets this can even be quarterly or yearly.
 
 Full replacements also need to specify and match their scopes carefully; if the receiver's understanding of what they should delete is broader than what they receive, they'll drop data that will not be replaced.
 
-Sandpiper's full replacement model can only be used in Level 1.
+Sandpiper's full replacement model can only be used in [Level 1](#level-1).
 
 #### Partial Changes
 
@@ -159,7 +159,7 @@ Partial changes in theory allow for high-frequency updates, pinpoint corrections
 
 Within a set, the individual records within a pool are immutable, i.e. once defined, they cannot be changed. Thus a unique ID will always refer to both the same values and the actual data record containing them. In this way sets of data can be mathematically compared and resolved, and the end state of a second dataset will always provably match the state of the first.
 
-Sandpiper's partial change model can only be used in Level 2 and higher.
+Sandpiper's partial change model can only be used in [Level 2](#level-2) and higher.
 
 ##### Why not "Delete/Update/Add"?
 
@@ -167,7 +167,7 @@ Adding information to an existing dataset is well understood; the new data augme
 
 Removing information is a little more complicated because to do so the remover needs to specify exactly what existing data needs to be deleted, as well as what to do when there are multiple records sharing that same specification. Whole chains of validation exist today to attempt to resolve these deletes based on values, and missing values or things like different character encodings create huge headaches.
 
-Updating information is even more complicated. On top of all the same requirements that would be present for a delete, replacement values must also be provided, and then subjected to the same validation as adding new information. Without doing this, values within a record could be updated to create overlaps and violate domain rules. After the fact, there's also no way to know if a record has been changed without comparing all of its values to the previous record -- which may have changed itself. So clearly when processing updates as field-level changes in product data, there's no way to know the exact state of any dataset without examining *all* of the dataset.
+Updating information is even more complicated. On top of all the same requirements that would be present for a delete, replacement values must also be provided, and then subjected to the same validation as adding new information. Without doing this, values within a record could be updated to create overlaps and violate domain rules. After the fact, there's also no way to know if a record has been changed without comparing all of its values to the previous record -- which may itself have changed. So clearly when processing updates as field-level changes in product data, there's no way to know the exact state of any dataset without examining *all* of the dataset.
 
 Therefore a record update in a dataset is actually at least as difficult to orchestrate as a delete *and* an add, but without any of the certainty.
 
@@ -177,7 +177,7 @@ For these reasons Sandpiper avoids updates except as a concept, and actually tre
 
 <img src="assets/Object_Model_Links.png" alt="Sandpiper model diagram showing links on persistent objects" title="The Sandpiper Object Model" width="50%" style="float: right; clear: right; padding: 1em"/>
 
-The object model for Sandpiper defines a set of common abstractions for the product data each node stores. There are just four persistent objects (*Node*, *Pool*, *Slice*, and *Grain*) and two reference objects (*Link* and *Subscription*). All Sandpiper objects have a universally unique ID that will be used for actions exclusively whenever possible.
+The object model for Sandpiper defines a set of common abstractions for the product data each node stores. There are just four persistent objects ([*Node*](#nodes), [*Pool*](#pools), [*Slice*](#slices), and [*Grain*](#grains)) and two reference objects ([*Link*](#links) and [*Subscription*](#subscriptions)). All Sandpiper objects have a universally unique ID that will be used for actions exclusively whenever possible.
 
 The node represents the root of one self-contained Sandpiper environment, with one controller. It contains pools of product data, each with one owner. These pools are further subdivided into slices, each representing one set of the same type of data and specifying how it is internally organized. That data is finally broken into grains by the method of organization named on the slice.
 
@@ -602,7 +602,7 @@ Sandpiper-Capable PIMs speak directly to the Sandpiper server via the API, integ
 
 When we say data broker, what we mean is an intermediary who specializes in providing persistent, reliable “data hosting” for providers. Most suppliers are not going to have the in-house team, resources, and/or desire to maintain an always-on server that can act as a Sandpiper respondent. This is how the industry works today, in fact, and data brokers serve a crucial role in that capacity. They also often provide additional services like format conversion and a healthy ecosystem of supplier datasets to choose from.
 
-This leads to a natural human abstraction: we tend to think that, if a customer of ours is receiving our data through a broker, then we are giving that data to our customer. We think that we have a direct data relationship. But we don’t — if we did, we’d send the data directly. Imagine if the customer had issues downloading through the broker’s interfaces. Would they need to talk to us, or to the broker? It’s clear that there are actually two relationships: between us and the broker, and between the broker and the customer.
+This leads to a natural human abstraction: we tend to think that, if a customer of ours is receiving our data through a broker, then we are giving that data to our customer. We think that we have a direct data relationship. But we don’t -- if we did, we’d send the data directly. Imagine if the customer had issues downloading through the broker’s interfaces. Would they need to talk to us, or to the broker? It’s clear that there are actually two relationships: between us and the broker, and between the broker and the customer.
 
 Sandpiper is a two-actor framework, because the fundamental transfer of product data doesn’t happen as a multicast free-for-all. We transfer data based on our relationships.
 

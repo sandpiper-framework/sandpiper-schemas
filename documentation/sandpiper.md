@@ -775,7 +775,7 @@ First, the hard requirements:
 1. All paths are considered an unbreakable unit and must be processed in a way that prevents spaces or other characters from being interpreted as arguments or alternate values -- for example, when passing a path to a shell script, the path should be enclosed in double quotes
 1. Files must be treated as actual entities; symlinks and shortcuts are forbidden
 
-Second the strong suggestions:
+Second, the strong suggestions:
 
 1. Individual path components should not exceed 255 characters
 1. Total path depth should not exceed 16 directories
@@ -966,7 +966,7 @@ Advanced, Sandpiper-native systems may track their own content changes internall
 
 #### PIES Background and Introduction
 
-PIES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). Like their related standard, ACES, It is validated against an XSD, accompanied by best practice guidelines.
+PIES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). Like its related standard, ACES, PIES XML is validated against an XSD, accompanied by best practice guidelines.
 
 PIES XML files are a monolithic delivery format with a root element <code>PIES</code>, containing a preamble, <code>Header</code>, and a postscript, <code>Trailer</code>.
 

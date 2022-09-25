@@ -319,8 +319,6 @@ Actors also are the lone interaction object that can use links to describe thems
 
 Actors have an *Instance* object that describes their environment and capabilities. This includes the *Software*, with a version string and description, as well as the *Capability*, stating the actor's Sandpiper level. Actors with higher capability levels must either support all lower levels as well, or offer no slices at the simpler level.
 
-There are no UUIDs on the instance or software objects.
-
 #### The Controller
 
 Actors have a *Controller* that describes the people and processes in place to synchronize data. At this time it is a simple administrator description, name, and email address, as part of an attempt to avoid over-engineering contact data.

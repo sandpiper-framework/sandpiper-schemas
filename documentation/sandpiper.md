@@ -109,7 +109,7 @@ Sandpiper's focus is product data, which has two primary characteristics:
 
 To give an example of the first primary characteristic of product data, if a sprocket has five teeth when first communicated, that could not be changed to six teeth in a second communication without raising an eyebrow; if the part truly changed from five to six teeth, it's been fundamentally altered and will not function the same way. It really is a new product, even if it supersedes the old for some reason. While Sandpiper doesn't prohibit any changes, making functional modifications like this without introducing a new number is at best ill-advised.
 
-To illustrate the second primary characteristic of product data, if the same sprocket is communicated at the same time to Customer A and Customer B, they will both see the same number of teeth. Product data is the same at any given point in time for any customer or relationship^[Some exception may be made for varying "flavors" of things like market copy, usage notes, and so on, but this creates an element of uncertainty that probably discounts these elements from use as anchor points within Sandpiper].
+To illustrate the second primary characteristic of product data, if the same sprocket is communicated at the same time to Customer A and Customer B, they will both see the same number of teeth. Product data is the same at any given point in time for any customer or relationship^[Some exception may be made for varying "flavors" of things like market copy, usage notes, and so on, but this creates an element of uncertainty that probably discounts these elements from use as anchor points within Sandpiper.].
 
 Some examples of product data:
 
@@ -245,7 +245,7 @@ However, at or above [Level 2](#level-2), this information may not be present in
 
 <img src="assets/Context-Slice.png" alt="Context Slice with referencing ACES Apps slice" title="Context slice with ACES Apps" width="50%" style="padding: 1em; float: right; clear: right;"/>
 
-In the context slice pattern, we define a Level 2 slice with slice-type "key-values", a format that assumes all grain keys are the name of a field, attribute, or property, and the payload of the grains inside the slice contains the values associated with that key^[Note that this is still a proper slice -- with UUIDs that reflect the unique state of the content within. So a change to any of the key values will necessitate a new grain UUID, even if the grain key does not change. In this way context can also be synchronized using the same methods as any other Sandpiper slice]. Then, any slice can indicate that it inherits that context with a unique link pointing to the context slice's UUID (link type "context-slice").
+In the context slice pattern, we define a Level 2 slice with slice-type "key-values", a format that assumes all grain keys are the name of a field, attribute, or property, and the payload of the grains inside the slice contains the values associated with that key^[Note that this is still a proper slice -- with UUIDs that reflect the unique state of the content within. So a change to any of the key values will necessitate a new grain UUID, even if the grain key does not change. In this way context can also be synchronized using the same methods as any other Sandpiper slice.]. Then, any slice can indicate that it inherits that context with a unique link pointing to the context slice's UUID (link type "context-slice").
 
 The key-values format should not be used to store a rich payload like XML or JSON as a means of storing multiple possible values. Instead, the value list should be delimited with a pipe character. Further, keys must be unique, and any collisions or ambiguity must be resolved by the granulation strategy for a given format.
 
@@ -327,15 +327,16 @@ The controller has a UUID that persists across all interactions and plans.
 
 ### The Plan
 
-The agreement between two actors is known as the Plan. This describes and confirms a shared understanding of the process, structure, and metadata surrounding synchronization, though not the product data itself. The Sandpiper API and management interfaces actually implement these details -- the Plan itself is not a method for establishing agreements, modifying slice scopes, and so on. Instead, the Plan represents the state of these facets at a given point in time, and the *Plan Document* encapsulates them in an implementation-independent XML format that can be compared between actors and signed off on by both.
+The agreement between two actors is known as the *Plan*. This describes and confirms a shared understanding of the process, structure, and metadata surrounding synchronization, though not the product data itself. The Sandpiper API and management interfaces actually implement these details -- the Plan itself is not a method for establishing agreements, modifying slice scopes, and so on. Instead, the Plan represents the state of these facets at a given point in time, and the *Plan Document* encapsulates them in an implementation-independent XML format that can be compared between actors and signed off on by both.
 
 The Plan itself has a UUID that uniquely identifies it among all plans in use globally. Any change to the plan results in a new UUID (though note that a change to a plan's status, being external to the document, will not necessitate a new UUID).
 
-Either actor may terminate the agreement. Failure to agree on a proposed change also results in a failed plan, and it must be put on hold until resolved.
+Either actor may terminate the agreement. Failure to agree on a proposed change also results in a failed plan, and it must be put on hold until resolved. For more information, see [The Plan Proposal Workflow](#the-plan-proposal-workflow).
 
 #### Plan Domains
 
 <img src="assets/Domains.png" title="Domain Summary" alt="Diagram showing primary, common, and secondary domains" width="50%" style="float: right; padding: 1em;">
+
 A Sandpiper plan establishes three domains and their ownership: The *Primary Domain* (owned by the primary actor), the *Secondary Domain* (owned by the secondary actor), and the *Communal Domain* (jointly shared between primary and secondary). To modify any part of the plan, both actors must agree to the change.
 
 ##### Primary Plan Domain
@@ -364,7 +365,7 @@ One actor, known as the *Initiator*, connects to the other, known as the *Respon
 
 ##### Authentication
 
-In the authentication, the initiator supplies credentials to the respondent that prove its identity and provide a plan if available; if not, their permissions will be minimal and they must enter the plan proposal workflow.
+In the authentication step, the initiator supplies credentials to the respondent that prove its identity and provide a plan if available; if not, their permissions will be minimal and they must enter the [plan proposal workflow](#the-plan-proposal-workflow).
 
 #### The Exchange
 
@@ -378,7 +379,7 @@ Negotiation attempts to establish an unambiguous course of action, or to safely 
 
 In this step, the initiator indicates its intent to proceed using a given plan, which is embedded in the login payload as a base64-encoded XML file, or to proceed without a plan, in which case the plan document area of the login payload is left empty. The respondent either agrees, and further actions can begin, or disagrees, and the connection is aborted.
 
-When the initiator supplied a plan during authentication and the respondent does agree to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
+When the initiator supplied a plan during authentication and the respondent agrees to proceed, the initiator generates a plan document that represents its current understanding of this particular plan, then transfers it to the respondent, who does the same, and compares the two documents. If they are not identical in content^["Identical in content" specifically means that all meaningful data in the document is the same between the two plans. Differences in non-essential whitespace (leading tabs, spaces, line breaks, etc.) should not be included in this comparison, only the XML elements, attributes, and values.], the exchange can't continue, and the connection is aborted.
 
 ###### The Plan Proposal Workflow
 
@@ -390,7 +391,7 @@ Humans may still be needed to fill in the details of their subscriptions, and to
 
 <img src="assets/Plan_Creation_Example.png" alt="Example of plan creation" title="Plan Creation Example" width="100%" style="padding: 1em;"/>
 
-New plans start with a *Fragment Plan* -- a stub plan document that contains only the primary actor's information and a plan UUID.^[Remember that any substantive modification to any Sandpiper object will result in a new UUID, and fragments are no exception; once it is filled out further, it must receive a new UUID]
+New plans start with a *Fragment Plan* -- a stub plan document that contains only the primary actor's information and a plan UUID.^[Remember that any substantive modification to any Sandpiper object will result in a new UUID, and fragments are no exception; once it is filled out further, it must receive a new UUID.]
 
 The primary actor is responsible for supplying the fragment plan, because it is their information that populates it. The /plans/invoke endpoint provides (if the primary is the respondent) or accepts (if the primary is the initiator) these documents.
 
@@ -442,7 +443,7 @@ Level 0 is essentially how product data exchange occurs in most scenarios today.
 
 #### Level 1
 
-Level 1 is the first and simplest method of communicating product data. Information is exchanged in complete collections as files, which must replace all of the data stored at the recipient.
+Level 1 is the first and simplest method of communicating product data via Sandpiper. Information is exchanged in complete collections as files, which must replace all of the data stored at the recipient.
 
 Level 1 is equivalent to sending full files between partners manually, but with the benefits of the Sandpiper framework's metadata, automation and validation.
 
@@ -520,11 +521,11 @@ The respondent has included, in the plan, a URI for accessing the server. This b
 
 #### Authentication and Negotiation
 
-Authentication is a simple username and password, submitted by the initiator to the respondent as JSON POSTed to the entry point URL, always the base URI plus "/login". This JSON object may also include a base64-encoded copy of the plan document representing that actor's understanding of the interaction's context.
+Authentication is a simple username and password, submitted by the initiator to the respondent as JSON POSTed to the entry point URL, always the base URI plus "/login". This JSON object may also include a base64-encoded copy of the [plan document](#the-plan) representing that actor's understanding of the interaction's context.
 
-The respondent must first verify that the username and password are valid, and then, if a plan document is present, compare this plan document to its own understanding of the plans available between the two actors. Messages (including errors) are returned inside the "message" attribute of a JSON string; successes will also include the JWT standard "token" and "expires" attributes.
+The respondent must first verify that the username and password are valid, and then, if a plan document is present, compare this plan document to its own understanding of the plans available between the two actors. Messages (including errors) are returned inside the <code>message</code> attribute of a JSON string; successes will also include the JWT standard <code>token</code> and <code>expires</code> attributes.
 
-The response may also include a planschemaerrors attribute to list any warnings or errors found with the plan schema.
+The response may also include a <code>planschemaerrors</code> attribute to list any warnings or errors found when validating a plan document against the plan document schema.
 
 ##### The Level 1 and 2 Java Web Token
 
@@ -550,11 +551,11 @@ The capabilities of the data source will direct the workflow that's most efficie
 
 <img src="assets/Input_ClassicPimL1.png" alt="Classic PIM Level 1 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
-Level 1, being file-based, is designed for classic PIMs that can't use or haven't yet been adapted to use the Sandpiper framework. The PIM outputs files, and the user loads them into the Sandpiper server using the commandline interface.
+Level 1, being file-based, is designed for classic PIMs that can't use or haven't yet been adapted to use the Sandpiper framework. The PIM outputs files, and the user loads them into the Sandpiper server using manually-triggered processes.
 
 <img src="assets/Input_ClassicPimL2.png" alt="Classic PIM Level 2 Input Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em;"/>
 
-Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, and classic PIMs also have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a *Granulator.*)
+Level 2 introduces the ability to split complete datasets into grains. The server itself does not attempt to parse or interpret data, and classic PIMs also have no internal capacity to do this. Sandpiper is designed to support this scenario but to do so it will need an external, domain-specific tool to do so (called a [*Granulator*](#granulation).)
 
 ##### Sandpiper-Aware PIM Input
 
@@ -580,7 +581,7 @@ The classic PIM, without additional development, can make use of a purely Level 
 
 <img src="assets/Output_ClassicPimL2.png" alt="Classic PIM Level 2 Output Workflow" title="Classic PIM - Level 1" width="40%" style="padding: 1em"/>
 
-With an integration process, a classic PIM can also use the results of Level 2 transactions. More advanced recipients often already have a process to do something similar (for example, by comparing existing files to data in the PIM). Using the Sandpiper API and/or CLI, an external migration program can offload this change comparison to the deterministic Sandpiper framework, yet feed the PIM in the way it's already operating.
+With an integration process, a classic PIM can also use the results of Level 2 transactions. More advanced recipients often already have a process to do something similar (for example, by comparing existing files to data in the PIM). Using the Sandpiper API, an external migration program can offload this change comparison to the deterministic Sandpiper framework, yet feed the PIM in the way it's already operating.
 
 ##### Sandpiper-Aware PIM Output
 
@@ -598,9 +599,9 @@ Sandpiper-Capable PIMs speak directly to the Sandpiper server via the API, integ
 
 #### Data Brokers
 
-When we say data broker, what we mean is an intermediary who specializes in providing persistent, reliable “data hosting” for providers. Most suppliers are not going to have the in-house team, resources, and/or desire to maintain an always-on server that can act as a Sandpiper respondent. This is how the industry works today, in fact, and data brokers serve a crucial role in that capacity. They also often provide additional services like format conversion and a healthy ecosystem of supplier datasets to choose from.
+When we say data broker, what we mean is an intermediary who specializes in providing persistent, reliable data hosting for providers. Most suppliers are not going to have the in-house team, resources, and/or desire to maintain an always-on server that can act as a Sandpiper respondent. This is how the industry works today, in fact, and data brokers serve a crucial role in that capacity. They also often provide additional services like format conversion and a healthy ecosystem of supplier datasets to choose from.
 
-This leads to a natural human abstraction: we tend to think that, if a customer of ours is receiving our data through a broker, then we are giving that data to our customer. We think that we have a direct data relationship. But we don’t -- if we did, we’d send the data directly. Imagine if the customer had issues downloading through the broker’s interfaces. Would they need to talk to us, or to the broker? It’s clear that there are actually two relationships: between us and the broker, and between the broker and the customer.
+This leads to a natural human abstraction: we tend to think that, if a customer of ours is receiving our data through a broker, then we are giving that data to our customer. We think that we have a direct data relationship with our customer. But we don’t -- if we did, we’d send the data directly. Imagine if the customer had issues downloading through the broker’s interfaces. Would they need to talk to us, or to the broker? It’s clear that there are actually two relationships: between us and the broker, and between the broker and the customer.
 
 Sandpiper is a two-actor framework, because the fundamental transfer of product data doesn’t happen as a multicast free-for-all. We transfer data based on our relationships.
 
@@ -622,7 +623,7 @@ Maintaining this separation could be burdensome in large data environments. But:
 
 #### UUIDs
 
-IDs in Sandpiper are Universally Unique IDentifiers (UUIDs)^[See [Wikipedia's entry](https://en.wikipedia.org/wiki/Universally_unique_identifier) for more details. Sandpiper specifies version 4 of [RFC4122](https://tools.ietf.org/html/rfc4122#section-4.4), which describes creating a UUID using a random number].
+IDs in Sandpiper are Universally Unique IDentifiers (UUIDs)^[See [Wikipedia's entry](https://en.wikipedia.org/wiki/Universally_unique_identifier) for more details. Sandpiper specifies version 4 of [RFC4122](https://tools.ietf.org/html/rfc4122#section-4.4), which describes creating a UUID using a random number.].
 
 ##### Ensuring Uniqueness
 
@@ -646,11 +647,11 @@ Instead, the data received from another node should be integrated into your own 
 
 ##### Staging Updates for Atomicity
 
-Sometimes in the middle of an update systems will fail. At the least it's possible that a sudden hardware server fault could cause the machine to halt in the middle of a change.
+Sometimes in the middle of an update, systems will fail. At the least it's possible that a sudden hardware server fault could cause the machine to halt in the middle of a change.
 
 Database servers have several ways to guarantee that these updates can be rolled back and re-applied. However, their methods may still leave a pool in an unknown state if the Sandpiper implementation doesn't properly use them.
 
-Each Sandpiper transaction should be treated as an indivisible update; if one part of it fails, the whole thing should be rolled back. Properly boxing these updates can be done using SQL TRANSACTION statements, but as integration grows and crosses environments, it may not be enough. In these cases, instead of operating directly on the current tables, it makes sense to operate on copies of the data in staging tables. Once the transaction is complete, the tables can be swapped atomically. Another benefit of this is that indexes can be dropped and added on the staging table as needed for performance.
+Each Sandpiper transaction should be treated as an indivisible update; if one part of it fails, the whole thing should be rolled back. Properly boxing these updates can be done using SQL <code>TRANSACTION</code> statements, but as integration grows and crosses environments, they may not be enough. In these cases, instead of operating directly on the current tables, it makes sense to operate on copies of the data in staging tables. Once the transaction is complete, the tables can be swapped atomically. Another benefit of this is that indexes can be dropped and added on the staging table as needed for performance.
 
 ## Appendix A: Reference Values
 
@@ -684,8 +685,8 @@ key-values          | 2+   | Unique keys and their values | Key Values | *none* 
 | -- | -- | -- |
 primary-reference | Unique | Code or string defined by the primary actor to tie an object to an internal reference point, e.g. a product hierarchy node |
 secondary-reference | Unique | Code or string defined by the secondary actor to tie an object to an internal reference point, e.g. a product line code |
-context-slice | Unique | Meant to be used only on slices. Gives the UUID of the slice that contains important contextual metadata not present in individual elements |
-content-author | Unique | Meant to be used only on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
+context-slice | Unique | Can only be used on slices. Gives the UUID of the slice that contains important contextual metadata not present in individual elements |
+content-author | Unique | Can only be used on the primary node. The UUID of the actor who authored the data, when it's different from the primary actor in this plan, e.g. a data broker scenario |
 autocare-branding-brand | Multi | Auto Care Brand Table BrandID |
 autocare-branding-brandowner | Multi | Auto Care Brand Table BrandOwnerID |
 autocare-branding-parent | Multi | Auto Care Brand Table ParentID |
@@ -714,36 +715,36 @@ Obsolete | One or both parties have decided that this plan holds no value for fu
 
 | Message Code | Message Description | Comments
 |---|---|---|
-1000 | System OK | The system message category is used for lower-level messaging that is independent of work area and relationship. This code is a generic "All is well" message
+1000 | System OK | The system message category is used for lower-level messaging that is independent of work area and relationship. This code is a generic "All is well" message.
 1001 | Invalid message code received |
 1002 | Invalid message text received |
-1003 | Sandpiper unavailable | The respondent system is working but the Sandpiper layer is not functional
-2000 | Auth OK | The authorization message category is used for communication about login and authentication. This code is a generic "All is well" message
-2001 | Plan accepted, no proposed plans pending | Authentication with a given plan was successful, and there are no proposals that need to be evaluated
-2002 | Plan accepted, proposed plans pending | Authentication with a given plan was successful, and there are proposals that need evaluation
-2003 | No plan supplied, no plans pending | Authentication without a plan was successful, and there are no proposals that need to be evaluated
-2004 | No plan supplied, plans pending | Authentication without a plan was successful, and there are proposals that need to be evaluated
-2005 | Invalid plan supplied | Particular problem with this plan supplied in the message_text attribute: "Unknown plan", "Corrupt or invalid plan XML", "Obsolete or unusable plan"
-2006 | Login OK with unrecoverable error | There is some issue that means both sides can't continue until humans intervene; no content can be conveyed
-3000 | Plan OK | The plan message category is used to convey information about plan workflow events
-3001 | Plan status change Invalid | The requested plan status change is not valid given the current plan status. Message_text: "Plans cannot go from X to Y"
-3002 | Proposed plan XML invalid | The proposed plan's XML does not validate against the plan schema
-3003 | Proposed plan UUID already exists | The UUID for the proposed plan is in use somewhere else, whether on another plan or a different data object
-3004 | One or both proposed plan actors invalid | The proposed plan references one or more actors who are not part of this relationship, either in the secondary or primary roles
-3005 | Proposed plan content invalid | One or more references in the plan refer to values that are not valid
-3006 | Respondent information in plan does not match expectation | The proposed plan has data about the respondent that does not match what the respondent supplies in its own plans & plan fragments
-4000 | Data OK | The data message category is used for communication about data updates. This code is a generic "All is well" message
-4001 | Delete not available to your role | Reason in message_text
-4002 | Creation not available to your role | Reason in message_text
-4003 | Data UUID already exists | This uuid is in use elsewhere, potentially in another relationship. This revelation of other information is a compromise to allow good-faith collisions to be seen
-4004 | Data UUID invalid | The routing layer of a server may also catch this before it gets to the Sandpiper layer, but for implementations where it does not, this code may be used
-4005 | Data contents invalid | Something inside the payload violates rules established in the content domain, which the standard itself must leave up to the actors and processes
-4006 | Grain order overlaps | This action would cause an overlap with an existing grain order
-4007 | Grain size exceeds limits | The respondent system cannot handle grains of this size
-4008 | Payload encoding unsupported | Reserved for future use when payload encodings other than the default will be supported
-4009 | Corrupt payload detected | This is a hard encoding error (e.g. an illegal character in a base64 string), not contents themselves, which, as long as the encoding itself is faithful, will not trigger this message
-4010 | Invalid metadata | General purpose issues with the metadata around a data object, such as the grain size not matching the payload
-9000 | User OK | The user message category is used to convey information that the standard codes cannot address. This is a generic "All is well" message, though message_text may be used to add more information
+1003 | Sandpiper unavailable | The respondent system is working but the Sandpiper layer is not functional.
+2000 | Auth OK | The authorization message category is used for communication about login and authentication. This code is a generic "All is well" message.
+2001 | Plan accepted, no proposed plans pending | Authentication with a given plan was successful, and there are no proposals that need to be evaluated.
+2002 | Plan accepted, proposed plans pending | Authentication with a given plan was successful, and there are proposals that need evaluation.
+2003 | No plan supplied, no plans pending | Authentication without a plan was successful, and there are no proposals that need to be evaluated.
+2004 | No plan supplied, plans pending | Authentication without a plan was successful, and there are proposals that need to be evaluated.
+2005 | Invalid plan supplied | Particular problem with this plan supplied in the message_text attribute: "Unknown plan", "Corrupt or invalid plan XML", "Obsolete or unusable plan".
+2006 | Login OK with unrecoverable error | There is some issue that means both sides can't continue until humans intervene; no content can be conveyed.
+3000 | Plan OK | The plan message category is used to convey information about plan workflow events.
+3001 | Plan status change Invalid | The requested plan status change is not valid given the current plan status. Message_text: "Plans cannot go from X to Y".
+3002 | Proposed plan XML invalid | The proposed plan's XML does not validate against the plan schema.
+3003 | Proposed plan UUID already exists | The UUID for the proposed plan is in use somewhere else, whether on another plan or a different data object.
+3004 | One or both proposed plan actors invalid | The proposed plan references one or more actors who are not part of this relationship, either in the secondary or primary roles.
+3005 | Proposed plan content invalid | One or more references in the plan refer to values that are not valid.
+3006 | Respondent information in plan does not match expectation | The proposed plan has data about the respondent that does not match what the respondent supplies in its own plans & plan fragments.
+4000 | Data OK | The data message category is used for communication about data updates. This code is a generic "All is well" message.
+4001 | Delete not available to your role | Reason in message_text.
+4002 | Creation not available to your role | Reason in message_text.
+4003 | Data UUID already exists | This uuid is in use elsewhere, potentially in another relationship. This revelation of other information is a compromise to allow good-faith collisions to be seen.
+4004 | Data UUID invalid | The routing layer of a server may also catch this before it gets to the Sandpiper layer, but for implementations where it does not, this code may be used.
+4005 | Data contents invalid | Something inside the payload violates rules established in the content domain, which the standard itself must leave up to the actors and processes.
+4006 | Grain order overlaps | This action would cause an overlap with an existing grain order.
+4007 | Grain size exceeds limits | The respondent system cannot handle grains of this size.
+4008 | Payload encoding unsupported | Reserved for future use when payload encodings other than the default will be supported.
+4009 | Corrupt payload detected | This is a hard encoding error (e.g. an illegal character in a base64 string), not contents themselves, which, as long as the encoding itself is faithful, will not trigger this message.
+4010 | Invalid metadata | General purpose issues with the metadata around a data object, such as the grain size not matching the payload.
+9000 | User OK | The user message category is used to convey information that the standard codes cannot address. This is a generic "All is well" message, though message_text may be used to add more information.
 9001 | User Exception | Use to raise unspecified errors, with the message text containing whatever detail is required.
 
 ## Appendix B: Granulation Strategies

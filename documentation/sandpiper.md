@@ -278,26 +278,26 @@ Sandpiper's main goal is to facilitate repeatable, deterministic data transfer, 
 
 <img src="assets/Interaction_Model_Overview.png" alt="Interaction model overview" title="The Sandpiper Interaction Model" width="90%" style="padding: 1em"/>
 
-1. Outside well-defined communication channels, objects and roles are established. This segment is known as the *Extricate.*
-    1. A system or human employing Sandpiper is known as an *Actor*.
+1. Outside well-defined communication channels, objects and roles are established. This segment is known as the *Extricate*
+    1. A system or human employing Sandpiper is known as an *Actor*
     1. Before engaging, two actors must share login details
-1. All actor communication via Sandpiper occurs within a *Connection*.
-    1. Prior to beginning substantive data transfer, actors begin with the *introduction*.
+1. All actor communication via Sandpiper occurs within a *Connection*
+    1. Prior to beginning substantive data transfer, actors begin with the *Introduction*.
         1. Actors make *Contact* via the network
         1. Actors *Authenticate* to verify their respective identities
-            1. As part of authentication, actors confirm their existing agreement through a document known as the *Plan*.
-                1. If no Plan is yet available, or either actor wishes to amend the plan, they may still login but then must enter the *Plan Proposal Workflow*
-    1. Once the introduction is complete, actors transfer product data during the *Exchange*.
-        1. Exchanges are established and next steps are unlocked through *Negotiation*.
-        1. Transferring product data and resolving pools as part of an exchange is known as *Synchronization*.
-            1. Two Actors’ operations and communications during synchronization are part of one or more *Transactions*.
-        1. After synchronization, actors communicate about the data exchanged and sign off on the results during *Confirmation*.
+            1. As part of authentication, actors confirm their existing agreement through a document known as the *Plan*
+                1. If no plan is yet available, or either actor wishes to amend the plan, they may still login, but then must enter the *Plan Proposal Workflow*
+    1. Once the introduction is complete, actors transfer product data during the *Exchange*
+        1. Exchanges are established and next steps are unlocked through *Negotiation*
+        1. Transferring product data and resolving pools as part of an exchange is known as *Synchronization*
+            1. Two Actors’ operations and communications during synchronization are part of one or more *Transactions*
+        1. After synchronization, actors communicate about the data exchanged and sign off on the results during *Confirmation*
 
-Data transfer is only one-way: in any connection only one actor will receive product data.
+Data transfer is only one-way: in any connection only one actor will receive product data, and only one actor will send product data.
 
 ### Interaction Objects and UUIDs
 
-Many objects in the interaction model have UUIDs, but unlike in the data model, most of these are intended to persist even when the information about that object has changed.
+Many objects in the interaction model have [UUIDs](#uuids), but unlike in the data model, most of these are intended to persist even when the information about that object has changed.
 
 Recall that the reason for strictly unique stateless UUIDs in the data model is that they can be used to mathematically determine changes in a dataset regardless of the data that the UUID refers to; the UUID is representative of the content even though it is not *derived from* the content. But the interaction is not what's being synchronized, only the product data, and so when it makes sense to use a persistent ID to help establish and assist with exchange, a semi-permanent UUID is employed. In future versions of Sandpiper we will readdress this synchronization and whether it can be extended to the interaction model as well.
 
@@ -305,9 +305,9 @@ One special point: even when two actors are using the same content in their slic
 
 ### Actors
 
-In the context of a connection, nodes, humans, and systems assume a role as an actor. Any connection has only two actors: a *Primary Actor* and a *Secondary Actor.*
+In the context of a connection, nodes, humans, and systems assume a role as an actor. Any connection has only two actors: a *Primary Actor* and a *Secondary Actor*.
 
-The primary actor is the sender of data, responsible for providing information about and issuing updates from its canonical pools.
+The primary actor is the provider of data, responsible for communicating information about and issuing updates from its canonical pools.
 
 The secondary actor is the recipient of data. This actor can be a human or a full Sandpiper node. The former is known as *Basic Secondary Actors*, because it cannot engage in a true Sandpiper exchange, and the latter are known as *Advanced Secondary Actors*. Advanced secondary actors are responsible for providing information about their snapshot pools as well as processing updates provided by the primary actor.
 

@@ -189,11 +189,11 @@ To structure this data and aid the creation of shared scope between actors, the 
 
 The node is a single Sandpiper instance or system^[While a server might run multiple concurrent copies of the Sandpiper software and thus represent multiple nodes, for simplicity we just refer to the node as a system, as this is the most common use case.]. It has a *Controller* responsible for, though not necessarily the originator of, its operation and contents.
 
-Note: a human interacting at Level 1-1 is technically a node, though their data state is unknown after retrieval.
+Note: a human interacting at [Level 1-1](#level-1-1-basic-exchange) is technically a node, though their data state is unknown after retrieval.
 
 ##### Pools
 
-Within each Sandpiper node, product data is stored in broad banks called *Pools*. These represent a business or management-level division, so that a single node might contain product data spanning multiple business approaches yet being coordinated within one system.
+Within each Sandpiper node, product data is stored in broad banks called *Pools*. These represent a business or management-level division, so that a single node might contain product data spanning multiple business approaches coordinated within one system.
 
 While a node has a controller, a pool has a *Creator*, the owner of the product data within. In some cases this will be the same as the controller, and in others it will be different. For example, if the node operator works for a shared services provider that offers data synchronization for multiple customers, the controller will be the provider, and the creator will be the customer.
 
@@ -201,15 +201,15 @@ Pools can be one of two types: *Canonical* or *Snapshot*.
 
 A node's canonical pools contain the data that it owns and controls; changes made to a local node's canonical pools can be transferred to external Sandpiper nodes, with the local node as the origin point.
 
-A node's snapshot pools contain copies of the data in other nodes' canonical pools transferred in this way. A snapshot pool is just that: a snapshot of some or all of the data in a canonical pool from an external node, at its last-known state.
+A node's snapshot pools contain copies of the data in other nodes' canonical pools transferred in this way. A snapshot pool is just that: a snapshot of some or all of the data in a canonical pool from an external node, at its last-known state. A node cannot independently change the data in its snapshot pools; it can only do so at the direction of the origin node during synchronization.
 
 ##### Slices
 
 <img src="assets/SliceGrain.png" alt="Slices and grains" title="Slices and grains" width="40%" style="float: right; clear: right; padding: 1em"/>
 
-A pool is divided into *Slices*. The slice is the fundamental unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
+A pool is divided into *Slices*. The slice is the fundamental container unit of Sandpiper; basic transactions are expected to operate only on the slice, and it provides the context for all more complex transactions as well. In some cases it can be thought of as the file level of the data.
 
-A slice defines the single type of the data it contains (see [the slice types list](#slice-type)). All grains within a slice must be the same slice type, which carries with it a single granulation strategy to be used when breaking the data into manageable pieces. The slice also defines a filename for Level 1 transactions.
+A slice defines the single type of the data it contains (see [the slice types list](#slice-type)). All grains within a slice must be the same slice type, which carries with it a single granulation strategy to be used when breaking the data into manageable pieces. The slice also defines a filename for [Level 1](#level-1) transactions.
 
 ##### Grains
 
@@ -217,17 +217,17 @@ A slice is broken into *Grains*, each representing one unit of meaning or scope.
 
 Grains have a *Grain Key* containing a single text value, to safely and atomically operate on the data in pieces smaller than a whole slice. This value must be a single unicode key that directly references one key value within the data, e.g. a part number or a [UUID](#UUIDs). It must not be an artificially packed or delimited set of values referring to more than one key within the data. Some exception is allowed for part number keys, in the case of a creator controlling multiple brands; in this case a simple pipe-delimited key, containing only branding and part number, may be used. However, under no circumstances should a key contain multiple part numbers, multiple brands, or a similar non-unique, non-self-contained value.
 
-The grain is the smallest unit on which a Sandpiper node can act, and can only be directly addressed in Level 2 and higher transactions.
+The grain is the smallest unit on which a Sandpiper node can act, and can only be directly addressed in [Level 2](#level-2) and higher transactions.
 
-Grains are not part of the plan; they reside below the slice, the lowest level of agreement between actors.
+Grains are not part of the [plan](#the-plan); they reside below the slice, the lowest level of agreement between actors.
 
-All slices technically contain at least one grain; in the case of a Level 1 file, it's just that there's one single, large grain: the full file. But for Level 2 slices, the information in the full file can be broken into grains that allow different perspectives of access and synchronization, e.g. by PIES item, by ACES item, and more.
+All slices technically contain at least one grain; in the case of a Level 1 file, it's just that there's one single, large grain: the full file. But for Level 2 slices, the information in the full file can be broken into grains that allow different perspectives of access and synchronization, e.g. by PIES <code>Item</code>, by ACES <code>App</code>, and more.
 
 #### Reference Objects
 
 ##### Links
 
-Links are references that allow Sandpiper data objects to be tied to other systems and tagged with nonstandard metadata.
+Links are references that allow Sandpiper data objects to be tied to other systems and other slices, and to be tagged with nonstandard metadata.
 
 The link is the primary means of attaching overarching structure to slice data. Every partnership will have a different preferred method for establishing things like line codes, hierarchies, and sets, so the link provides a few standard methods to do this and an extensible category for what it doesn't define. The link similarly connects slice data to description or validation frameworks like reference database versions, business identities, and so on. It also provides a method to add the same kinds of connections to actors themselves, for example company codes in DUNS and SWIFT.
 
@@ -239,9 +239,9 @@ See [Link Fields](#link-fields) for a list of all the fields available.
 
 ##### The Context Slice
 
-A Level 1 slice contains a full file that can only be communicated in full. Often these files contain important contextual information that applies to the rest of the information in the file -- for example, validity periods, reference database versions, and so on.
+A [Level 1](#level-1) slice contains a full file that can only be communicated in its entirety. Often these files contain important contextual information that applies to the rest of the information in the file -- for example, validity periods, reference database versions, and so on.
 
-However, at Level 2, this information may not be present in the individual pieces being granulated. In the classic Level 1 scenario it's assumed that, by virtue of being in the full file (as a header, a footer, preamble, etc.), this information will be used by a processing system for all elements inside. When we break the information up, we lose the context. Sandpiper solves this problem with a special slice: The *Context Slice*.
+However, at or above [Level 2](#level-2), this information may not be present in the individual pieces being granulated. In the classic Level 1 scenario it's assumed that, by virtue of being in the full file (as a header, a footer, preamble, etc.), this information will be used by a processing system for all elements inside. When we break the information up, we lose the context. Sandpiper solves this problem with a special slice: The *Context Slice*.
 
 <img src="assets/Context-Slice.png" alt="Context Slice with referencing ACES Apps slice" title="Context slice with ACES Apps" width="50%" style="padding: 1em; float: right; clear: right;"/>
 

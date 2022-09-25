@@ -463,7 +463,7 @@ Level 1-2 advanced exchanges can only occur between two Sandpiper nodes, machine
 
 ##### Level 1 Negotiation
 
-To start, in Level 1, nodes declare themselves, define their capabilities, and agree on their actions. The chief mechanism for this definition is the plan, as an XML file passed back and forth, with the actors filling in their proposed states and accepting or rejecting the changes.
+To start, in Level 1, nodes declare themselves, define their capabilities, and agree on their actions. The chief mechanism for this definition is the [plan](#the-plan), as an XML file passed back and forth, with the actors filling in their proposed states and accepting or rejecting the changes.
 
 All subscriptions occur at the slice, using its unique ID. It is not possible to retrieve data at any higher or lower position in the object model at Level 1; for that, Level 2 and beyond must be engaged.
 
@@ -794,7 +794,7 @@ c552ee5a-3074-49b0-a83a-8330352f54c4 | ./thumbs/wpt.jpg | binary | {binary}
 
 ACES is an XML delivery format specified by the [Auto Care Association](https://autocare.org). It is validated against an XSD, with additional, looser best practice guidelines that are somewhat inconsistently followed.
 
-ACES XML files are a monolithic delivery format consisting of a root element, <code>ACES</code>, containing a preamble <code>Header</code>, zero or more <code>App</code> elements, zero or more <code>Asset</code> elements, zero or one <code>DigitalAsset</code> element (containing one or more <code>DigitalFileInformation</code> elements), and a final <code>Trailer</code>.
+ACES XML files follow a monolithic delivery format with a root element, <code>ACES</code>, that contains a preamble <code>Header</code>, zero or more <code>App</code> elements, zero or more <code>Asset</code> elements, zero or one <code>DigitalAsset</code> elements (containing one or more <code>DigitalFileInformation</code> elements), and a final <code>Trailer</code>.
 
 ACES files can be of two types: Full or Partial. Partial files can be additions to or deletes from existing data, whereas Full files are understood to represent the entire universe of ACES data. Sandpiper does not support the partial facility of ACES, because this would be like trying to serialize data that is itself a pseudo-serialized payload referencing another, potentially unresolvable dataset.
 
@@ -818,7 +818,7 @@ The three main ACES content elements (<code>App</code>, <code>Asset</code>, and 
 
 The context information (from the <code>Header</code> element) is similarly extracted, though no reference values are needed. It is important to establish the same context slice for all slices that share a common origin; this will serve as the link tying them together into a single set.
 
-Also, be aware that some of these elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three content element types, even if it is always empty. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken.
+Also, be aware that some of these elements can be interdependent; ACES was not built with data encapsulation in mind. Therefore, it's important to provide, subscribe to, and synchronize at least one slice for each of the three content element types, even if it is always empty. For example, if a newly-synchronized <code>App</code> element contains a reference to a new but unsynchronized <code>Asset</code> element, data integrity is broken. Primary actors are responsible for rejecting subscription proposals that do not include all three segments needed.
 
 These subscriptions can be a mix of coarse and fine granulation. However, secondary actors should carefully consider before subscribing to both coarse and fine slices for the same elements in the same context -- in that situtation, data will still be synchronized correctly, but some operations will be carried out multiple times.
 
@@ -828,7 +828,7 @@ Context data is provided in the <code>Header</code> element preamble and must be
 
 All elements in the ACES Header should be extracted for this purpose, though some elements only make sense when sending full files and can be ignored or not included at all -- for example, <code>TransferDate</code>. Others are somewhat ambiguous and potentially dangerous, like <code>EffectiveDate</code>, because this assumes a time dimension that does not apply to real-time data. Instead, data should be sent when it is available and ready to be transmitted to a partner. These may be stored in the context slice but should be used with caution or not at all.
 
-The <code>ApprovedFor</code>, <code>PartsApprovedFor</code>, and <code>RegionFor</code> header elements can contain a sequence of child elements. These would not cleanly fit into a key-values payload, as this payload only allows actual value storage. Instead, they should be collapsed into a delimited list of values (using, as in all context slices, the pipe character as delimiter). Append an underscore and the child element name as a key suffix, i.e. ApprovedFor_Country, PartsApprovedFor_Country, and RegionFor_Region. This ensures that future extensions to these elements will remain compatible with this strategy.
+The <code>ApprovedFor</code>, <code>PartsApprovedFor</code>, and <code>RegionFor</code> header elements can contain a sequence of child elements. These do not cleanly fit into a key-values payload, as this payload only allows actual value storage. Instead, they should be collapsed into a delimited list of values (using, as in all context slices, the pipe character as delimiter). Append an underscore and the child element name as a key suffix, i.e. ApprovedFor_Country, PartsApprovedFor_Country, and RegionFor_Region. This ensures that future extensions to these elements will remain compatible with this strategy.
 
 For example, given this header information:
 
